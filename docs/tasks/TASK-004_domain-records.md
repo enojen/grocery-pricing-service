@@ -1,7 +1,7 @@
 # TASK-004: Domain Records
 
 ## Status
-- [ ] Not Started
+- [x] Completed
 
 ## Phase
 Phase 1: Foundation
@@ -175,9 +175,9 @@ public record Order(List<OrderItem> items) {
 
 ## Acceptance Criteria
 
-- [ ] OrderItem interface with getType() and getName() methods
-- [ ] BreadItem record with quantity and daysOld validation
-- [ ] VegetableItem record with weightGrams validation
-- [ ] BeerItem record with quantity and origin validation
-- [ ] Order aggregate with defensive copy
-- [ ] All validation throws appropriate exceptions
+- [x] OrderItem interface with getType() and getName() methods
+- [x] BreadItem record with quantity and daysOld validation
+- [x] VegetableItem record with weightGrams validation
+- [x] BeerItem record with quantity and origin validation
+- [x] Order aggregate with defensive copy
+- [x] All validation throws appropriate exceptions
