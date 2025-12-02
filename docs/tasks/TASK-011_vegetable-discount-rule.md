@@ -1,7 +1,7 @@
 # TASK-011: Vegetable Discount Rule
 
 ## Status
-- [ ] Not Started
+- [x] Completed
 
 ## Phase
 Phase 2: Pricing Logic
@@ -243,10 +243,10 @@ class VegetableWeightTierRuleTest {
 
 ## Acceptance Criteria
 
-- [ ] VegetableWeightTierRule implements VegetableDiscountRule interface
-- [ ] 5% discount applied for weight < 100g
-- [ ] 7% discount applied for weight 100-499g
-- [ ] 10% discount applied for weight >= 500g
-- [ ] Boundary conditions handled correctly (100g, 500g)
-- [ ] Uses configuration for thresholds (not hardcoded)
-- [ ] All unit tests pass
+- [x] VegetableWeightTierRule implements VegetableDiscountRule interface
+- [x] 5% discount applied for weight < 100g
+- [x] 7% discount applied for weight 100-499g
+- [x] 10% discount applied for weight >= 500g
+- [x] Boundary conditions handled correctly (100g, 500g)
+- [x] Uses configuration for thresholds (not hardcoded)
+- [x] All unit tests pass
