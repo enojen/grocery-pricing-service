@@ -1,7 +1,7 @@
 # TASK-013: Pricing Strategies
 
 ## Status
-- [ ] Not Started
+- [x] Completed
 
 ## Phase
 Phase 2: Pricing Logic
@@ -368,10 +368,10 @@ void shouldGroupBeerByOrigin() { /* multiple origins in one order */ }
 
 ## Acceptance Criteria
 
-- [ ] All three strategies implement PricingStrategy interface
-- [ ] Strategies auto-discover and apply discount rules via Spring DI
-- [ ] BreadPricingStrategy groups items by age
-- [ ] VegetablePricingStrategy aggregates all vegetables for weight calculation
-- [ ] BeerPricingStrategy groups items by origin
-- [ ] MoneyUtils.normalize() applied to all monetary values
-- [ ] All unit tests pass
+- [x] All three strategies implement PricingStrategy interface
+- [x] Strategies auto-discover and apply discount rules via Spring DI
+- [x] BreadPricingStrategy groups items by age
+- [x] VegetablePricingStrategy aggregates all vegetables for weight calculation
+- [x] BeerPricingStrategy groups items by origin
+- [x] MoneyUtils.normalize() applied to all monetary values
+- [x] All unit tests pass
