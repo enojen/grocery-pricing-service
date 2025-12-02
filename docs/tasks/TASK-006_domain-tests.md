@@ -1,7 +1,7 @@
 # TASK-006: Domain Tests
 
 ## Status
-- [ ] Not Started
+- [x] Completed
 
 ## Phase
 Phase 1: Foundation
@@ -323,8 +323,8 @@ class MoneyUtilsTest {
 
 ## Acceptance Criteria
 
-- [ ] All domain records have comprehensive tests
-- [ ] Validation edge cases covered
-- [ ] Immutability verified for Order and Receipt
-- [ ] MoneyUtils rounding behavior tested
-- [ ] All tests pass with `mvn test`
+- [x] All domain records have comprehensive tests
+- [x] Validation edge cases covered
+- [x] Immutability verified for Order and Receipt
+- [x] MoneyUtils rounding behavior tested
+- [x] All tests pass with `mvn test`
