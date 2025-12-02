@@ -1,3 +1,37 @@
 spring:
   application:
     name: grocery-pricing-service
+
+pricing:
+  bread-price: 1.00
+  vegetable-price-per100g: 1.00
+
+  bread:
+    max-age-days: 6
+    bundle-discount-min-age: 3
+    special-bundle-age: 6
+
+  vegetable:
+    small-weight-threshold: 100
+    medium-weight-threshold: 500
+    small-weight-discount: 0.05
+    medium-weight-discount: 0.07
+    large-weight-discount: 0.10
+
+  beer:
+    pack-size: 6
+    belgian-base-price: 0.60
+    dutch-base-price: 0.50
+    german-base-price: 0.80
+    belgian-pack-discount: 3.00
+    dutch-pack-discount: 2.00
+    german-pack-discount: 4.00
+
+server:
+  port: 8080
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
