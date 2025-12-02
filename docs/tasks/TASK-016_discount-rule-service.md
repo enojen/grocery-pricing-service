@@ -1,7 +1,7 @@
 # TASK-016: Discount Rule Service
 
 ## Status
-- [ ] Not Started
+- [x] Completed
 
 ## Phase
 Phase 3: Service Layer
@@ -221,8 +221,8 @@ class DiscountRuleServiceTest {
 
 ## Acceptance Criteria
 
-- [ ] DiscountRuleService auto-discovers all discount rules via Spring DI
-- [ ] getAllRules() returns all rules with product type and description
-- [ ] getRulesByProductType() filters rules correctly
-- [ ] Descriptions come from rule implementations (self-documenting)
-- [ ] All unit tests pass
+- [x] DiscountRuleService auto-discovers all discount rules via Spring DI
+- [x] getAllRules() returns all rules with product type and description
+- [x] getRulesByProductType() filters rules correctly
+- [x] Descriptions come from rule implementations (self-documenting)
+- [x] All unit tests pass
