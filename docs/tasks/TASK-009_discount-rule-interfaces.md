@@ -1,7 +1,7 @@
 # TASK-009: Discount Rule Interfaces
 
 ## Status
-- [ ] Not Started
+- [x] Completed
 
 ## Phase
 Phase 2: Pricing Logic
@@ -14,9 +14,9 @@ Create interfaces for pluggable discount rules for each product type.
 ### BeerDiscountRule Interface
 
 ```java
-package com.grocery.pricing.pricing.discount;
+package com.online.grocery.pricing.pricing.discount;
 
-import com.grocery.pricing.pricing.context.BeerPricingContext;
+import com.online.grocery.pricing.pricing.context.BeerPricingContext;
 
 import java.math.BigDecimal;
 
@@ -64,9 +64,9 @@ public interface BeerDiscountRule {
 ### BreadDiscountRule Interface
 
 ```java
-package com.grocery.pricing.pricing.discount;
+package com.online.grocery.pricing.pricing.discount;
 
-import com.grocery.pricing.pricing.context.BreadPricingContext;
+import com.online.grocery.pricing.pricing.context.BreadPricingContext;
 
 import java.math.BigDecimal;
 
@@ -112,9 +112,9 @@ public interface BreadDiscountRule {
 ### VegetableDiscountRule Interface
 
 ```java
-package com.grocery.pricing.pricing.discount;
+package com.online.grocery.pricing.pricing.discount;
 
-import com.grocery.pricing.pricing.context.VegetablePricingContext;
+import com.online.grocery.pricing.pricing.context.VegetablePricingContext;
 
 import java.math.BigDecimal;
 
@@ -203,14 +203,14 @@ public class NewYearBeerPromoRule implements BeerDiscountRule {
 
 ## Files to Create
 
-- `src/main/java/com/grocery/pricing/pricing/discount/BeerDiscountRule.java`
-- `src/main/java/com/grocery/pricing/pricing/discount/BreadDiscountRule.java`
-- `src/main/java/com/grocery/pricing/pricing/discount/VegetableDiscountRule.java`
+- `src/main/java/com/online/grocery/pricing/pricing/discount/BeerDiscountRule.java`
+- `src/main/java/com/online/grocery/pricing/pricing/discount/BreadDiscountRule.java`
+- `src/main/java/com/online/grocery/pricing/pricing/discount/VegetableDiscountRule.java`
 
 ## Acceptance Criteria
 
-- [ ] BeerDiscountRule interface with isApplicable, calculateDiscount, order, description
-- [ ] BreadDiscountRule interface with same method signatures
-- [ ] VegetableDiscountRule interface with same method signatures
-- [ ] Proper JavaDoc documentation for all methods
-- [ ] Ready for concrete implementations
+- [x] BeerDiscountRule interface with isApplicable, calculateDiscount, order, description
+- [x] BreadDiscountRule interface with same method signatures
+- [x] VegetableDiscountRule interface with same method signatures
+- [x] Proper JavaDoc documentation for all methods
+- [x] Ready for concrete implementations
