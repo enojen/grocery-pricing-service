@@ -1,7 +1,7 @@
 # TASK-003: Enums
 
 ## Status
-- [ ] Not Started
+- [x] Completed
 
 ## Phase
 Phase 1: Foundation
@@ -68,7 +68,7 @@ BigDecimal originBasePrice = switch (origin) {
 
 ## Acceptance Criteria
 
-- [ ] ProductType enum with BREAD, VEGETABLE, BEER values
-- [ ] BeerOrigin enum with BELGIAN, DUTCH, GERMAN values
-- [ ] Proper package location under domain/enums
-- [ ] JavaDoc comments for documentation
+- [x] ProductType enum with BREAD, VEGETABLE, BEER values
+- [x] BeerOrigin enum with BELGIAN, DUTCH, GERMAN values
+- [x] Proper package location under domain/enums
+- [x] JavaDoc comments for documentation
