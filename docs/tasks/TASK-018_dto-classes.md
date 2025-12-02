@@ -1,7 +1,7 @@
 # TASK-018: DTO Classes
 
 ## Status
-- [ ] Not Started
+- [x] Completed
 
 ## Phase
 Phase 4: REST API
@@ -14,10 +14,10 @@ Create Request/Response DTOs for the REST API with validation annotations.
 ### OrderItemRequest
 
 ```java
-package com.grocery.pricing.api.dto;
+package com.online.grocery.pricing.api.dto;
 
-import com.grocery.pricing.domain.enums.BeerOrigin;
-import com.grocery.pricing.domain.enums.ProductType;
+import com.online.grocery.pricing.domain.enums.BeerOrigin;
+import com.online.grocery.pricing.domain.enums.ProductType;
 import jakarta.validation.constraints.*;
 
 /**
@@ -48,7 +48,7 @@ public record OrderItemRequest(
 ### OrderRequest
 
 ```java
-package com.grocery.pricing.api.dto;
+package com.online.grocery.pricing.api.dto;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
@@ -68,7 +68,7 @@ public record OrderRequest(
 ### ReceiptLineResponse
 
 ```java
-package com.grocery.pricing.api.dto;
+package com.online.grocery.pricing.api.dto;
 
 import java.math.BigDecimal;
 
@@ -86,7 +86,7 @@ public record ReceiptLineResponse(
 ### ReceiptResponse
 
 ```java
-package com.grocery.pricing.api.dto;
+package com.online.grocery.pricing.api.dto;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -105,7 +105,7 @@ public record ReceiptResponse(
 ### PriceInfoResponse
 
 ```java
-package com.grocery.pricing.api.dto;
+package com.online.grocery.pricing.api.dto;
 
 import java.math.BigDecimal;
 
@@ -191,16 +191,16 @@ public record PriceInfoResponse(
 
 ## Files to Create
 
-- `src/main/java/com/grocery/pricing/api/dto/OrderItemRequest.java`
-- `src/main/java/com/grocery/pricing/api/dto/OrderRequest.java`
-- `src/main/java/com/grocery/pricing/api/dto/ReceiptLineResponse.java`
-- `src/main/java/com/grocery/pricing/api/dto/ReceiptResponse.java`
-- `src/main/java/com/grocery/pricing/api/dto/PriceInfoResponse.java`
+- `src/main/java/com/online/grocery/pricing/api/dto/OrderItemRequest.java`
+- `src/main/java/com/online/grocery/pricing/api/dto/OrderRequest.java`
+- `src/main/java/com/online/grocery/pricing/api/dto/ReceiptLineResponse.java`
+- `src/main/java/com/online/grocery/pricing/api/dto/ReceiptResponse.java`
+- `src/main/java/com/online/grocery/pricing/api/dto/PriceInfoResponse.java`
 
 ## Acceptance Criteria
 
-- [ ] All DTOs created as Java records
-- [ ] OrderItemRequest with validation annotations
-- [ ] OrderRequest with @NotEmpty validation
-- [ ] Response DTOs for receipt and price info
-- [ ] Bean validation annotations properly configured
+- [x] All DTOs created as Java records
+- [x] OrderItemRequest with validation annotations
+- [x] OrderRequest with @NotEmpty validation
+- [x] Response DTOs for receipt and price info
+- [x] Bean validation annotations properly configured
