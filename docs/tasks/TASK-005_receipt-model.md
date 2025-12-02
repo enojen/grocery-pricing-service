@@ -1,7 +1,7 @@
 # TASK-005: Receipt Model
 
 ## Status
-- [ ] Not Started
+- [x] Completed
 
 ## Phase
 Phase 1: Foundation
@@ -136,8 +136,8 @@ return new ReceiptLine(
 
 ## Acceptance Criteria
 
-- [ ] ReceiptLine record with validation for non-negative final price
-- [ ] Receipt record with defensive copy of lines
-- [ ] MoneyUtils utility class with normalize method
-- [ ] Consistent 2 decimal place rounding
-- [ ] HALF_UP rounding mode for financial accuracy
+- [x] ReceiptLine record with validation for non-negative final price
+- [x] Receipt record with defensive copy of lines
+- [x] MoneyUtils utility class with normalize method
+- [x] Consistent 2 decimal place rounding
+- [x] HALF_UP rounding mode for financial accuracy
