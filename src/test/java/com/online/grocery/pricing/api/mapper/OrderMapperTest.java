@@ -1,139 +1,21 @@
-# TASK-019: Order Mapper
+package com.online.grocery.pricing.api.mapper;
 
-## Status
-- [x] Completed
-
-## Phase
-Phase 4: REST API
-
-## Description
-Create OrderMapper component for converting DTOs to domain models with type-specific validation.
-
-## Implementation Details
-
-### OrderMapper
-
-```java
-package com.grocery.pricing.api.mapper;
-
-import com.grocery.pricing.api.dto.OrderItemRequest;
-import com.grocery.pricing.api.dto.OrderRequest;
-import com.grocery.pricing.domain.model.*;
-import com.grocery.pricing.exception.InvalidOrderException;
-import org.springframework.stereotype.Component;
-
-import java.util.List;
-
-/**
- * Mapper for converting API DTOs to domain models.
- * Handles type-specific validation for OrderItemRequest.
- */
-@Component
-public class OrderMapper {
-
-    /**
-     * Convert OrderRequest DTO to domain Order model.
-     * Validates type-specific field requirements before conversion.
-     *
-     * @param request The order request from API
-     * @return Domain Order object
-     * @throws InvalidOrderException if required fields for type are missing
-     */
-    public Order mapToOrder(OrderRequest request) {
-        List<OrderItem> items = request.items().stream()
-            .map(this::mapToOrderItem)
-            .toList();
-
-        return new Order(items);
-    }
-
-    /**
-     * Convert single OrderItemRequest to appropriate OrderItem domain model.
-     * Throws InvalidOrderException if required fields for type are missing.
-     */
-    private OrderItem mapToOrderItem(OrderItemRequest itemRequest) {
-        // Validate type-specific required fields
-        validateItemRequest(itemRequest);
-
-        return switch (itemRequest.type()) {
-            case BREAD -> new BreadItem(
-                itemRequest.name(),
-                itemRequest.quantity(),
-                itemRequest.daysOld()
-            );
-            case VEGETABLE -> new VegetableItem(
-                itemRequest.name(),
-                itemRequest.weightGrams()
-            );
-            case BEER -> new BeerItem(
-                itemRequest.name(),
-                itemRequest.quantity(),
-                itemRequest.origin()
-            );
-        };
-    }
-
-    /**
-     * Validate that required fields for the product type are present.
-     * Throws InvalidOrderException with descriptive error message.
-     */
-    private void validateItemRequest(OrderItemRequest request) {
-        switch (request.type()) {
-            case BREAD:
-                if (request.quantity() == null) {
-                    throw new InvalidOrderException(
-                        "quantity field required for product type BREAD"
-                    );
-                }
-                if (request.daysOld() == null) {
-                    throw new InvalidOrderException(
-                        "daysOld field required for product type BREAD"
-                    );
-                }
-                break;
-
-            case VEGETABLE:
-                if (request.weightGrams() == null) {
-                    throw new InvalidOrderException(
-                        "weightGrams field required for product type VEGETABLE"
-                    );
-                }
-                break;
-
-            case BEER:
-                if (request.quantity() == null) {
-                    throw new InvalidOrderException(
-                        "quantity field required for product type BEER"
-                    );
-                }
-                if (request.origin() == null) {
-                    throw new InvalidOrderException(
-                        "origin field required for product type BEER"
-                    );
-                }
-                break;
-        }
-    }
-}
-```
-
-### Unit Tests
-
-```java
-package com.grocery.pricing.api.mapper;
-
-import com.grocery.pricing.api.dto.OrderItemRequest;
-import com.grocery.pricing.api.dto.OrderRequest;
-import com.grocery.pricing.domain.enums.BeerOrigin;
-import com.grocery.pricing.domain.enums.ProductType;
-import com.grocery.pricing.domain.model.*;
-import com.grocery.pricing.exception.InvalidOrderException;
+import com.online.grocery.pricing.api.dto.OrderItemRequest;
+import com.online.grocery.pricing.api.dto.OrderRequest;
+import com.online.grocery.pricing.domain.enums.BeerOrigin;
+import com.online.grocery.pricing.domain.enums.ProductType;
+import com.online.grocery.pricing.domain.model.BeerItem;
+import com.online.grocery.pricing.domain.model.BreadItem;
+import com.online.grocery.pricing.domain.model.Order;
+import com.online.grocery.pricing.domain.model.VegetableItem;
+import com.online.grocery.pricing.exception.InvalidOrderException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class OrderMapperTest {
 
@@ -268,18 +150,3 @@ class OrderMapperTest {
             .hasMessageContaining("origin field required for product type BEER");
     }
 }
-```
-
-## Files to Create
-
-- `src/main/java/com/grocery/pricing/api/mapper/OrderMapper.java`
-- `src/test/java/com/grocery/pricing/api/mapper/OrderMapperTest.java`
-
-## Acceptance Criteria
-
-- [x] OrderMapper converts OrderRequest to Order domain model
-- [x] Type-specific validation for BREAD (quantity, daysOld required)
-- [x] Type-specific validation for VEGETABLE (weightGrams required)
-- [x] Type-specific validation for BEER (quantity, origin required)
-- [x] Throws InvalidOrderException with descriptive messages
-- [x] All unit tests pass
