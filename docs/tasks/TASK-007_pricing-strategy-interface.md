@@ -1,7 +1,7 @@
 # TASK-007: Pricing Strategy Interface
 
 ## Status
-- [ ] Not Started
+- [x] Completed
 
 ## Phase
 Phase 2: Pricing Logic
@@ -14,11 +14,11 @@ Create the PricingStrategy interface that defines the contract for product-speci
 ### PricingStrategy Interface
 
 ```java
-package com.grocery.pricing.pricing.strategy;
+package com.online.grocery.pricing.pricing.strategy;
 
-import com.grocery.pricing.domain.enums.ProductType;
-import com.grocery.pricing.domain.model.OrderItem;
-import com.grocery.pricing.domain.model.ReceiptLine;
+import com.online.grocery.pricing.domain.enums.ProductType;
+import com.online.grocery.pricing.domain.model.OrderItem;
+import com.online.grocery.pricing.domain.model.ReceiptLine;
 
 import java.util.List;
 
@@ -94,11 +94,11 @@ OrderRequest → OrderController
 
 ## Files to Create
 
-- `src/main/java/com/grocery/pricing/pricing/strategy/PricingStrategy.java`
+- `src/main/java/com/online/grocery/pricing/pricing/strategy/PricingStrategy.java`
 
 ## Acceptance Criteria
 
-- [ ] PricingStrategy interface defined with getProductType() and calculatePrice() methods
-- [ ] Proper JavaDoc documentation
-- [ ] Interface is generic enough for all product types
-- [ ] Ready for BreadPricingStrategy, VegetablePricingStrategy, BeerPricingStrategy implementations
+- [x] PricingStrategy interface defined with getProductType() and calculatePrice() methods
+- [x] Proper JavaDoc documentation
+- [x] Interface is generic enough for all product types
+- [x] Ready for BreadPricingStrategy, VegetablePricingStrategy, BeerPricingStrategy implementations
