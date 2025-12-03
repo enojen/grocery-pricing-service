@@ -1,7 +1,7 @@
 # TASK-021: Discount Controller
 
 ## Status
-- [ ] Not Started
+- [x] Completed
 
 ## Phase
 Phase 4: REST API
@@ -182,9 +182,9 @@ class DiscountControllerIntegrationTest {
 
 ## Acceptance Criteria
 
-- [ ] GET /api/v1/discounts/rules endpoint functional
-- [ ] Returns all registered discount rules
-- [ ] Each rule includes productType and description
-- [ ] Descriptions come from discount rule implementations (self-documenting)
-- [ ] OpenAPI annotations for Swagger documentation
-- [ ] All tests pass
+- [x] GET /api/v1/discounts/rules endpoint functional
+- [x] Returns all registered discount rules
+- [x] Each rule includes productType and description
+- [x] Descriptions come from discount rule implementations (self-documenting)
+- [x] OpenAPI annotations for Swagger documentation
+- [x] All tests pass
