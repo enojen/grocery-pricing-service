@@ -8,11 +8,6 @@ import java.math.BigDecimal;
 
 /**
  * Age-based bundle discount rule for bread.
- *
- * <ul>
- *   <li>3-5 days old: "Buy 1 take 2" - In groups of 2, pay for 1</li>
- *   <li>6 days old: "Buy 1 take 3" - In groups of 3, pay for 1</li>
- * </ul>
  */
 @Component
 public final class BreadAgeBundleRule implements BreadDiscountRule {
@@ -25,9 +20,10 @@ public final class BreadAgeBundleRule implements BreadDiscountRule {
 
     @Override
     public boolean isApplicable(BreadPricingContext ctx) {
-        int minAge = config.getBread().getBundleDiscountMinAge();
-        int specialAge = config.getBread().getSpecialBundleAge();
-        return ctx.age() >= minAge && ctx.age() <= specialAge;
+        int age = ctx.age();
+        int buyOneTakeTwoAge = config.getBread().getBuyOneTakeTwoAge();
+        int payOneTakeThreeAge = config.getBread().getPayOneTakeThreeAge();
+        return age == buyOneTakeTwoAge || age == payOneTakeThreeAge;
     }
 
     @Override
@@ -36,17 +32,17 @@ public final class BreadAgeBundleRule implements BreadDiscountRule {
         int qty = ctx.totalQuantity();
         BigDecimal unitPrice = ctx.unitPrice();
 
-        int minAge = config.getBread().getBundleDiscountMinAge();
-        int specialAge = config.getBread().getSpecialBundleAge();
+        int buyOneTakeTwoAge = config.getBread().getBuyOneTakeTwoAge();
+        int payOneTakeThreeAge = config.getBread().getPayOneTakeThreeAge();
 
-        if (age >= minAge && age < specialAge) {
+        if (age == buyOneTakeTwoAge) {
             // "Buy 1 take 2": In groups of 2, pay for 1
             int freeItems = qty / 2;
             return unitPrice.multiply(BigDecimal.valueOf(freeItems));
         }
 
-        if (age == specialAge) {
-            // "Buy 1 take 3": In groups of 3, pay for 1
+        if (age == payOneTakeThreeAge) {
+            // "Pay 1 take 3": In groups of 3, pay for 1
             int groups = qty / 3;
             int freeItems = groups * 2;
             return unitPrice.multiply(BigDecimal.valueOf(freeItems));
@@ -62,11 +58,11 @@ public final class BreadAgeBundleRule implements BreadDiscountRule {
 
     @Override
     public String description() {
-        int minAge = config.getBread().getBundleDiscountMinAge();
-        int specialAge = config.getBread().getSpecialBundleAge();
+        int buyOneTakeTwoAge = config.getBread().getBuyOneTakeTwoAge();
+        int payOneTakeThreeAge = config.getBread().getPayOneTakeThreeAge();
         return String.format(
-                "Age-based bundle discounts: %d-%d days old = buy 1 take 2, %d days old = buy 1 take 3",
-                minAge, specialAge - 1, specialAge
+                "Age-based bundle discounts: %d days old = buy 1 take 2, %d days old = pay 1 take 3",
+                buyOneTakeTwoAge, payOneTakeThreeAge
         );
     }
 }

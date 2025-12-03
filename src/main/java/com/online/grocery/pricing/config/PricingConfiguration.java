@@ -53,13 +53,13 @@ public class PricingConfiguration {
         @Min(value = 0, message = "Max age days cannot be negative")
         private int maxAgeDays = 6;
 
-        @Min(value = 0, message = "Bundle discount min age cannot be negative")
-        @Max(value = 6, message = "Bundle discount min age cannot exceed 6")
-        private int bundleDiscountMinAge = 3;
+        @Min(value = 0, message = "Buy one take two age cannot be negative")
+        @Max(value = 6, message = "Buy one take two age cannot exceed 6")
+        private int buyOneTakeTwoAge = 3;
 
-        @Min(value = 0, message = "Special bundle age cannot be negative")
-        @Max(value = 6, message = "Special bundle age cannot exceed 6")
-        private int specialBundleAge = 6;
+        @Min(value = 0, message = "Pay one take three age cannot be negative")
+        @Max(value = 6, message = "Pay one take three age cannot exceed 6")
+        private int payOneTakeThreeAge = 6;
 
     }
 

@@ -24,8 +24,8 @@ class BreadAgeBundleRuleTest {
         PricingConfiguration.BreadRules breadRules = mock(PricingConfiguration.BreadRules.class);
 
         when(config.getBread()).thenReturn(breadRules);
-        when(breadRules.getBundleDiscountMinAge()).thenReturn(3);
-        when(breadRules.getSpecialBundleAge()).thenReturn(6);
+        when(breadRules.getBuyOneTakeTwoAge()).thenReturn(3);
+        when(breadRules.getPayOneTakeThreeAge()).thenReturn(6);
 
         rule = new BreadAgeBundleRule(config);
     }
@@ -36,8 +36,8 @@ class BreadAgeBundleRuleTest {
             "1, false",
             "2, false",
             "3, true",
-            "4, true",
-            "5, true",
+            "4, false",
+            "5, false",
             "6, true"
     })
     void shouldCheckApplicability(int age, boolean expected) {
@@ -54,8 +54,8 @@ class BreadAgeBundleRuleTest {
             "3, 3, 1.00",
             "3, 4, 2.00",
             "3, 5, 2.00",
-            "4, 6, 3.00",
-            "5, 1, 0.00"
+            "3, 6, 3.00",
+            "3, 1, 0.00"
     })
     void shouldCalculateBuyOneTakeTwoDiscount(int age, int qty, String expectedDiscount) {
         BreadPricingContext ctx = new BreadPricingContext(

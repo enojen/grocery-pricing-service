@@ -8,8 +8,8 @@ pricing:
 
   bread:
     max-age-days: 6
-    bundle-discount-min-age: 3
-    special-bundle-age: 6
+    buy-one-take-two-age: 3
+    pay-one-take-three-age: 6
 
   vegetable:
     small-weight-threshold: 100
