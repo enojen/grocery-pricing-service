@@ -23,13 +23,13 @@ public class BreadPricingStrategy implements PricingStrategy {
     private final List<BreadDiscountRule> discountRules;
 
     public BreadPricingStrategy(
-        PricingConfiguration config,
-        List<BreadDiscountRule> discountRules
+            PricingConfiguration config,
+            List<BreadDiscountRule> discountRules
     ) {
         this.config = config;
         this.discountRules = discountRules.stream()
-            .sorted(Comparator.comparingInt(BreadDiscountRule::order))
-            .toList();
+                .sorted(Comparator.comparingInt(BreadDiscountRule::order))
+                .toList();
     }
 
     @Override
@@ -42,11 +42,11 @@ public class BreadPricingStrategy implements PricingStrategy {
         List<BreadItem> breads = castToType(items, BreadItem.class);
 
         Map<Integer, List<BreadItem>> byAge = breads.stream()
-            .collect(Collectors.groupingBy(BreadItem::daysOld));
+                .collect(Collectors.groupingBy(BreadItem::daysOld));
 
         return byAge.entrySet().stream()
-            .map(this::priceAgeGroup)
-            .toList();
+                .map(this::priceAgeGroup)
+                .toList();
     }
 
     private ReceiptLine priceAgeGroup(Map.Entry<Integer, List<BreadItem>> entry) {
@@ -58,33 +58,33 @@ public class BreadPricingStrategy implements PricingStrategy {
         BigDecimal originalPrice = unitPrice.multiply(BigDecimal.valueOf(totalQty));
 
         BreadPricingContext ctx = new BreadPricingContext(
-            age,
-            totalQty,
-            unitPrice,
-            originalPrice
+                age,
+                totalQty,
+                unitPrice,
+                originalPrice
         );
 
         BigDecimal totalDiscount = discountRules.stream()
-            .filter(rule -> rule.isApplicable(ctx))
-            .map(rule -> rule.calculateDiscount(ctx))
-            .reduce(BigDecimal.ZERO, BigDecimal::add);
+                .filter(rule -> rule.isApplicable(ctx))
+                .map(rule -> rule.calculateDiscount(ctx))
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
 
         BigDecimal finalPrice = originalPrice.subtract(totalDiscount);
 
         String description = String.format("%d x Bread (%d days old)", totalQty, age);
         return new ReceiptLine(
-            description,
-            MoneyUtils.normalize(originalPrice),
-            MoneyUtils.normalize(totalDiscount),
-            MoneyUtils.normalize(finalPrice)
+                description,
+                MoneyUtils.normalize(originalPrice),
+                MoneyUtils.normalize(totalDiscount),
+                MoneyUtils.normalize(finalPrice)
         );
     }
 
     @SuppressWarnings("unchecked")
     private <T extends OrderItem> List<T> castToType(List<OrderItem> items, Class<T> type) {
         return items.stream()
-            .filter(type::isInstance)
-            .map(type::cast)
-            .toList();
+                .filter(type::isInstance)
+                .map(type::cast)
+                .toList();
     }
 }

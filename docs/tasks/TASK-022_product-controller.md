@@ -1,12 +1,15 @@
 # TASK-022: Product Controller
 
 ## Status
+
 - [x] Completed
 
 ## Phase
+
 Phase 4: REST API
 
 ## Description
+
 Create ProductController with GET /products/prices endpoint to list current product prices.
 
 ## Implementation Details

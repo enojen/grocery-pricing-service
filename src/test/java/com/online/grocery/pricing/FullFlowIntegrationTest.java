@@ -17,7 +17,8 @@ import java.util.List;
 import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
  * Full flow integration test validating all endpoints work together.
@@ -26,42 +27,41 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 class FullFlowIntegrationTest {
 
+    private final ObjectMapper objectMapper = new ObjectMapper();
     @Autowired
     private MockMvc mockMvc;
-
-    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Test
     void shouldCompleteFullOrderFlow() throws Exception {
         // Step 1: Check available prices
         mockMvc.perform(get("/api/v1/products/prices"))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$", hasSize(5)));
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(5)));
 
         // Step 2: Check available discounts
         mockMvc.perform(get("/api/v1/discounts/rules"))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$", hasSize(greaterThanOrEqualTo(3))));
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(greaterThanOrEqualTo(3))));
 
         // Step 3: Calculate order
         OrderRequest request = new OrderRequest(List.of(
-            new OrderItemRequest(ProductType.BREAD, "Bread", 3, 3, null, null),
-            new OrderItemRequest(ProductType.VEGETABLE, "Veggies", null, null, 200, null),
-            new OrderItemRequest(ProductType.BEER, "Beer", 6, null, null, BeerOrigin.DUTCH)
+                new OrderItemRequest(ProductType.BREAD, "Bread", 3, 3, null, null),
+                new OrderItemRequest(ProductType.VEGETABLE, "Veggies", null, null, 200, null),
+                new OrderItemRequest(ProductType.BEER, "Beer", 6, null, null, BeerOrigin.DUTCH)
         ));
 
         mockMvc.perform(post("/api/v1/orders/calculate")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(request)))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.total", is(4.86)));
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.total", is(4.86)));
     }
 
     @Test
     void shouldExposeSwaggerDocumentation() throws Exception {
         mockMvc.perform(get("/api-docs"))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.openapi").exists())
-            .andExpect(jsonPath("$.info.title", is("Grocery Pricing Service API")));
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.openapi").exists())
+                .andExpect(jsonPath("$.info.title", is("Grocery Pricing Service API")));
     }
 }

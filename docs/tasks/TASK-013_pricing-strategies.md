@@ -1,12 +1,15 @@
 # TASK-013: Pricing Strategies
 
 ## Status
+
 - [x] Completed
 
 ## Phase
+
 Phase 2: Pricing Logic
 
 ## Description
+
 Implement pricing strategy classes for each product type that orchestrate discount rule application.
 
 ## Implementation Details

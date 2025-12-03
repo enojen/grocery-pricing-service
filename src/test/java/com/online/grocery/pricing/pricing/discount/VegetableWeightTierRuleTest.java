@@ -36,7 +36,7 @@ class VegetableWeightTierRuleTest {
     @Test
     void shouldBeApplicableForAnyPositiveWeight() {
         VegetablePricingContext ctx = new VegetablePricingContext(
-            1, new BigDecimal("0.01"), new BigDecimal("0.01")
+                1, new BigDecimal("0.01"), new BigDecimal("0.01")
         );
 
         assertThat(rule.isApplicable(ctx)).isTrue();
@@ -45,7 +45,7 @@ class VegetableWeightTierRuleTest {
     @Test
     void shouldNotBeApplicableForZeroWeight() {
         VegetablePricingContext ctx = new VegetablePricingContext(
-            0, BigDecimal.ZERO, BigDecimal.ZERO
+                0, BigDecimal.ZERO, BigDecimal.ZERO
         );
 
         assertThat(rule.isApplicable(ctx)).isFalse();
@@ -53,18 +53,18 @@ class VegetableWeightTierRuleTest {
 
     @ParameterizedTest
     @CsvSource({
-        "50, 0.50, 0.025",
-        "99, 0.99, 0.0495",
-        "100, 1.00, 0.07",
-        "200, 2.00, 0.14",
-        "499, 4.99, 0.3493",
-        "500, 5.00, 0.50",
-        "1000, 10.00, 1.00"
+            "50, 0.50, 0.025",
+            "99, 0.99, 0.0495",
+            "100, 1.00, 0.07",
+            "200, 2.00, 0.14",
+            "499, 4.99, 0.3493",
+            "500, 5.00, 0.50",
+            "1000, 10.00, 1.00"
     })
     void shouldCalculateCorrectDiscount(int weight, String originalPrice, String expectedDiscount) {
         BigDecimal pricePerGram = new BigDecimal("0.01");
         VegetablePricingContext ctx = new VegetablePricingContext(
-            weight, pricePerGram, new BigDecimal(originalPrice)
+                weight, pricePerGram, new BigDecimal(originalPrice)
         );
 
         BigDecimal discount = rule.calculateDiscount(ctx);
@@ -75,7 +75,7 @@ class VegetableWeightTierRuleTest {
     @Test
     void shouldApply5PercentForSmallWeight() {
         VegetablePricingContext ctx = new VegetablePricingContext(
-            50, new BigDecimal("0.01"), new BigDecimal("0.50")
+                50, new BigDecimal("0.01"), new BigDecimal("0.50")
         );
 
         BigDecimal discount = rule.calculateDiscount(ctx);
@@ -86,7 +86,7 @@ class VegetableWeightTierRuleTest {
     @Test
     void shouldApply7PercentForMediumWeight() {
         VegetablePricingContext ctx = new VegetablePricingContext(
-            200, new BigDecimal("0.01"), new BigDecimal("2.00")
+                200, new BigDecimal("0.01"), new BigDecimal("2.00")
         );
 
         BigDecimal discount = rule.calculateDiscount(ctx);
@@ -97,7 +97,7 @@ class VegetableWeightTierRuleTest {
     @Test
     void shouldApply10PercentForLargeWeight() {
         VegetablePricingContext ctx = new VegetablePricingContext(
-            600, new BigDecimal("0.01"), new BigDecimal("6.00")
+                600, new BigDecimal("0.01"), new BigDecimal("6.00")
         );
 
         BigDecimal discount = rule.calculateDiscount(ctx);
@@ -108,7 +108,7 @@ class VegetableWeightTierRuleTest {
     @Test
     void shouldHandleBoundaryAt100g() {
         VegetablePricingContext ctx = new VegetablePricingContext(
-            100, new BigDecimal("0.01"), new BigDecimal("1.00")
+                100, new BigDecimal("0.01"), new BigDecimal("1.00")
         );
 
         BigDecimal discount = rule.calculateDiscount(ctx);
@@ -119,7 +119,7 @@ class VegetableWeightTierRuleTest {
     @Test
     void shouldHandleBoundaryAt500g() {
         VegetablePricingContext ctx = new VegetablePricingContext(
-            500, new BigDecimal("0.01"), new BigDecimal("5.00")
+                500, new BigDecimal("0.01"), new BigDecimal("5.00")
         );
 
         BigDecimal discount = rule.calculateDiscount(ctx);

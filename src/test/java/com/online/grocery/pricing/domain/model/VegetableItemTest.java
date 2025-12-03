@@ -5,14 +5,15 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class VegetableItemTest {
 
     @Test
     void shouldCreateValidVegetableItem() {
         VegetableItem vegetable = new VegetableItem("Carrots", 200);
-        
+
         assertThat(vegetable.name()).isEqualTo("Carrots");
         assertThat(vegetable.weightGrams()).isEqualTo(200);
         assertThat(vegetable.getType()).isEqualTo(ProductType.VEGETABLE);
@@ -22,8 +23,8 @@ class VegetableItemTest {
     @ValueSource(ints = {0, -1, -100})
     void shouldRejectNonPositiveWeight(int weight) {
         assertThatThrownBy(() -> new VegetableItem("Carrots", weight))
-            .isInstanceOf(IllegalArgumentException.class)
-            .hasMessageContaining("Weight must be positive");
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("Weight must be positive");
     }
 
     @Test

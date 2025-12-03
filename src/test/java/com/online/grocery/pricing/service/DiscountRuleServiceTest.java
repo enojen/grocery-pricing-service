@@ -32,9 +32,9 @@ class DiscountRuleServiceTest {
         when(vegetableRule.description()).thenReturn("Vegetable weight tier discount");
 
         service = new DiscountRuleService(
-            List.of(beerRule),
-            List.of(breadRule),
-            List.of(vegetableRule)
+                List.of(beerRule),
+                List.of(breadRule),
+                List.of(vegetableRule)
         );
     }
 
@@ -44,7 +44,7 @@ class DiscountRuleServiceTest {
 
         assertThat(rules).hasSize(3);
         assertThat(rules).extracting(DiscountRuleResponse::productType)
-            .containsExactlyInAnyOrder("BREAD", "VEGETABLE", "BEER");
+                .containsExactlyInAnyOrder("BREAD", "VEGETABLE", "BEER");
     }
 
     @Test
@@ -52,11 +52,11 @@ class DiscountRuleServiceTest {
         List<DiscountRuleResponse> rules = service.getAllRules();
 
         assertThat(rules).extracting(DiscountRuleResponse::description)
-            .containsExactlyInAnyOrder(
-                "Beer pack discount",
-                "Bread age bundle discount",
-                "Vegetable weight tier discount"
-            );
+                .containsExactlyInAnyOrder(
+                        "Beer pack discount",
+                        "Bread age bundle discount",
+                        "Vegetable weight tier discount"
+                );
     }
 
     @Test
@@ -74,9 +74,9 @@ class DiscountRuleServiceTest {
         when(secondBeerRule.description()).thenReturn("Holiday beer discount");
 
         DiscountRuleService serviceWithMultipleRules = new DiscountRuleService(
-            List.of(beerRule, secondBeerRule),
-            List.of(breadRule),
-            List.of(vegetableRule)
+                List.of(beerRule, secondBeerRule),
+                List.of(breadRule),
+                List.of(vegetableRule)
         );
 
         List<DiscountRuleResponse> rules = serviceWithMultipleRules.getAllRules();
@@ -88,9 +88,9 @@ class DiscountRuleServiceTest {
     @Test
     void shouldReturnEmptyListForTypeWithNoRules() {
         DiscountRuleService emptyService = new DiscountRuleService(
-            List.of(),
-            List.of(),
-            List.of()
+                List.of(),
+                List.of(),
+                List.of()
         );
 
         List<DiscountRuleResponse> rules = emptyService.getAllRules();

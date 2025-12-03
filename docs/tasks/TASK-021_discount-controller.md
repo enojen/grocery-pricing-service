@@ -1,12 +1,15 @@
 # TASK-021: Discount Controller
 
 ## Status
+
 - [x] Completed
 
 ## Phase
+
 Phase 4: REST API
 
 ## Description
+
 Create DiscountController with GET /discounts/rules endpoint to list all discount rules.
 
 ## Implementation Details
@@ -50,15 +53,15 @@ public class DiscountController {
      */
     @GetMapping("/rules")
     @Operation(
-        summary = "List discount rules",
-        description = "Returns all registered discount rules with their descriptions"
+            summary = "List discount rules",
+            description = "Returns all registered discount rules with their descriptions"
     )
     @ApiResponse(
-        responseCode = "200",
-        description = "Discount rules retrieved successfully",
-        content = @Content(
-            array = @ArraySchema(schema = @Schema(implementation = DiscountRuleResponse.class))
-        )
+            responseCode = "200",
+            description = "Discount rules retrieved successfully",
+            content = @Content(
+                    array = @ArraySchema(schema = @Schema(implementation = DiscountRuleResponse.class))
+            )
     )
     public ResponseEntity<List<DiscountRuleResponse>> listDiscountRules() {
         return ResponseEntity.ok(ruleService.getAllRules());
@@ -119,16 +122,16 @@ class DiscountControllerTest {
     @Test
     void shouldReturnAllDiscountRules() throws Exception {
         when(ruleService.getAllRules()).thenReturn(List.of(
-            new DiscountRuleResponse("BREAD", "Bread discount rule"),
-            new DiscountRuleResponse("VEGETABLE", "Vegetable discount rule"),
-            new DiscountRuleResponse("BEER", "Beer discount rule")
+                new DiscountRuleResponse("BREAD", "Bread discount rule"),
+                new DiscountRuleResponse("VEGETABLE", "Vegetable discount rule"),
+                new DiscountRuleResponse("BEER", "Beer discount rule")
         ));
 
         mockMvc.perform(get("/api/v1/discounts/rules"))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$", hasSize(3)))
-            .andExpect(jsonPath("$[0].productType", is("BREAD")))
-            .andExpect(jsonPath("$[0].description", is("Bread discount rule")));
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(3)))
+                .andExpect(jsonPath("$[0].productType", is("BREAD")))
+                .andExpect(jsonPath("$[0].description", is("Bread discount rule")));
     }
 
     @Test
@@ -136,8 +139,8 @@ class DiscountControllerTest {
         when(ruleService.getAllRules()).thenReturn(List.of());
 
         mockMvc.perform(get("/api/v1/discounts/rules"))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$", hasSize(0)));
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(0)));
     }
 }
 ```

@@ -1,12 +1,15 @@
 # TASK-016: Discount Rule Service
 
 ## Status
+
 - [x] Completed
 
 ## Phase
+
 Phase 3: Service Layer
 
 ## Description
+
 Create DiscountRuleService that provides discount rule metadata for the API documentation endpoint.
 
 ## Implementation Details
@@ -57,9 +60,9 @@ public class DiscountRuleService {
     private final List<VegetableDiscountRule> vegetableRules;
 
     public DiscountRuleService(
-        List<BeerDiscountRule> beerRules,
-        List<BreadDiscountRule> breadRules,
-        List<VegetableDiscountRule> vegetableRules
+            List<BeerDiscountRule> beerRules,
+            List<BreadDiscountRule> breadRules,
+            List<VegetableDiscountRule> vegetableRules
     ) {
         this.beerRules = beerRules;
         this.breadRules = breadRules;
@@ -73,26 +76,26 @@ public class DiscountRuleService {
      */
     public List<DiscountRuleResponse> getAllRules() {
         Stream<DiscountRuleResponse> beer = beerRules.stream()
-            .map(rule -> new DiscountRuleResponse(
-                ProductType.BEER.name(),
-                rule.description()
-            ));
+                .map(rule -> new DiscountRuleResponse(
+                        ProductType.BEER.name(),
+                        rule.description()
+                ));
 
         Stream<DiscountRuleResponse> bread = breadRules.stream()
-            .map(rule -> new DiscountRuleResponse(
-                ProductType.BREAD.name(),
-                rule.description()
-            ));
+                .map(rule -> new DiscountRuleResponse(
+                        ProductType.BREAD.name(),
+                        rule.description()
+                ));
 
         Stream<DiscountRuleResponse> veg = vegetableRules.stream()
-            .map(rule -> new DiscountRuleResponse(
-                ProductType.VEGETABLE.name(),
-                rule.description()
-            ));
+                .map(rule -> new DiscountRuleResponse(
+                        ProductType.VEGETABLE.name(),
+                        rule.description()
+                ));
 
         return Stream.of(bread, veg, beer)
-            .flatMap(Function.identity())
-            .toList();
+                .flatMap(Function.identity())
+                .toList();
     }
 
     /**
@@ -103,8 +106,8 @@ public class DiscountRuleService {
      */
     public List<DiscountRuleResponse> getRulesByProductType(ProductType productType) {
         return getAllRules().stream()
-            .filter(rule -> rule.productType().equals(productType.name()))
-            .toList();
+                .filter(rule -> rule.productType().equals(productType.name()))
+                .toList();
     }
 }
 ```
@@ -145,9 +148,9 @@ class DiscountRuleServiceTest {
         when(vegetableRule.description()).thenReturn("Vegetable weight tier discount");
 
         service = new DiscountRuleService(
-            List.of(beerRule),
-            List.of(breadRule),
-            List.of(vegetableRule)
+                List.of(beerRule),
+                List.of(breadRule),
+                List.of(vegetableRule)
         );
     }
 
@@ -157,7 +160,7 @@ class DiscountRuleServiceTest {
 
         assertThat(rules).hasSize(3);
         assertThat(rules).extracting(DiscountRuleResponse::productType)
-            .containsExactlyInAnyOrder("BREAD", "VEGETABLE", "BEER");
+                .containsExactlyInAnyOrder("BREAD", "VEGETABLE", "BEER");
     }
 
     @Test
@@ -165,11 +168,11 @@ class DiscountRuleServiceTest {
         List<DiscountRuleResponse> rules = service.getAllRules();
 
         assertThat(rules).extracting(DiscountRuleResponse::description)
-            .containsExactlyInAnyOrder(
-                "Beer pack discount",
-                "Bread age bundle discount",
-                "Vegetable weight tier discount"
-            );
+                .containsExactlyInAnyOrder(
+                        "Beer pack discount",
+                        "Bread age bundle discount",
+                        "Vegetable weight tier discount"
+                );
     }
 
     @Test
@@ -187,9 +190,9 @@ class DiscountRuleServiceTest {
         when(secondBeerRule.description()).thenReturn("Holiday beer discount");
 
         DiscountRuleService serviceWithMultipleRules = new DiscountRuleService(
-            List.of(beerRule, secondBeerRule),
-            List.of(breadRule),
-            List.of(vegetableRule)
+                List.of(beerRule, secondBeerRule),
+                List.of(breadRule),
+                List.of(vegetableRule)
         );
 
         List<DiscountRuleResponse> rules = serviceWithMultipleRules.getAllRules();
@@ -201,9 +204,9 @@ class DiscountRuleServiceTest {
     @Test
     void shouldReturnEmptyListForTypeWithNoRules() {
         DiscountRuleService emptyService = new DiscountRuleService(
-            List.of(),
-            List.of(),
-            List.of()
+                List.of(),
+                List.of(),
+                List.of()
         );
 
         List<DiscountRuleResponse> rules = emptyService.getAllRules();

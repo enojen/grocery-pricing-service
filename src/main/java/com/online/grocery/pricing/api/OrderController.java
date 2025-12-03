@@ -35,8 +35,8 @@ public class OrderController {
     private final OrderMapper orderMapper;
 
     public OrderController(
-        OrderPricingService pricingService,
-        OrderMapper orderMapper
+            OrderPricingService pricingService,
+            OrderMapper orderMapper
     ) {
         this.pricingService = pricingService;
         this.orderMapper = orderMapper;
@@ -50,28 +50,28 @@ public class OrderController {
      */
     @PostMapping("/calculate")
     @Operation(
-        summary = "Calculate order total",
-        description = "Calculates the total price for an order with all applicable discounts"
+            summary = "Calculate order total",
+            description = "Calculates the total price for an order with all applicable discounts"
     )
     @ApiResponses(value = {
-        @ApiResponse(
-            responseCode = "200",
-            description = "Order calculated successfully",
-            content = @Content(schema = @Schema(implementation = ReceiptResponse.class))
-        ),
-        @ApiResponse(
-            responseCode = "400",
-            description = "Invalid request data",
-            content = @Content(schema = @Schema(implementation = ErrorResponse.class))
-        ),
-        @ApiResponse(
-            responseCode = "422",
-            description = "Business rule violation",
-            content = @Content(schema = @Schema(implementation = ErrorResponse.class))
-        )
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Order calculated successfully",
+                    content = @Content(schema = @Schema(implementation = ReceiptResponse.class))
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Invalid request data",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class))
+            ),
+            @ApiResponse(
+                    responseCode = "422",
+                    description = "Business rule violation",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class))
+            )
     })
     public ResponseEntity<ReceiptResponse> calculateOrder(
-        @Valid @RequestBody OrderRequest request
+            @Valid @RequestBody OrderRequest request
     ) {
         Order order = orderMapper.mapToOrder(request);
         Receipt receipt = pricingService.calculateReceipt(order);
@@ -80,19 +80,19 @@ public class OrderController {
 
     private ReceiptResponse mapToResponse(Receipt receipt) {
         List<ReceiptLineResponse> lineResponses = receipt.lines().stream()
-            .map(line -> new ReceiptLineResponse(
-                line.description(),
-                line.originalPrice(),
-                line.discount(),
-                line.finalPrice()
-            ))
-            .toList();
+                .map(line -> new ReceiptLineResponse(
+                        line.description(),
+                        line.originalPrice(),
+                        line.discount(),
+                        line.finalPrice()
+                ))
+                .toList();
 
         return new ReceiptResponse(
-            lineResponses,
-            receipt.subtotal(),
-            receipt.totalDiscount(),
-            receipt.total()
+                lineResponses,
+                receipt.subtotal(),
+                receipt.totalDiscount(),
+                receipt.total()
         );
     }
 }

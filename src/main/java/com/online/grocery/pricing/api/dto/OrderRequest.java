@@ -9,7 +9,8 @@ import java.util.List;
  * Request DTO for order calculation endpoint.
  */
 public record OrderRequest(
-    @NotEmpty(message = "At least one item required")
-    @Valid
-    List<OrderItemRequest> items
-) {}
+        @NotEmpty(message = "At least one item required")
+        @Valid
+        List<OrderItemRequest> items
+) {
+}

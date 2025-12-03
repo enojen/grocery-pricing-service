@@ -1,12 +1,15 @@
 # TASK-023: Exception Handling
 
 ## Status
+
 - [X] Completed
 
 ## Phase
+
 Phase 4: REST API
 
 ## Description
+
 Create GlobalExceptionHandler and InvalidOrderException for comprehensive error handling.
 
 ## Implementation Details
@@ -136,6 +139,7 @@ public class GlobalExceptionHandler {
 ### Error Response Examples
 
 **Validation Error (400 Bad Request):**
+
 ```json
 {
   "code": "VALIDATION_ERROR",
@@ -148,6 +152,7 @@ public class GlobalExceptionHandler {
 ```
 
 **Business Rule Violation (422 Unprocessable Entity):**
+
 ```json
 {
   "code": "INVALID_ORDER",
@@ -157,6 +162,7 @@ public class GlobalExceptionHandler {
 ```
 
 **Domain Validation Error (422 Unprocessable Entity):**
+
 ```json
 {
   "code": "INVALID_ORDER",
@@ -166,6 +172,7 @@ public class GlobalExceptionHandler {
 ```
 
 **Internal Error (500 Internal Server Error):**
+
 ```json
 {
   "code": "INTERNAL_ERROR",

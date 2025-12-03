@@ -1,12 +1,15 @@
 # TASK-020: Order Controller
 
 ## Status
+
 - [X] Completed
 
 ## Phase
+
 Phase 4: REST API
 
 ## Description
+
 Create OrderController with POST /orders/calculate endpoint for order pricing.
 
 ## Implementation Details

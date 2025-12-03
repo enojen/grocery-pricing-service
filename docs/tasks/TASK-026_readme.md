@@ -1,12 +1,15 @@
 # TASK-026: README
 
 ## Status
+
 - [x] Completed
 
 ## Phase
+
 Phase 5: Polish
 
 ## Description
+
 Create comprehensive project README with architecture documentation and usage examples.
 
 ## Implementation Details
@@ -30,30 +33,32 @@ This service calculates order totals for a grocery store, applying automatic dis
 ### High-Level Design
 
 ```
+
 ┌─────────────────────────────────────────────────────────────────┐
-│                          REST API Layer                         │
-│  OrderController │ DiscountController │ ProductController       │
+│ REST API Layer │
+│ OrderController │ DiscountController │ ProductController │
 └─────────────────────────────┬───────────────────────────────────┘
-                              │
+│
 ┌─────────────────────────────▼───────────────────────────────────┐
-│                        Service Layer                            │
-│            OrderPricingService │ DiscountRuleService            │
+│ Service Layer │
+│ OrderPricingService │ DiscountRuleService │
 └─────────────────────────────┬───────────────────────────────────┘
-                              │
+│
 ┌─────────────────────────────▼───────────────────────────────────┐
-│                       Pricing Layer                             │
-│  BreadPricingStrategy │ VegetablePricingStrategy │ BeerPricing │
-│                              │                                  │
-│  ┌───────────────────────────▼─────────────────────────────┐   │
-│  │              Pluggable Discount Rules                    │   │
-│  │  BreadAgeBundleRule │ VegetableWeightTierRule │ BeerPack │   │
-│  └──────────────────────────────────────────────────────────┘   │
+│ Pricing Layer │
+│ BreadPricingStrategy │ VegetablePricingStrategy │ BeerPricing │
+│ │ │
+│ ┌───────────────────────────▼─────────────────────────────┐ │
+│ │ Pluggable Discount Rules │ │
+│ │ BreadAgeBundleRule │ VegetableWeightTierRule │ BeerPack │ │
+│ └──────────────────────────────────────────────────────────┘ │
 └─────────────────────────────────────────────────────────────────┘
-                              │
+│
 ┌─────────────────────────────▼───────────────────────────────────┐
-│                        Domain Layer                             │
-│     OrderItem │ BreadItem │ VegetableItem │ BeerItem │ Receipt │
+│ Domain Layer │
+│ OrderItem │ BreadItem │ VegetableItem │ BeerItem │ Receipt │
 └─────────────────────────────────────────────────────────────────┘
+
 ```
 
 ### Key Design Patterns
@@ -93,6 +98,7 @@ java -jar target/pricing-service-1.0.0-SNAPSHOT.jar
 ## API Endpoints
 
 ### Calculate Order
+
 ```http
 POST /api/v1/orders/calculate
 Content-Type: application/json
@@ -107,6 +113,7 @@ Content-Type: application/json
 ```
 
 **Response:**
+
 ```json
 {
   "lines": [
@@ -121,11 +128,13 @@ Content-Type: application/json
 ```
 
 ### List Discount Rules
+
 ```http
 GET /api/v1/discounts/rules
 ```
 
 ### List Product Prices
+
 ```http
 GET /api/v1/products/prices
 ```
@@ -133,26 +142,29 @@ GET /api/v1/products/prices
 ## Business Rules
 
 ### Bread
-| Age | Discount |
-|-----|----------|
-| 0-2 days | No discount |
+
+| Age      | Discount                                |
+|----------|-----------------------------------------|
+| 0-2 days | No discount                             |
 | 3-5 days | "Buy 1 take 2" (50% off in groups of 2) |
-| 6 days | "Buy 1 take 3" (66% off in groups of 3) |
-| >6 days | Not allowed |
+| 6 days   | "Buy 1 take 3" (66% off in groups of 3) |
+| >6 days  | Not allowed                             |
 
 ### Vegetables
-| Weight | Discount |
-|--------|----------|
-| 0-99g | 5% |
-| 100-499g | 7% |
-| 500g+ | 10% |
+
+| Weight   | Discount |
+|----------|----------|
+| 0-99g    | 5%       |
+| 100-499g | 7%       |
+| 500g+    | 10%      |
 
 ### Beer
-| Origin | Base Price | Pack Discount | Final (6-pack) |
-|--------|------------|---------------|----------------|
-| Belgian | €0.60/bottle | €3.00 | €0.60 |
-| Dutch | €0.50/bottle | €2.00 | €1.00 |
-| German | €0.80/bottle | €4.00 | €0.80 |
+
+| Origin  | Base Price   | Pack Discount | Final (6-pack) |
+|---------|--------------|---------------|----------------|
+| Belgian | €0.60/bottle | €3.00         | €0.60          |
+| Dutch   | €0.50/bottle | €2.00         | €1.00          |
+| German  | €0.80/bottle | €4.00         | €0.80          |
 
 ## Configuration
 
@@ -250,6 +262,7 @@ src/main/java/com/grocery/pricing/
 ## License
 
 MIT License
+
 ```
 
 ## Files to Create

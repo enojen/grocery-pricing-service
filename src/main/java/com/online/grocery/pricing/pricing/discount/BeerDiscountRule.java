@@ -9,10 +9,10 @@ import java.math.BigDecimal;
  * Implementations are auto-discovered by Spring and applied by BeerPricingStrategy.
  */
 public interface BeerDiscountRule {
-    
+
     /**
      * Check if this discount rule applies to the given context.
-     * 
+     *
      * @param ctx Beer pricing context with all relevant data
      * @return true if this rule should be applied
      */
@@ -21,7 +21,7 @@ public interface BeerDiscountRule {
     /**
      * Calculate the discount amount for this rule.
      * Only called if isApplicable() returns true.
-     * 
+     *
      * @param ctx Beer pricing context with all relevant data
      * @return Discount amount to subtract from original price
      */
@@ -30,7 +30,7 @@ public interface BeerDiscountRule {
     /**
      * Order of execution (lower numbers execute first).
      * Use values like 100, 200, 300 to allow insertion between rules.
-     * 
+     *
      * @return Execution order priority
      */
     int order();
@@ -38,7 +38,7 @@ public interface BeerDiscountRule {
     /**
      * Human-readable description of this discount rule.
      * Used by GET /discounts/rules endpoint.
-     * 
+     *
      * @return Description for API documentation
      */
     String description();

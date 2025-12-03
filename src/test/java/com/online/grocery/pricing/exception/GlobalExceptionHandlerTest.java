@@ -28,11 +28,11 @@ class GlobalExceptionHandlerTest {
     void shouldHandleValidationErrors() {
         MethodArgumentNotValidException ex = mock(MethodArgumentNotValidException.class);
         BindingResult bindingResult = mock(BindingResult.class);
-        
+
         FieldError fieldError = new FieldError(
-            "orderRequest", "items", "At least one item required"
+                "orderRequest", "items", "At least one item required"
         );
-        
+
         when(ex.getBindingResult()).thenReturn(bindingResult);
         when(bindingResult.getFieldErrors()).thenReturn(List.of(fieldError));
 

@@ -6,7 +6,8 @@ import java.util.Map;
  * Standard error response format.
  */
 public record ErrorResponse(
-    String code,
-    String message,
-    Map<String, String> details
-) {}
+        String code,
+        String message,
+        Map<String, String> details
+) {
+}

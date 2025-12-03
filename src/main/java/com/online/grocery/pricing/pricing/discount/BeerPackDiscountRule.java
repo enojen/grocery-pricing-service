@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 
 /**
  * Pack-based discount rule for beer.
- * 
+ *
  * <p>Applies fixed discount per 6-pack based on beer origin:</p>
  * <ul>
  *   <li>Belgian: €3.00 per pack</li>
@@ -33,13 +33,13 @@ public class BeerPackDiscountRule implements BeerDiscountRule {
     @Override
     public BigDecimal calculateDiscount(BeerPricingContext ctx) {
         PricingConfiguration.BeerRules beerRules = config.getBeer();
-        
+
         BigDecimal perPackDiscount = switch (ctx.origin()) {
             case BELGIAN -> beerRules.getBelgianPackDiscount();
             case DUTCH -> beerRules.getDutchPackDiscount();
             case GERMAN -> beerRules.getGermanPackDiscount();
         };
-        
+
         return perPackDiscount.multiply(BigDecimal.valueOf(ctx.packs()));
     }
 
@@ -52,10 +52,10 @@ public class BeerPackDiscountRule implements BeerDiscountRule {
     public String description() {
         PricingConfiguration.BeerRules rules = config.getBeer();
         return String.format(
-            "Fixed discount per 6-pack: Belgian €%.2f, Dutch €%.2f, German €%.2f",
-            rules.getBelgianPackDiscount(),
-            rules.getDutchPackDiscount(),
-            rules.getGermanPackDiscount()
+                "Fixed discount per 6-pack: Belgian €%.2f, Dutch €%.2f, German €%.2f",
+                rules.getBelgianPackDiscount(),
+                rules.getDutchPackDiscount(),
+                rules.getGermanPackDiscount()
         );
     }
 }

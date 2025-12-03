@@ -6,20 +6,20 @@ import org.junit.jupiter.params.provider.CsvSource;
 
 import java.math.BigDecimal;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 class MoneyUtilsTest {
 
     @ParameterizedTest
     @CsvSource({
-        "1.8667, 1.87",
-        "1.8647, 1.86",
-        "1.865, 1.87",
-        "1.8650, 1.87",
-        "1.8, 1.80",
-        "1, 1.00",
-        "0.005, 0.01",
-        "0.004, 0.00"
+            "1.8667, 1.87",
+            "1.8647, 1.86",
+            "1.865, 1.87",
+            "1.8650, 1.87",
+            "1.8, 1.80",
+            "1, 1.00",
+            "0.005, 0.01",
+            "0.004, 0.00"
     })
     void shouldNormalizeToTwoDecimalPlaces(String input, String expected) {
         BigDecimal result = MoneyUtils.normalize(new BigDecimal(input));

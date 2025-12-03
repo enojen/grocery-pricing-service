@@ -24,21 +24,21 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> handleValidationErrors(
-        MethodArgumentNotValidException ex
+            MethodArgumentNotValidException ex
     ) {
         Map<String, String> errors = ex.getBindingResult().getFieldErrors().stream()
-            .collect(Collectors.toMap(
-                FieldError::getField,
-                error -> error.getDefaultMessage() != null 
-                    ? error.getDefaultMessage() 
-                    : "Invalid value",
-                (first, second) -> first
-            ));
+                .collect(Collectors.toMap(
+                        FieldError::getField,
+                        error -> error.getDefaultMessage() != null
+                                ? error.getDefaultMessage()
+                                : "Invalid value",
+                        (first, second) -> first
+                ));
 
         ErrorResponse response = new ErrorResponse(
-            "VALIDATION_ERROR",
-            "Invalid request data",
-            errors
+                "VALIDATION_ERROR",
+                "Invalid request data",
+                errors
         );
         return ResponseEntity.badRequest().body(response);
     }
@@ -49,12 +49,12 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(InvalidOrderException.class)
     public ResponseEntity<ErrorResponse> handleInvalidOrder(
-        InvalidOrderException ex
+            InvalidOrderException ex
     ) {
         ErrorResponse response = new ErrorResponse(
-            "INVALID_ORDER",
-            ex.getMessage(),
-            null
+                "INVALID_ORDER",
+                ex.getMessage(),
+                null
         );
         return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(response);
     }
@@ -65,12 +65,12 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ErrorResponse> handleIllegalArgument(
-        IllegalArgumentException ex
+            IllegalArgumentException ex
     ) {
         ErrorResponse response = new ErrorResponse(
-            "INVALID_ORDER",
-            ex.getMessage(),
-            null
+                "INVALID_ORDER",
+                ex.getMessage(),
+                null
         );
         return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(response);
     }
@@ -82,9 +82,9 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleGeneralError(Exception ex) {
         ErrorResponse response = new ErrorResponse(
-            "INTERNAL_ERROR",
-            "An unexpected error occurred",
-            null
+                "INTERNAL_ERROR",
+                "An unexpected error occurred",
+                null
         );
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
     }

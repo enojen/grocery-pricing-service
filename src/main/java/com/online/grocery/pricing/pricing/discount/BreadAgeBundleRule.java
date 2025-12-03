@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 
 /**
  * Age-based bundle discount rule for bread.
- * 
+ *
  * <ul>
  *   <li>3-5 days old: "Buy 1 take 2" - In groups of 2, pay for 1</li>
  *   <li>6 days old: "Buy 1 take 3" - In groups of 3, pay for 1</li>
@@ -65,8 +65,8 @@ public class BreadAgeBundleRule implements BreadDiscountRule {
         int minAge = config.getBread().getBundleDiscountMinAge();
         int specialAge = config.getBread().getSpecialBundleAge();
         return String.format(
-            "Age-based bundle discounts: %d-%d days old = buy 1 take 2, %d days old = buy 1 take 3",
-            minAge, specialAge - 1, specialAge
+                "Age-based bundle discounts: %d-%d days old = buy 1 take 2, %d days old = buy 1 take 3",
+                minAge, specialAge - 1, specialAge
         );
     }
 }

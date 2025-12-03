@@ -7,5 +7,6 @@ import com.online.grocery.pricing.domain.enums.ProductType;
  */
 public interface OrderItem {
     ProductType getType();
+
     String getName();
 }

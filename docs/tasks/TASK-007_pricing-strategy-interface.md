@@ -1,12 +1,15 @@
 # TASK-007: Pricing Strategy Interface
 
 ## Status
+
 - [x] Completed
 
 ## Phase
+
 Phase 2: Pricing Logic
 
 ## Description
+
 Create the PricingStrategy interface that defines the contract for product-specific pricing logic.
 
 ## Implementation Details
@@ -25,24 +28,24 @@ import java.util.List;
 /**
  * Strategy interface for product-specific pricing calculations.
  * Each product type (Bread, Beer, Vegetable) has its own implementation.
- * 
+ *
  * <p>Implementations are discovered by Spring DI and registered by product type
  * in OrderPricingService.</p>
  */
 public interface PricingStrategy {
-    
+
     /**
      * Returns the product type this strategy handles.
      * Used for automatic registration and dispatch.
-     * 
+     *
      * @return The ProductType this strategy is responsible for
      */
     ProductType getProductType();
-    
+
     /**
      * Calculate prices for a list of order items.
      * All items passed to this method will be of the type returned by getProductType().
-     * 
+     *
      * @param items List of order items to price (pre-filtered by type)
      * @return List of receipt lines with pricing details
      */

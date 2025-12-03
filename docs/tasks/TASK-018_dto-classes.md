@@ -1,12 +1,15 @@
 # TASK-018: DTO Classes
 
 ## Status
+
 - [x] Completed
 
 ## Phase
+
 Phase 4: REST API
 
 ## Description
+
 Create Request/Response DTOs for the REST API with validation annotations.
 
 ## Implementation Details

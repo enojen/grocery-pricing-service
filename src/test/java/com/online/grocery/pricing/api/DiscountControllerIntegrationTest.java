@@ -7,8 +7,9 @@ import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.hamcrest.Matchers.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -20,8 +21,8 @@ class DiscountControllerIntegrationTest {
     @Test
     void shouldReturnActualDiscountRules() throws Exception {
         mockMvc.perform(get("/api/v1/discounts/rules"))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$", hasSize(greaterThanOrEqualTo(3))))
-            .andExpect(jsonPath("$[*].productType", hasItems("BREAD", "VEGETABLE", "BEER")));
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(greaterThanOrEqualTo(3))))
+                .andExpect(jsonPath("$[*].productType", hasItems("BREAD", "VEGETABLE", "BEER")));
     }
 }

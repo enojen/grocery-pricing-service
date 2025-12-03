@@ -1,17 +1,21 @@
 # TASK-011: Vegetable Discount Rule
 
 ## Status
+
 - [x] Completed
 
 ## Phase
+
 Phase 2: Pricing Logic
 
 ## Description
+
 Implement VegetableWeightTierRule for weight-based percentage discounts on vegetables.
 
 ## Business Rules
 
 **Vegetable Weight-Based Discounts** (applied to ALL vegetables in order):
+
 - **0-99g**: 5% discount
 - **100-499g**: 7% discount
 - **500g+**: 10% discount
@@ -33,7 +37,7 @@ import java.math.BigDecimal;
 
 /**
  * Weight-based percentage discount rule for vegetables.
- * 
+ *
  * <ul>
  *   <li>0-99g: 5% discount</li>
  *   <li>100-499g: 7% discount</li>
@@ -60,7 +64,7 @@ public class VegetableWeightTierRule implements VegetableDiscountRule {
         BigDecimal discountPercent;
 
         int weight = ctx.totalWeightGrams();
-        
+
         if (weight < rules.getSmallWeightThreshold()) {
             discountPercent = rules.getSmallWeightDiscount();
         } else if (weight < rules.getMediumWeightThreshold()) {
@@ -81,14 +85,14 @@ public class VegetableWeightTierRule implements VegetableDiscountRule {
     public String description() {
         PricingConfiguration.VegetableRules rules = config.getVegetable();
         return String.format(
-            "Weight-based discounts: <%dg = %.0f%%, %d-%dg = %.0f%%, %dg+ = %.0f%%",
-            rules.getSmallWeightThreshold(),
-            rules.getSmallWeightDiscount().multiply(new BigDecimal("100")),
-            rules.getSmallWeightThreshold(),
-            rules.getMediumWeightThreshold() - 1,
-            rules.getMediumWeightDiscount().multiply(new BigDecimal("100")),
-            rules.getMediumWeightThreshold(),
-            rules.getLargeWeightDiscount().multiply(new BigDecimal("100"))
+                "Weight-based discounts: <%dg = %.0f%%, %d-%dg = %.0f%%, %dg+ = %.0f%%",
+                rules.getSmallWeightThreshold(),
+                rules.getSmallWeightDiscount().multiply(new BigDecimal("100")),
+                rules.getSmallWeightThreshold(),
+                rules.getMediumWeightThreshold() - 1,
+                rules.getMediumWeightDiscount().multiply(new BigDecimal("100")),
+                rules.getMediumWeightThreshold(),
+                rules.getLargeWeightDiscount().multiply(new BigDecimal("100"))
         );
     }
 }
@@ -120,54 +124,54 @@ class VegetableWeightTierRuleTest {
     void setUp() {
         config = mock(PricingConfiguration.class);
         PricingConfiguration.VegetableRules vegRules = mock(PricingConfiguration.VegetableRules.class);
-        
+
         when(config.getVegetable()).thenReturn(vegRules);
         when(vegRules.getSmallWeightThreshold()).thenReturn(100);
         when(vegRules.getMediumWeightThreshold()).thenReturn(500);
         when(vegRules.getSmallWeightDiscount()).thenReturn(new BigDecimal("0.05"));
         when(vegRules.getMediumWeightDiscount()).thenReturn(new BigDecimal("0.07"));
         when(vegRules.getLargeWeightDiscount()).thenReturn(new BigDecimal("0.10"));
-        
+
         rule = new VegetableWeightTierRule(config);
     }
 
     @Test
     void shouldBeApplicableForAnyPositiveWeight() {
         VegetablePricingContext ctx = new VegetablePricingContext(
-            1, new BigDecimal("0.01"), new BigDecimal("0.01")
+                1, new BigDecimal("0.01"), new BigDecimal("0.01")
         );
-        
+
         assertThat(rule.isApplicable(ctx)).isTrue();
     }
 
     @Test
     void shouldNotBeApplicableForZeroWeight() {
         VegetablePricingContext ctx = new VegetablePricingContext(
-            0, BigDecimal.ZERO, BigDecimal.ZERO
+                0, BigDecimal.ZERO, BigDecimal.ZERO
         );
-        
+
         assertThat(rule.isApplicable(ctx)).isFalse();
     }
 
     @ParameterizedTest
     @CsvSource({
-        // weight, originalPrice, expectedDiscount
-        "50, 0.50, 0.025",     // 50g @ €0.50 × 5% = €0.025
-        "99, 0.99, 0.0495",    // 99g @ €0.99 × 5% = €0.0495
-        "100, 1.00, 0.07",     // 100g @ €1.00 × 7% = €0.07
-        "200, 2.00, 0.14",     // 200g @ €2.00 × 7% = €0.14
-        "499, 4.99, 0.3493",   // 499g @ €4.99 × 7% = €0.3493
-        "500, 5.00, 0.50",     // 500g @ €5.00 × 10% = €0.50
-        "1000, 10.00, 1.00"    // 1000g @ €10.00 × 10% = €1.00
+            // weight, originalPrice, expectedDiscount
+            "50, 0.50, 0.025",     // 50g @ €0.50 × 5% = €0.025
+            "99, 0.99, 0.0495",    // 99g @ €0.99 × 5% = €0.0495
+            "100, 1.00, 0.07",     // 100g @ €1.00 × 7% = €0.07
+            "200, 2.00, 0.14",     // 200g @ €2.00 × 7% = €0.14
+            "499, 4.99, 0.3493",   // 499g @ €4.99 × 7% = €0.3493
+            "500, 5.00, 0.50",     // 500g @ €5.00 × 10% = €0.50
+            "1000, 10.00, 1.00"    // 1000g @ €10.00 × 10% = €1.00
     })
     void shouldCalculateCorrectDiscount(int weight, String originalPrice, String expectedDiscount) {
         BigDecimal pricePerGram = new BigDecimal("0.01"); // €1.00 per 100g
         VegetablePricingContext ctx = new VegetablePricingContext(
-            weight, pricePerGram, new BigDecimal(originalPrice)
+                weight, pricePerGram, new BigDecimal(originalPrice)
         );
-        
+
         BigDecimal discount = rule.calculateDiscount(ctx);
-        
+
         assertThat(discount).isEqualByComparingTo(expectedDiscount);
     }
 
@@ -175,11 +179,11 @@ class VegetableWeightTierRuleTest {
     void shouldApply5PercentForSmallWeight() {
         // 50g vegetables at €0.50
         VegetablePricingContext ctx = new VegetablePricingContext(
-            50, new BigDecimal("0.01"), new BigDecimal("0.50")
+                50, new BigDecimal("0.01"), new BigDecimal("0.50")
         );
-        
+
         BigDecimal discount = rule.calculateDiscount(ctx);
-        
+
         // 5% of €0.50 = €0.025
         assertThat(discount).isEqualByComparingTo("0.025");
     }
@@ -188,11 +192,11 @@ class VegetableWeightTierRuleTest {
     void shouldApply7PercentForMediumWeight() {
         // 200g vegetables at €2.00
         VegetablePricingContext ctx = new VegetablePricingContext(
-            200, new BigDecimal("0.01"), new BigDecimal("2.00")
+                200, new BigDecimal("0.01"), new BigDecimal("2.00")
         );
-        
+
         BigDecimal discount = rule.calculateDiscount(ctx);
-        
+
         // 7% of €2.00 = €0.14
         assertThat(discount).isEqualByComparingTo("0.14");
     }
@@ -201,11 +205,11 @@ class VegetableWeightTierRuleTest {
     void shouldApply10PercentForLargeWeight() {
         // 600g vegetables at €6.00
         VegetablePricingContext ctx = new VegetablePricingContext(
-            600, new BigDecimal("0.01"), new BigDecimal("6.00")
+                600, new BigDecimal("0.01"), new BigDecimal("6.00")
         );
-        
+
         BigDecimal discount = rule.calculateDiscount(ctx);
-        
+
         // 10% of €6.00 = €0.60
         assertThat(discount).isEqualByComparingTo("0.60");
     }
@@ -214,11 +218,11 @@ class VegetableWeightTierRuleTest {
     void shouldHandleBoundaryAt100g() {
         // Exactly 100g should get 7% (medium tier)
         VegetablePricingContext ctx = new VegetablePricingContext(
-            100, new BigDecimal("0.01"), new BigDecimal("1.00")
+                100, new BigDecimal("0.01"), new BigDecimal("1.00")
         );
-        
+
         BigDecimal discount = rule.calculateDiscount(ctx);
-        
+
         assertThat(discount).isEqualByComparingTo("0.07");
     }
 
@@ -226,11 +230,11 @@ class VegetableWeightTierRuleTest {
     void shouldHandleBoundaryAt500g() {
         // Exactly 500g should get 10% (large tier)
         VegetablePricingContext ctx = new VegetablePricingContext(
-            500, new BigDecimal("0.01"), new BigDecimal("5.00")
+                500, new BigDecimal("0.01"), new BigDecimal("5.00")
         );
-        
+
         BigDecimal discount = rule.calculateDiscount(ctx);
-        
+
         assertThat(discount).isEqualByComparingTo("0.50");
     }
 }

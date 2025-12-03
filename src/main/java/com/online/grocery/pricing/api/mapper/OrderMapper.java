@@ -2,11 +2,7 @@ package com.online.grocery.pricing.api.mapper;
 
 import com.online.grocery.pricing.api.dto.OrderItemRequest;
 import com.online.grocery.pricing.api.dto.OrderRequest;
-import com.online.grocery.pricing.domain.model.BeerItem;
-import com.online.grocery.pricing.domain.model.BreadItem;
-import com.online.grocery.pricing.domain.model.Order;
-import com.online.grocery.pricing.domain.model.OrderItem;
-import com.online.grocery.pricing.domain.model.VegetableItem;
+import com.online.grocery.pricing.domain.model.*;
 import com.online.grocery.pricing.exception.InvalidOrderException;
 import org.springframework.stereotype.Component;
 
@@ -29,8 +25,8 @@ public class OrderMapper {
      */
     public Order mapToOrder(OrderRequest request) {
         List<OrderItem> items = request.items().stream()
-            .map(this::mapToOrderItem)
-            .toList();
+                .map(this::mapToOrderItem)
+                .toList();
 
         return new Order(items);
     }
@@ -44,18 +40,18 @@ public class OrderMapper {
 
         return switch (itemRequest.type()) {
             case BREAD -> new BreadItem(
-                itemRequest.name(),
-                itemRequest.quantity(),
-                itemRequest.daysOld()
+                    itemRequest.name(),
+                    itemRequest.quantity(),
+                    itemRequest.daysOld()
             );
             case VEGETABLE -> new VegetableItem(
-                itemRequest.name(),
-                itemRequest.weightGrams()
+                    itemRequest.name(),
+                    itemRequest.weightGrams()
             );
             case BEER -> new BeerItem(
-                itemRequest.name(),
-                itemRequest.quantity(),
-                itemRequest.origin()
+                    itemRequest.name(),
+                    itemRequest.quantity(),
+                    itemRequest.origin()
             );
         };
     }
@@ -69,12 +65,12 @@ public class OrderMapper {
             case BREAD:
                 if (request.quantity() == null) {
                     throw new InvalidOrderException(
-                        "quantity field required for product type BREAD"
+                            "quantity field required for product type BREAD"
                     );
                 }
                 if (request.daysOld() == null) {
                     throw new InvalidOrderException(
-                        "daysOld field required for product type BREAD"
+                            "daysOld field required for product type BREAD"
                     );
                 }
                 break;
@@ -82,7 +78,7 @@ public class OrderMapper {
             case VEGETABLE:
                 if (request.weightGrams() == null) {
                     throw new InvalidOrderException(
-                        "weightGrams field required for product type VEGETABLE"
+                            "weightGrams field required for product type VEGETABLE"
                     );
                 }
                 break;
@@ -90,12 +86,12 @@ public class OrderMapper {
             case BEER:
                 if (request.quantity() == null) {
                     throw new InvalidOrderException(
-                        "quantity field required for product type BEER"
+                            "quantity field required for product type BEER"
                     );
                 }
                 if (request.origin() == null) {
                     throw new InvalidOrderException(
-                        "origin field required for product type BEER"
+                            "origin field required for product type BEER"
                     );
                 }
                 break;

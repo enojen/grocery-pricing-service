@@ -9,10 +9,10 @@ import java.math.BigDecimal;
  * Implementations are auto-discovered by Spring and applied by VegetablePricingStrategy.
  */
 public interface VegetableDiscountRule {
-    
+
     /**
      * Check if this discount rule applies to the given context.
-     * 
+     *
      * @param ctx Vegetable pricing context with weight and price data
      * @return true if this rule should be applied
      */
@@ -21,7 +21,7 @@ public interface VegetableDiscountRule {
     /**
      * Calculate the discount amount for this rule.
      * Only called if isApplicable() returns true.
-     * 
+     *
      * @param ctx Vegetable pricing context with weight and price data
      * @return Discount amount to subtract from original price
      */
@@ -29,14 +29,14 @@ public interface VegetableDiscountRule {
 
     /**
      * Order of execution (lower numbers execute first).
-     * 
+     *
      * @return Execution order priority
      */
     int order();
 
     /**
      * Human-readable description of this discount rule.
-     * 
+     *
      * @return Description for API documentation
      */
     String description();

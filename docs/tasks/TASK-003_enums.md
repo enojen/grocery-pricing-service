@@ -1,12 +1,15 @@
 # TASK-003: Enums
 
 ## Status
+
 - [x] Completed
 
 ## Phase
+
 Phase 1: Foundation
 
 ## Description
+
 Create ProductType and BeerOrigin enums for type-safe product categorization.
 
 ## Implementation Details
@@ -44,6 +47,7 @@ public enum BeerOrigin {
 ### Usage Context
 
 These enums are used throughout the application:
+
 - `ProductType` - Used by `OrderItem.getType()` to categorize items
 - `BeerOrigin` - Used by `BeerItem` to determine origin-specific pricing
 

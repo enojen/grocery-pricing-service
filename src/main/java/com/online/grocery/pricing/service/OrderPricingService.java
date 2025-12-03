@@ -31,10 +31,10 @@ public class OrderPricingService {
      */
     public OrderPricingService(List<PricingStrategy> strategyList) {
         this.strategies = strategyList.stream()
-            .collect(Collectors.toMap(
-                PricingStrategy::getProductType,
-                Function.identity()
-            ));
+                .collect(Collectors.toMap(
+                        PricingStrategy::getProductType,
+                        Function.identity()
+                ));
     }
 
     /**
@@ -46,27 +46,27 @@ public class OrderPricingService {
      */
     public Receipt calculateReceipt(Order order) {
         Map<ProductType, List<OrderItem>> itemsByType = order.getItems().stream()
-            .collect(Collectors.groupingBy(OrderItem::getType));
+                .collect(Collectors.groupingBy(OrderItem::getType));
 
         List<ReceiptLine> allLines = itemsByType.entrySet().stream()
-            .flatMap(entry -> {
-                PricingStrategy strategy = strategies.get(entry.getKey());
-                if (strategy == null) {
-                    throw new IllegalStateException(
-                        "No pricing strategy registered for product type: " + entry.getKey()
-                    );
-                }
-                return strategy.calculatePrice(entry.getValue()).stream();
-            })
-            .toList();
+                .flatMap(entry -> {
+                    PricingStrategy strategy = strategies.get(entry.getKey());
+                    if (strategy == null) {
+                        throw new IllegalStateException(
+                                "No pricing strategy registered for product type: " + entry.getKey()
+                        );
+                    }
+                    return strategy.calculatePrice(entry.getValue()).stream();
+                })
+                .toList();
 
         BigDecimal subtotal = allLines.stream()
-            .map(ReceiptLine::originalPrice)
-            .reduce(BigDecimal.ZERO, BigDecimal::add);
+                .map(ReceiptLine::originalPrice)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
 
         BigDecimal totalDiscount = allLines.stream()
-            .map(ReceiptLine::discount)
-            .reduce(BigDecimal.ZERO, BigDecimal::add);
+                .map(ReceiptLine::discount)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
 
         BigDecimal total = subtotal.subtract(totalDiscount);
 

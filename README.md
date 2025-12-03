@@ -5,6 +5,7 @@ REST API for calculating grocery order totals with product-specific discounts.
 ## Overview
 
 This service calculates order totals for a grocery store, applying automatic discounts based on:
+
 - **Bread**: Age-based bundle discounts
 - **Vegetables**: Weight-based percentage discounts
 - **Beer**: Origin-specific pack discounts
@@ -49,6 +50,7 @@ This service calculates order totals for a grocery store, applying automatic dis
 ## Quick Start
 
 ### Prerequisites
+
 - Java 21+
 - Maven 3.6+
 
@@ -77,6 +79,7 @@ java -jar target/grocery-pricing-service-0.0.1-SNAPSHOT.jar
 ## API Endpoints
 
 ### Calculate Order
+
 ```http
 POST /api/v1/orders/calculate
 Content-Type: application/json
@@ -91,6 +94,7 @@ Content-Type: application/json
 ```
 
 **Response:**
+
 ```json
 {
   "lines": [
@@ -105,11 +109,13 @@ Content-Type: application/json
 ```
 
 ### List Discount Rules
+
 ```http
 GET /api/v1/discounts/rules
 ```
 
 ### List Product Prices
+
 ```http
 GET /api/v1/products/prices
 ```
@@ -117,26 +123,29 @@ GET /api/v1/products/prices
 ## Business Rules
 
 ### Bread
-| Age | Discount |
-|-----|----------|
-| 0-2 days | No discount |
+
+| Age      | Discount                                |
+|----------|-----------------------------------------|
+| 0-2 days | No discount                             |
 | 3-5 days | "Buy 1 take 2" (50% off in groups of 2) |
-| 6 days | "Buy 1 take 3" (66% off in groups of 3) |
-| >6 days | Not allowed |
+| 6 days   | "Buy 1 take 3" (66% off in groups of 3) |
+| >6 days  | Not allowed                             |
 
 ### Vegetables
-| Weight | Discount |
-|--------|----------|
-| 0-99g | 5% |
-| 100-499g | 7% |
-| 500g+ | 10% |
+
+| Weight   | Discount |
+|----------|----------|
+| 0-99g    | 5%       |
+| 100-499g | 7%       |
+| 500g+    | 10%      |
 
 ### Beer
-| Origin | Base Price | Pack Discount | Final (6-pack) |
-|--------|------------|---------------|----------------|
-| Belgian | €0.60/bottle | €3.00 | €0.60 |
-| Dutch | €0.50/bottle | €2.00 | €1.00 |
-| German | €0.80/bottle | €4.00 | €0.80 |
+
+| Origin  | Base Price   | Pack Discount | Final (6-pack) |
+|---------|--------------|---------------|----------------|
+| Belgian | €0.60/bottle | €3.00         | €0.60          |
+| Dutch   | €0.50/bottle | €2.00         | €1.00          |
+| German  | €0.80/bottle | €4.00         | €0.80          |
 
 ## Configuration
 

@@ -22,13 +22,13 @@ public class VegetablePricingStrategy implements PricingStrategy {
     private final List<VegetableDiscountRule> discountRules;
 
     public VegetablePricingStrategy(
-        PricingConfiguration config,
-        List<VegetableDiscountRule> discountRules
+            PricingConfiguration config,
+            List<VegetableDiscountRule> discountRules
     ) {
         this.config = config;
         this.discountRules = discountRules.stream()
-            .sorted(Comparator.comparingInt(VegetableDiscountRule::order))
-            .toList();
+                .sorted(Comparator.comparingInt(VegetableDiscountRule::order))
+                .toList();
     }
 
     @Override
@@ -41,41 +41,41 @@ public class VegetablePricingStrategy implements PricingStrategy {
         List<VegetableItem> vegetables = castToType(items, VegetableItem.class);
 
         int totalWeight = vegetables.stream()
-            .mapToInt(VegetableItem::weightGrams)
-            .sum();
+                .mapToInt(VegetableItem::weightGrams)
+                .sum();
 
         BigDecimal pricePerGram = config.getVegetablePricePer100g()
-            .divide(BigDecimal.valueOf(100), 4, RoundingMode.HALF_UP);
+                .divide(BigDecimal.valueOf(100), 4, RoundingMode.HALF_UP);
         BigDecimal originalPrice = pricePerGram
-            .multiply(BigDecimal.valueOf(totalWeight));
+                .multiply(BigDecimal.valueOf(totalWeight));
 
         VegetablePricingContext ctx = new VegetablePricingContext(
-            totalWeight,
-            pricePerGram,
-            originalPrice
+                totalWeight,
+                pricePerGram,
+                originalPrice
         );
 
         BigDecimal totalDiscount = discountRules.stream()
-            .filter(rule -> rule.isApplicable(ctx))
-            .map(rule -> rule.calculateDiscount(ctx))
-            .reduce(BigDecimal.ZERO, BigDecimal::add);
+                .filter(rule -> rule.isApplicable(ctx))
+                .map(rule -> rule.calculateDiscount(ctx))
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
 
         BigDecimal finalPrice = originalPrice.subtract(totalDiscount);
 
         String description = String.format("%dg Vegetables", totalWeight);
         return List.of(new ReceiptLine(
-            description,
-            MoneyUtils.normalize(originalPrice),
-            MoneyUtils.normalize(totalDiscount),
-            MoneyUtils.normalize(finalPrice)
+                description,
+                MoneyUtils.normalize(originalPrice),
+                MoneyUtils.normalize(totalDiscount),
+                MoneyUtils.normalize(finalPrice)
         ));
     }
 
     @SuppressWarnings("unchecked")
     private <T extends OrderItem> List<T> castToType(List<OrderItem> items, Class<T> type) {
         return items.stream()
-            .filter(type::isInstance)
-            .map(type::cast)
-            .toList();
+                .filter(type::isInstance)
+                .map(type::cast)
+                .toList();
     }
 }

@@ -1,12 +1,15 @@
 # TASK-015: Order Pricing Service
 
 ## Status
+
 - [X] Completed
 
 ## Phase
+
 Phase 3: Service Layer
 
 ## Description
+
 Create OrderPricingService that orchestrates pricing strategies to calculate order totals.
 
 ## Implementation Details

@@ -1,12 +1,15 @@
 # TASK-001: Project Setup
 
 ## Status
+
 - [x] Completed
 
 ## Phase
+
 Phase 1: Foundation
 
 ## Description
+
 Create Spring Boot project with Java 21 and configure Maven dependencies for the grocery pricing service.
 
 ## Implementation Details
@@ -16,39 +19,39 @@ Create Spring Boot project with Java 21 and configure Maven dependencies for the
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    
+
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>4.0.0</version>
         <relativePath/>
     </parent>
-    
+
     <groupId>com.online.grocery</groupId>
     <artifactId>grocery-pricing-service</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>grocery-pricing-service</name>
     <description>Grocery Pricing &amp; Receipt Service for Online Grocery Store</description>
-    
+
     <properties>
         <java.version>21</java.version>
     </properties>
-    
+
     <dependencies>
         <!-- Spring Boot Web MVC -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-webmvc</artifactId>
         </dependency>
-        
+
         <!-- Validation -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-validation</artifactId>
         </dependency>
-        
+
         <!-- DevTools -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -56,14 +59,14 @@ Create Spring Boot project with Java 21 and configure Maven dependencies for the
             <scope>runtime</scope>
             <optional>true</optional>
         </dependency>
-        
+
         <!-- Lombok -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <optional>true</optional>
         </dependency>
-        
+
         <!-- Testing -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -76,7 +79,7 @@ Create Spring Boot project with Java 21 and configure Maven dependencies for the
             <scope>test</scope>
         </dependency>
     </dependencies>
-    
+
     <build>
         <plugins>
             <plugin>

@@ -1,12 +1,15 @@
 # TASK-004: Domain Records
 
 ## Status
+
 - [x] Completed
 
 ## Phase
+
 Phase 1: Foundation
 
 ## Description
+
 Create the OrderItem interface and implementing records (BreadItem, VegetableItem, BeerItem) with validation.
 
 ## Implementation Details
@@ -37,17 +40,17 @@ import com.grocery.pricing.exception.InvalidOrderException;
 
 /**
  * Represents bread items in an order.
- * 
+ *
  * @param name Item name/description
  * @param quantity Number of bread units
  * @param daysOld Age of bread in days (0-6 valid)
  */
 public record BreadItem(
-    String name,
-    int quantity,
-    int daysOld
+        String name,
+        int quantity,
+        int daysOld
 ) implements OrderItem {
-    
+
     public BreadItem {
         if (quantity <= 0) {
             throw new IllegalArgumentException("Quantity must be positive");
@@ -61,8 +64,8 @@ public record BreadItem(
     }
 
     @Override
-    public ProductType getType() { 
-        return ProductType.BREAD; 
+    public ProductType getType() {
+        return ProductType.BREAD;
     }
 }
 ```
@@ -76,15 +79,15 @@ import com.grocery.pricing.domain.enums.ProductType;
 
 /**
  * Represents vegetable items in an order.
- * 
+ *
  * @param name Item name/description
  * @param weightGrams Weight of vegetables in grams
  */
 public record VegetableItem(
-    String name,
-    int weightGrams
+        String name,
+        int weightGrams
 ) implements OrderItem {
-    
+
     public VegetableItem {
         if (weightGrams <= 0) {
             throw new IllegalArgumentException("Weight must be positive");
@@ -92,8 +95,8 @@ public record VegetableItem(
     }
 
     @Override
-    public ProductType getType() { 
-        return ProductType.VEGETABLE; 
+    public ProductType getType() {
+        return ProductType.VEGETABLE;
     }
 }
 ```
@@ -105,21 +108,22 @@ package com.grocery.pricing.domain.model;
 
 import com.grocery.pricing.domain.enums.BeerOrigin;
 import com.grocery.pricing.domain.enums.ProductType;
+
 import java.util.Objects;
 
 /**
  * Represents beer items in an order.
- * 
+ *
  * @param name Item name/description
  * @param quantity Number of bottles
  * @param origin Beer origin (BELGIAN, DUTCH, GERMAN)
  */
 public record BeerItem(
-    String name,
-    int quantity,
-    BeerOrigin origin
+        String name,
+        int quantity,
+        BeerOrigin origin
 ) implements OrderItem {
-    
+
     public BeerItem {
         if (quantity <= 0) {
             throw new IllegalArgumentException("Quantity must be positive");
@@ -128,8 +132,8 @@ public record BeerItem(
     }
 
     @Override
-    public ProductType getType() { 
-        return ProductType.BEER; 
+    public ProductType getType() {
+        return ProductType.BEER;
     }
 }
 ```

@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 import java.math.BigDecimal;
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
 class VegetablePricingStrategyTest {
@@ -25,10 +25,10 @@ class VegetablePricingStrategyTest {
     void setUp() {
         config = mock(PricingConfiguration.class);
         discountRule = mock(VegetableDiscountRule.class);
-        
+
         when(config.getVegetablePricePer100g()).thenReturn(new BigDecimal("1.00"));
         when(discountRule.order()).thenReturn(100);
-        
+
         strategy = new VegetablePricingStrategy(config, List.of(discountRule));
     }
 
@@ -41,10 +41,10 @@ class VegetablePricingStrategyTest {
     void shouldCalculatePriceForSmallWeight() {
         when(discountRule.isApplicable(any())).thenReturn(true);
         when(discountRule.calculateDiscount(any())).thenReturn(new BigDecimal("0.025"));
-        
+
         List<OrderItem> items = List.of(new VegetableItem("Carrots", 50));
         List<ReceiptLine> result = strategy.calculatePrice(items);
-        
+
         assertThat(result).hasSize(1);
         ReceiptLine line = result.get(0);
         assertThat(line.description()).isEqualTo("50g Vegetables");
@@ -55,10 +55,10 @@ class VegetablePricingStrategyTest {
     void shouldCalculatePriceForMediumWeight() {
         when(discountRule.isApplicable(any())).thenReturn(true);
         when(discountRule.calculateDiscount(any())).thenReturn(new BigDecimal("0.21"));
-        
+
         List<OrderItem> items = List.of(new VegetableItem("Potatoes", 300));
         List<ReceiptLine> result = strategy.calculatePrice(items);
-        
+
         assertThat(result).hasSize(1);
         ReceiptLine line = result.get(0);
         assertThat(line.description()).isEqualTo("300g Vegetables");
@@ -69,10 +69,10 @@ class VegetablePricingStrategyTest {
     void shouldCalculatePriceForLargeWeight() {
         when(discountRule.isApplicable(any())).thenReturn(true);
         when(discountRule.calculateDiscount(any())).thenReturn(new BigDecimal("0.50"));
-        
+
         List<OrderItem> items = List.of(new VegetableItem("Mixed Vegetables", 500));
         List<ReceiptLine> result = strategy.calculatePrice(items);
-        
+
         assertThat(result).hasSize(1);
         ReceiptLine line = result.get(0);
         assertThat(line.description()).isEqualTo("500g Vegetables");
@@ -82,14 +82,14 @@ class VegetablePricingStrategyTest {
     @Test
     void shouldAggregateAllVegetables() {
         when(discountRule.isApplicable(any())).thenReturn(false);
-        
+
         List<OrderItem> items = List.of(
-            new VegetableItem("Carrots", 100),
-            new VegetableItem("Potatoes", 200),
-            new VegetableItem("Onions", 150)
+                new VegetableItem("Carrots", 100),
+                new VegetableItem("Potatoes", 200),
+                new VegetableItem("Onions", 150)
         );
         List<ReceiptLine> result = strategy.calculatePrice(items);
-        
+
         assertThat(result).hasSize(1);
         ReceiptLine line = result.get(0);
         assertThat(line.description()).isEqualTo("450g Vegetables");
@@ -102,10 +102,10 @@ class VegetablePricingStrategyTest {
     void shouldApplyDiscount() {
         when(discountRule.isApplicable(any())).thenReturn(true);
         when(discountRule.calculateDiscount(any())).thenReturn(new BigDecimal("0.50"));
-        
+
         List<OrderItem> items = List.of(new VegetableItem("Vegetables", 500));
         List<ReceiptLine> result = strategy.calculatePrice(items);
-        
+
         ReceiptLine line = result.get(0);
         assertThat(line.originalPrice()).isEqualByComparingTo("5.00");
         assertThat(line.discount()).isEqualByComparingTo("0.50");
@@ -116,21 +116,21 @@ class VegetablePricingStrategyTest {
     void shouldApplyMultipleDiscountRulesInOrder() {
         VegetableDiscountRule rule1 = mock(VegetableDiscountRule.class);
         VegetableDiscountRule rule2 = mock(VegetableDiscountRule.class);
-        
+
         when(rule1.order()).thenReturn(200);
         when(rule2.order()).thenReturn(100);
         when(rule1.isApplicable(any())).thenReturn(true);
         when(rule2.isApplicable(any())).thenReturn(true);
         when(rule1.calculateDiscount(any())).thenReturn(new BigDecimal("0.10"));
         when(rule2.calculateDiscount(any())).thenReturn(new BigDecimal("0.20"));
-        
+
         VegetablePricingStrategy strategyWithMultipleRules = new VegetablePricingStrategy(
-            config, List.of(rule1, rule2)
+                config, List.of(rule1, rule2)
         );
-        
+
         List<OrderItem> items = List.of(new VegetableItem("Veggies", 200));
         List<ReceiptLine> result = strategyWithMultipleRules.calculatePrice(items);
-        
+
         assertThat(result.get(0).discount()).isEqualByComparingTo("0.30");
     }
 
@@ -138,10 +138,10 @@ class VegetablePricingStrategyTest {
     void shouldNormalizeMonetaryValues() {
         when(config.getVegetablePricePer100g()).thenReturn(new BigDecimal("1.00"));
         when(discountRule.isApplicable(any())).thenReturn(false);
-        
+
         List<OrderItem> items = List.of(new VegetableItem("Veggies", 33));
         List<ReceiptLine> result = strategy.calculatePrice(items);
-        
+
         assertThat(result.get(0).originalPrice().scale()).isEqualTo(2);
         assertThat(result.get(0).finalPrice().scale()).isEqualTo(2);
     }
@@ -149,14 +149,14 @@ class VegetablePricingStrategyTest {
     @Test
     void shouldReturnSingleReceiptLine() {
         when(discountRule.isApplicable(any())).thenReturn(false);
-        
+
         List<OrderItem> items = List.of(
-            new VegetableItem("A", 100),
-            new VegetableItem("B", 100),
-            new VegetableItem("C", 100)
+                new VegetableItem("A", 100),
+                new VegetableItem("B", 100),
+                new VegetableItem("C", 100)
         );
         List<ReceiptLine> result = strategy.calculatePrice(items);
-        
+
         assertThat(result).hasSize(1);
     }
 }

@@ -1,12 +1,15 @@
 # TASK-005: Receipt Model
 
 ## Status
+
 - [x] Completed
 
 ## Phase
+
 Phase 1: Foundation
 
 ## Description
+
 Create Receipt and ReceiptLine records for representing pricing calculation results.
 
 ## Implementation Details
@@ -20,17 +23,17 @@ import java.math.BigDecimal;
 
 /**
  * Represents a single line item on a receipt.
- * 
+ *
  * @param description Human-readable description of the item
  * @param originalPrice Price before any discounts
  * @param discount Total discount applied to this line
  * @param finalPrice Price after discount (originalPrice - discount)
  */
 public record ReceiptLine(
-    String description,
-    BigDecimal originalPrice,
-    BigDecimal discount,
-    BigDecimal finalPrice
+        String description,
+        BigDecimal originalPrice,
+        BigDecimal discount,
+        BigDecimal finalPrice
 ) {
     public ReceiptLine {
         if (finalPrice.compareTo(BigDecimal.ZERO) < 0) {
@@ -80,7 +83,7 @@ import java.math.RoundingMode;
  * Utility class for consistent money handling across all calculations.
  */
 public final class MoneyUtils {
-    
+
     private static final int CURRENCY_SCALE = 2;
     private static final RoundingMode ROUNDING_MODE = RoundingMode.HALF_UP;
 
@@ -91,7 +94,7 @@ public final class MoneyUtils {
     /**
      * Normalize BigDecimal to 2 decimal places using HALF_UP rounding.
      * Applied to all final prices and discount calculations.
-     * 
+     *
      * @param amount The amount to normalize
      * @return Normalized amount with 2 decimal places
      */
@@ -116,15 +119,21 @@ public final class MoneyUtils {
 ```java
 // In pricing strategies
 BigDecimal finalPrice = MoneyUtils.normalize(
-    originalPrice.subtract(totalDiscount)
+        originalPrice.subtract(totalDiscount)
 );
 
 // Creating receipt line
-return new ReceiptLine(
-    description,
-    MoneyUtils.normalize(originalPrice),
-    MoneyUtils.normalize(totalDiscount),
-    MoneyUtils.normalize(finalPrice)
+return new
+
+ReceiptLine(
+        description,
+        MoneyUtils.normalize(originalPrice),
+    MoneyUtils.
+
+normalize(totalDiscount),
+    MoneyUtils.
+
+normalize(finalPrice)
 );
 ```
 

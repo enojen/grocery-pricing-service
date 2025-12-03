@@ -2,49 +2,55 @@
 
 ## Executive Summary
 
-Build a clean, extensible grocery pricing REST service that  maintaining **simplicity and clarity** appropriate for the scope.
+Build a clean, extensible grocery pricing REST service that maintaining **simplicity and clarity** appropriate for the
+scope.
 
 ---
 
 ## 1. Requirements Analysis
 
 ### Functional Requirements
+
 - Calculate order total with product-specific discount rules
 - Support 3 product types: Bread, Vegetables, Beer
 - REST endpoints:
-  - `POST /orders/calculate` - Calculate order with receipt
-  - `GET /discounts/rules` - List current discount rules
-  - `GET /products/prices` - List current prices
+    - `POST /orders/calculate` - Calculate order with receipt
+    - `GET /discounts/rules` - List current discount rules
+    - `GET /products/prices` - List current prices
 
 ### Business Rules
 
 **Bread**:
+
 - Base price: €1.00 per unit
 - Age-based bundle discounts (applied per group):
-  - 0-2 days old: No discount
-  - 3-5 days old: "Buy 1 take 2" (in groups of 2, pay for 1)
-  - 6 days old: "Buy 1 take 3" (in groups of 3, pay for 1)
-  - `>6 days: Invalid (reject order)
+    - 0-2 days old: No discount
+    - 3-5 days old: "Buy 1 take 2" (in groups of 2, pay for 1)
+    - 6 days old: "Buy 1 take 3" (in groups of 3, pay for 1)
+    - `>6 days: Invalid (reject order)
 
 **Vegetables**:
+
 - Base price: €1.00 per 100g
 - Weight-based % discounts (applied to ALL vegetables in order):
-  - 0-99g: 5% discount
-  - 100-499g: 7% discount
-  - 500g+: 10% discount
+    - 0-99g: 5% discount
+    - 100-499g: 7% discount
+    - 500g+: 10% discount
 
 **Beer**:
+
 - Base prices per origin (to ensure positive final prices after discounts):
-  - Belgian beer: €0.60 per bottle
-  - Dutch beer: €0.50 per bottle
-  - German beer: €0.80 per bottle
+    - Belgian beer: €0.60 per bottle
+    - Dutch beer: €0.50 per bottle
+    - German beer: €0.80 per bottle
 - Pack discounts (6 bottles = 1 pack):
-  - Belgian pack: €3.00 discount → Final: €0.60 (€3.60 - €3.00)
-  - Dutch pack: €2.00 discount → Final: €1.00 (€3.00 - €2.00)
-  - German pack: €4.00 discount → Final: €0.80 (€4.80 - €4.00)
+    - Belgian pack: €3.00 discount → Final: €0.60 (€3.60 - €3.00)
+    - Dutch pack: €2.00 discount → Final: €1.00 (€3.00 - €2.00)
+    - German pack: €4.00 discount → Final: €0.80 (€4.80 - €4.00)
 - Single bottles: No discount, pay per-bottle base price
 
 ### Non-Functional Requirements
+
 - Java 17+
 - Spring Boot 4.0.0
 - Config-driven pricing rules
@@ -73,6 +79,7 @@ OrderRequest → OrderController
 ```
 
 **Key Principles**:
+
 - Single responsibility per class
 - Strategy pattern for product-specific logic
 - Config-driven rules (no hardcoded magic numbers)
@@ -152,16 +159,18 @@ com.grocery.pricing/
 ### 4.1 Domain Model
 
 **OrderItem Hierarchy**
+
 ```java
 public interface OrderItem {
     ProductType getType();
+
     String getName();
 }
 
 public record BreadItem(
-    String name,
-    int quantity,
-    int daysOld
+        String name,
+        int quantity,
+        int daysOld
 ) implements OrderItem {
     public BreadItem {
         if (quantity <= 0) throw new IllegalArgumentException("Quantity must be positive");
@@ -169,41 +178,48 @@ public record BreadItem(
         if (daysOld > 6) throw new InvalidOrderException("Bread older than 6 days cannot be ordered");
     }
 
-    public ProductType getType() { return ProductType.BREAD; }
+    public ProductType getType() {
+        return ProductType.BREAD;
+    }
 }
 
 public record VegetableItem(
-    String name,
-    int weightGrams
+        String name,
+        int weightGrams
 ) implements OrderItem {
     public VegetableItem {
         if (weightGrams <= 0) throw new IllegalArgumentException("Weight must be positive");
     }
 
-    public ProductType getType() { return ProductType.VEGETABLE; }
+    public ProductType getType() {
+        return ProductType.VEGETABLE;
+    }
 }
 
 public record BeerItem(
-    String name,
-    int quantity,
-    BeerOrigin origin
+        String name,
+        int quantity,
+        BeerOrigin origin
 ) implements OrderItem {
     public BeerItem {
         if (quantity <= 0) throw new IllegalArgumentException("Quantity must be positive");
         Objects.requireNonNull(origin, "Beer origin required");
     }
 
-    public ProductType getType() { return ProductType.BEER; }
+    public ProductType getType() {
+        return ProductType.BEER;
+    }
 }
 ```
 
 **Receipt Model**
+
 ```java
 public record ReceiptLine(
-    String description,
-    BigDecimal originalPrice,
-    BigDecimal discount,
-    BigDecimal finalPrice
+        String description,
+        BigDecimal originalPrice,
+        BigDecimal discount,
+        BigDecimal finalPrice
 ) {
     public ReceiptLine {
         if (finalPrice.compareTo(BigDecimal.ZERO) < 0) {
@@ -213,10 +229,10 @@ public record ReceiptLine(
 }
 
 public record Receipt(
-    List<ReceiptLine> lines,
-    BigDecimal subtotal,      // Sum of original prices
-    BigDecimal totalDiscount, // Sum of discounts
-    BigDecimal total          // subtotal - totalDiscount
+        List<ReceiptLine> lines,
+        BigDecimal subtotal,      // Sum of original prices
+        BigDecimal totalDiscount, // Sum of discounts
+        BigDecimal total          // subtotal - totalDiscount
 ) {
     public Receipt {
         lines = List.copyOf(lines); // Defensive copy
@@ -233,39 +249,46 @@ public record Receipt(
 #### 4.2.1 Pricing Contexts
 
 **BeerPricingContext**
+
 ```java
 public record BeerPricingContext(
-    BeerOrigin origin,
-    int totalBottles,
-    int packs,
-    int singles,
-    BigDecimal originBasePrice,    // Origin-specific price per bottle
-    BigDecimal originalPrice
-) {}
+        BeerOrigin origin,
+        int totalBottles,
+        int packs,
+        int singles,
+        BigDecimal originBasePrice,    // Origin-specific price per bottle
+        BigDecimal originalPrice
+) {
+}
 ```
 
 **BreadPricingContext**
+
 ```java
 public record BreadPricingContext(
-    int age,
-    int totalQuantity,
-    BigDecimal unitPrice,
-    BigDecimal originalPrice
-) {}
+        int age,
+        int totalQuantity,
+        BigDecimal unitPrice,
+        BigDecimal originalPrice
+) {
+}
 ```
 
 **VegetablePricingContext**
+
 ```java
 public record VegetablePricingContext(
-    int totalWeightGrams,
-    BigDecimal pricePerGram,
-    BigDecimal originalPrice
-) {}
+        int totalWeightGrams,
+        BigDecimal pricePerGram,
+        BigDecimal originalPrice
+) {
+}
 ```
 
 #### 4.2.2 Discount Rule Interfaces
 
 **BeerDiscountRule**
+
 ```java
 public interface BeerDiscountRule {
     /**
@@ -291,21 +314,29 @@ public interface BeerDiscountRule {
 ```
 
 **BreadDiscountRule** (same structure)
+
 ```java
 public interface BreadDiscountRule {
     boolean isApplicable(BreadPricingContext ctx);
+
     BigDecimal calculateDiscount(BreadPricingContext ctx);
+
     int order();
+
     String description();
 }
 ```
 
 **VegetableDiscountRule** (same structure)
+
 ```java
 public interface VegetableDiscountRule {
     boolean isApplicable(VegetablePricingContext ctx);
+
     BigDecimal calculateDiscount(VegetablePricingContext ctx);
+
     int order();
+
     String description();
 }
 ```
@@ -313,9 +344,11 @@ public interface VegetableDiscountRule {
 #### 4.2.3 Pricing Strategy Interface
 
 **PricingStrategy**
+
 ```java
 public interface PricingStrategy {
     ProductType getProductType();
+
     List<ReceiptLine> calculatePrice(List<OrderItem> items);
 }
 ```
@@ -323,7 +356,9 @@ public interface PricingStrategy {
 #### 4.2.4 Discount Rule Implementations
 
 **BreadAgeBundleRule** (Config-Driven)
+
 ```java
+
 @Component
 public class BreadAgeBundleRule implements BreadDiscountRule {
 
@@ -375,15 +410,17 @@ public class BreadAgeBundleRule implements BreadDiscountRule {
         int minAge = config.getBread().getBundleDiscountMinAge();
         int specialAge = config.getBread().getSpecialBundleAge();
         return String.format(
-            "Age-based bundle discounts: %d-%d days old = buy 1 take 2, %d days old = buy 1 take 3",
-            minAge, specialAge - 1, specialAge
+                "Age-based bundle discounts: %d-%d days old = buy 1 take 2, %d days old = buy 1 take 3",
+                minAge, specialAge - 1, specialAge
         );
     }
 }
 ```
 
 **BeerPackDiscountRule**
+
 ```java
+
 @Component
 public class BeerPackDiscountRule implements BeerDiscountRule {
 
@@ -418,17 +455,19 @@ public class BeerPackDiscountRule implements BeerDiscountRule {
     public String description() {
         var rules = config.getBeer();
         return String.format(
-            "Fixed discount per 6-pack: Belgian €%.2f, Dutch €%.2f, German €%.2f",
-            rules.getBelgianPackDiscount(),
-            rules.getDutchPackDiscount(),
-            rules.getGermanPackDiscount()
+                "Fixed discount per 6-pack: Belgian €%.2f, Dutch €%.2f, German €%.2f",
+                rules.getBelgianPackDiscount(),
+                rules.getDutchPackDiscount(),
+                rules.getGermanPackDiscount()
         );
     }
 }
 ```
 
 **VegetableWeightTierRule**
+
 ```java
+
 @Component
 public class VegetableWeightTierRule implements VegetableDiscountRule {
 
@@ -469,10 +508,10 @@ public class VegetableWeightTierRule implements VegetableDiscountRule {
     public String description() {
         var rules = config.getVegetable();
         return String.format(
-            "Weight-based discounts: <100g = %.0f%%, 100-499g = %.0f%%, 500g+ = %.0f%%",
-            rules.getSmallWeightDiscount().multiply(new BigDecimal("100")),
-            rules.getMediumWeightDiscount().multiply(new BigDecimal("100")),
-            rules.getLargeWeightDiscount().multiply(new BigDecimal("100"))
+                "Weight-based discounts: <100g = %.0f%%, 100-499g = %.0f%%, 500g+ = %.0f%%",
+                rules.getSmallWeightDiscount().multiply(new BigDecimal("100")),
+                rules.getMediumWeightDiscount().multiply(new BigDecimal("100")),
+                rules.getLargeWeightDiscount().multiply(new BigDecimal("100"))
         );
     }
 }
@@ -481,6 +520,7 @@ public class VegetableWeightTierRule implements VegetableDiscountRule {
 #### 4.2.5 Pricing Strategies (Orchestrators)
 
 **Type-Safe Casting Helper** (used in all strategies)
+
 ```java
 // Private helper in each strategy - defensive programming
 @SuppressWarnings("unchecked")
@@ -491,10 +531,13 @@ private <T extends OrderItem> List<T> castToType(List<OrderItem> items, Class<T>
         .toList();
 }
 ```
+
 ---
 
 **BreadPricingStrategy**
+
 ```java
+
 @Component
 public class BreadPricingStrategy implements PricingStrategy {
 
@@ -502,13 +545,13 @@ public class BreadPricingStrategy implements PricingStrategy {
     private final List<BreadDiscountRule> discountRules;
 
     public BreadPricingStrategy(
-        PricingConfiguration config,
-        List<BreadDiscountRule> discountRules
+            PricingConfiguration config,
+            List<BreadDiscountRule> discountRules
     ) {
         this.config = config;
         this.discountRules = discountRules.stream()
-            .sorted(Comparator.comparingInt(BreadDiscountRule::order))
-            .toList();
+                .sorted(Comparator.comparingInt(BreadDiscountRule::order))
+                .toList();
     }
 
     @Override
@@ -522,11 +565,11 @@ public class BreadPricingStrategy implements PricingStrategy {
 
         // Group by age
         Map<Integer, List<BreadItem>> byAge = breads.stream()
-            .collect(Collectors.groupingBy(BreadItem::daysOld));
+                .collect(Collectors.groupingBy(BreadItem::daysOld));
 
         return byAge.entrySet().stream()
-            .map(this::priceAgeGroup)
-            .toList();
+                .map(this::priceAgeGroup)
+                .toList();
     }
 
     private ReceiptLine priceAgeGroup(Map.Entry<Integer, List<BreadItem>> entry) {
@@ -539,17 +582,17 @@ public class BreadPricingStrategy implements PricingStrategy {
 
         // Create context
         BreadPricingContext ctx = new BreadPricingContext(
-            age,
-            totalQty,
-            unitPrice,
-            originalPrice
+                age,
+                totalQty,
+                unitPrice,
+                originalPrice
         );
 
         // Apply all applicable discount rules
         BigDecimal totalDiscount = discountRules.stream()
-            .filter(rule -> rule.isApplicable(ctx))
-            .map(rule -> rule.calculateDiscount(ctx))
-            .reduce(BigDecimal.ZERO, BigDecimal::add);
+                .filter(rule -> rule.isApplicable(ctx))
+                .map(rule -> rule.calculateDiscount(ctx))
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
 
         BigDecimal finalPrice = originalPrice.subtract(totalDiscount);
 
@@ -560,7 +603,9 @@ public class BreadPricingStrategy implements PricingStrategy {
 ```
 
 **VegetablePricingStrategy**
+
 ```java
+
 @Component
 public class VegetablePricingStrategy implements PricingStrategy {
 
@@ -568,13 +613,13 @@ public class VegetablePricingStrategy implements PricingStrategy {
     private final List<VegetableDiscountRule> discountRules;
 
     public VegetablePricingStrategy(
-        PricingConfiguration config,
-        List<VegetableDiscountRule> discountRules
+            PricingConfiguration config,
+            List<VegetableDiscountRule> discountRules
     ) {
         this.config = config;
         this.discountRules = discountRules.stream()
-            .sorted(Comparator.comparingInt(VegetableDiscountRule::order))
-            .toList();
+                .sorted(Comparator.comparingInt(VegetableDiscountRule::order))
+                .toList();
     }
 
     @Override
@@ -587,26 +632,26 @@ public class VegetablePricingStrategy implements PricingStrategy {
         List<VegetableItem> vegetables = castToType(items, VegetableItem.class);
 
         int totalWeight = vegetables.stream()
-            .mapToInt(VegetableItem::weightGrams)
-            .sum();
+                .mapToInt(VegetableItem::weightGrams)
+                .sum();
 
         BigDecimal pricePerGram = config.getVegetablePricePer100g()
-            .divide(BigDecimal.valueOf(100), 4, RoundingMode.HALF_UP);
+                .divide(BigDecimal.valueOf(100), 4, RoundingMode.HALF_UP);
         BigDecimal originalPrice = pricePerGram
-            .multiply(BigDecimal.valueOf(totalWeight));
+                .multiply(BigDecimal.valueOf(totalWeight));
 
         // Create context
         VegetablePricingContext ctx = new VegetablePricingContext(
-            totalWeight,
-            pricePerGram,
-            originalPrice
+                totalWeight,
+                pricePerGram,
+                originalPrice
         );
 
         // Apply all applicable discount rules
         BigDecimal totalDiscount = discountRules.stream()
-            .filter(rule -> rule.isApplicable(ctx))
-            .map(rule -> rule.calculateDiscount(ctx))
-            .reduce(BigDecimal.ZERO, BigDecimal::add);
+                .filter(rule -> rule.isApplicable(ctx))
+                .map(rule -> rule.calculateDiscount(ctx))
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
 
         BigDecimal finalPrice = originalPrice.subtract(totalDiscount);
 
@@ -617,7 +662,9 @@ public class VegetablePricingStrategy implements PricingStrategy {
 ```
 
 **BeerPricingStrategy**
+
 ```java
+
 @Component
 public class BeerPricingStrategy implements PricingStrategy {
 
@@ -625,13 +672,13 @@ public class BeerPricingStrategy implements PricingStrategy {
     private final List<BeerDiscountRule> discountRules;
 
     public BeerPricingStrategy(
-        PricingConfiguration config,
-        List<BeerDiscountRule> discountRules
+            PricingConfiguration config,
+            List<BeerDiscountRule> discountRules
     ) {
         this.config = config;
         this.discountRules = discountRules.stream()
-            .sorted(Comparator.comparingInt(BeerDiscountRule::order))
-            .toList();
+                .sorted(Comparator.comparingInt(BeerDiscountRule::order))
+                .toList();
     }
 
     @Override
@@ -644,18 +691,18 @@ public class BeerPricingStrategy implements PricingStrategy {
         List<BeerItem> beers = castToType(items, BeerItem.class);
 
         Map<BeerOrigin, List<BeerItem>> byOrigin = beers.stream()
-            .collect(Collectors.groupingBy(BeerItem::origin));
+                .collect(Collectors.groupingBy(BeerItem::origin));
 
         return byOrigin.entrySet().stream()
-            .map(this::priceOriginGroup)
-            .toList();
+                .map(this::priceOriginGroup)
+                .toList();
     }
 
     private ReceiptLine priceOriginGroup(Map.Entry<BeerOrigin, List<BeerItem>> entry) {
         BeerOrigin origin = entry.getKey();
         int totalBottles = entry.getValue().stream()
-            .mapToInt(BeerItem::quantity)
-            .sum();
+                .mapToInt(BeerItem::quantity)
+                .sum();
 
         // Get origin-specific base price
         var beerRules = config.getBeer();
@@ -672,36 +719,39 @@ public class BeerPricingStrategy implements PricingStrategy {
 
         // Create context
         BeerPricingContext ctx = new BeerPricingContext(
-            origin,
-            totalBottles,
-            packs,
-            singles,
-            originBasePrice,
-            originalPrice
+                origin,
+                totalBottles,
+                packs,
+                singles,
+                originBasePrice,
+                originalPrice
         );
 
         // Apply all applicable discount rules
         BigDecimal totalDiscount = discountRules.stream()
-            .filter(rule -> rule.isApplicable(ctx))
-            .map(rule -> rule.calculateDiscount(ctx))
-            .reduce(BigDecimal.ZERO, BigDecimal::add);
+                .filter(rule -> rule.isApplicable(ctx))
+                .map(rule -> rule.calculateDiscount(ctx))
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
 
         BigDecimal finalPrice = originalPrice.subtract(totalDiscount);
 
         String description = String.format(
-            "%d x %s Beer (%d packs + %d singles)",
-            totalBottles, origin, packs, singles
+                "%d x %s Beer (%d packs + %d singles)",
+                totalBottles, origin, packs, singles
         );
         return new ReceiptLine(description, originalPrice, totalDiscount, finalPrice);
     }
 }
 ```
+
 ---
 
 ### 4.3 Service Layer
 
 **DiscountRuleService** (Auto-generated documentation)
+
 ```java
+
 @Service
 public class DiscountRuleService {
 
@@ -710,9 +760,9 @@ public class DiscountRuleService {
     private final List<VegetableDiscountRule> vegetableRules;
 
     public DiscountRuleService(
-        List<BeerDiscountRule> beerRules,
-        List<BreadDiscountRule> breadRules,
-        List<VegetableDiscountRule> vegetableRules
+            List<BeerDiscountRule> beerRules,
+            List<BreadDiscountRule> breadRules,
+            List<VegetableDiscountRule> vegetableRules
     ) {
         this.beerRules = beerRules;
         this.breadRules = breadRules;
@@ -721,32 +771,34 @@ public class DiscountRuleService {
 
     public List<DiscountRuleResponse> getAllRules() {
         Stream<DiscountRuleResponse> beer = beerRules.stream()
-            .map(rule -> new DiscountRuleResponse(
-                ProductType.BEER.name(),
-                rule.description()
-            ));
+                .map(rule -> new DiscountRuleResponse(
+                        ProductType.BEER.name(),
+                        rule.description()
+                ));
 
         Stream<DiscountRuleResponse> bread = breadRules.stream()
-            .map(rule -> new DiscountRuleResponse(
-                ProductType.BREAD.name(),
-                rule.description()
-            ));
+                .map(rule -> new DiscountRuleResponse(
+                        ProductType.BREAD.name(),
+                        rule.description()
+                ));
 
         Stream<DiscountRuleResponse> veg = vegetableRules.stream()
-            .map(rule -> new DiscountRuleResponse(
-                ProductType.VEGETABLE.name(),
-                rule.description()
-            ));
+                .map(rule -> new DiscountRuleResponse(
+                        ProductType.VEGETABLE.name(),
+                        rule.description()
+                ));
 
         return Stream.of(beer, bread, veg)
-            .flatMap(Function.identity())
-            .toList();
+                .flatMap(Function.identity())
+                .toList();
     }
 }
 ```
 
 **OrderPricingService**
+
 ```java
+
 @Service
 public class OrderPricingService {
 
@@ -754,38 +806,38 @@ public class OrderPricingService {
 
     public OrderPricingService(List<PricingStrategy> strategyList) {
         this.strategies = strategyList.stream()
-            .collect(Collectors.toMap(
-                PricingStrategy::getProductType,
-                Function.identity()
-            ));
+                .collect(Collectors.toMap(
+                        PricingStrategy::getProductType,
+                        Function.identity()
+                ));
     }
 
     public Receipt calculateReceipt(Order order) {
         // Group items by product type
         Map<ProductType, List<OrderItem>> itemsByType = order.getItems().stream()
-            .collect(Collectors.groupingBy(OrderItem::getType));
+                .collect(Collectors.groupingBy(OrderItem::getType));
 
         // Calculate for each type
         List<ReceiptLine> allLines = itemsByType.entrySet().stream()
-            .flatMap(entry -> {
-                PricingStrategy strategy = strategies.get(entry.getKey());
-                if (strategy == null) {
-                    throw new IllegalStateException(
-                        "No pricing strategy registered for product type: " + entry.getKey()
-                    );
-                }
-                return strategy.calculatePrice(entry.getValue()).stream();
-            })
-            .toList();
+                .flatMap(entry -> {
+                    PricingStrategy strategy = strategies.get(entry.getKey());
+                    if (strategy == null) {
+                        throw new IllegalStateException(
+                                "No pricing strategy registered for product type: " + entry.getKey()
+                        );
+                    }
+                    return strategy.calculatePrice(entry.getValue()).stream();
+                })
+                .toList();
 
         // Calculate totals
         BigDecimal subtotal = allLines.stream()
-            .map(ReceiptLine::originalPrice)
-            .reduce(BigDecimal.ZERO, BigDecimal::add);
+                .map(ReceiptLine::originalPrice)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
 
         BigDecimal totalDiscount = allLines.stream()
-            .map(ReceiptLine::discount)
-            .reduce(BigDecimal.ZERO, BigDecimal::add);
+                .map(ReceiptLine::discount)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
 
         BigDecimal total = subtotal.subtract(totalDiscount);
 
@@ -793,22 +845,27 @@ public class OrderPricingService {
     }
 }
 ```
+
 ---
 
 ### 4.4 Configuration
 
 **PricingConfiguration**
+
 ```java
+
 @Configuration
 @ConfigurationProperties(prefix = "pricing")
 @Validated
 public class PricingConfiguration {
 
     // Base prices
-    @NotNull @DecimalMin("0.01")
+    @NotNull
+    @DecimalMin("0.01")
     private BigDecimal breadPrice;
 
-    @NotNull @DecimalMin("0.01")
+    @NotNull
+    @DecimalMin("0.01")
     private BigDecimal vegetablePricePer100g;
 
     // Product-specific rules
@@ -829,10 +886,12 @@ public class PricingConfiguration {
         @Min(0)
         private int maxAgeDays = 6;
 
-        @Min(0) @Max(6)
+        @Min(0)
+        @Max(6)
         private int bundleDiscountMinAge = 3;  // Start of "buy 1 take 2" tier (3-5 days)
 
-        @Min(0) @Max(6)
+        @Min(0)
+        @Max(6)
         private int specialBundleAge = 6;      // "buy 1 take 3" special rule age
 
         // Getters/setters
@@ -846,13 +905,19 @@ public class PricingConfiguration {
         @Min(1)
         private int mediumWeightThreshold = 500;
 
-        @NotNull @DecimalMin("0.00") @DecimalMax("1.00")
+        @NotNull
+        @DecimalMin("0.00")
+        @DecimalMax("1.00")
         private BigDecimal smallWeightDiscount = new BigDecimal("0.05");
 
-        @NotNull @DecimalMin("0.00") @DecimalMax("1.00")
+        @NotNull
+        @DecimalMin("0.00")
+        @DecimalMax("1.00")
         private BigDecimal mediumWeightDiscount = new BigDecimal("0.07");
 
-        @NotNull @DecimalMin("0.00") @DecimalMax("1.00")
+        @NotNull
+        @DecimalMin("0.00")
+        @DecimalMax("1.00")
         private BigDecimal largeWeightDiscount = new BigDecimal("0.10");
 
         // Getters/setters
@@ -864,23 +929,29 @@ public class PricingConfiguration {
         private int packSize = 6;
 
         // Origin-specific base prices (to prevent negative final prices)
-        @NotNull @DecimalMin("0.01")
+        @NotNull
+        @DecimalMin("0.01")
         private BigDecimal belgianBasePrice = new BigDecimal("0.60");
 
-        @NotNull @DecimalMin("0.01")
+        @NotNull
+        @DecimalMin("0.01")
         private BigDecimal dutchBasePrice = new BigDecimal("0.50");
 
-        @NotNull @DecimalMin("0.01")
+        @NotNull
+        @DecimalMin("0.01")
         private BigDecimal germanBasePrice = new BigDecimal("0.80");
 
         // Pack discounts
-        @NotNull @DecimalMin("0.00")
+        @NotNull
+        @DecimalMin("0.00")
         private BigDecimal belgianPackDiscount = new BigDecimal("3.00");
 
-        @NotNull @DecimalMin("0.00")
+        @NotNull
+        @DecimalMin("0.00")
         private BigDecimal dutchPackDiscount = new BigDecimal("2.00");
 
-        @NotNull @DecimalMin("0.00")
+        @NotNull
+        @DecimalMin("0.00")
         private BigDecimal germanPackDiscount = new BigDecimal("4.00");
 
         // Getters/setters
@@ -889,6 +960,7 @@ public class PricingConfiguration {
 ```
 
 **application.yml**
+
 ```yaml
 pricing:
   # Base unit prices
@@ -927,12 +999,14 @@ pricing:
 ### 4.5 Money Utilities and Rounding Policy
 
 **MoneyUtils** (Utility class for consistent money handling)
+
 ```java
 public final class MoneyUtils {
     private static final int CURRENCY_SCALE = 2;
     private static final RoundingMode ROUNDING_MODE = RoundingMode.HALF_UP;
 
-    private MoneyUtils() {}
+    private MoneyUtils() {
+    }
 
     /**
      * Normalize BigDecimal to 2 decimal places using HALF_UP rounding.
@@ -948,22 +1022,26 @@ public final class MoneyUtils {
 ```
 
 **Rounding Policy**:
+
 - All monetary calculations normalize to 2 decimal places
 - Rounding mode: `HALF_UP` (standard for financial systems)
 - Applied at: Final price calculations, discount aggregations, receipt totals
 - Example: €1.8667 → €1.87
 
 **Usage in Strategies**:
+
 ```java
 BigDecimal finalPrice = MoneyUtils.normalize(
-    originalPrice.subtract(totalDiscount)
+        originalPrice.subtract(totalDiscount)
 );
 ```
+
 ---
 
 ### 4.6 REST API
 
 **OrderController**
+
 ```java
 @RestController
 @RequestMapping("/api/v1/orders")
@@ -983,7 +1061,9 @@ public class OrderController {
 ```
 
 **DiscountController**
+
 ```java
+
 @RestController
 @RequestMapping("/api/v1/discounts")
 public class DiscountController {
@@ -998,6 +1078,7 @@ public class DiscountController {
 ```
 
 **ProductController**
+
 ```java
 @RestController
 @RequestMapping("/api/v1/products")
@@ -1027,29 +1108,32 @@ public class ProductController {
 #### 4.7.1 DTO Classes
 
 **OrderItemRequest** (Unified approach for all product types)
+
 ```java
 public record OrderItemRequest(
-    @NotNull(message = "Product type required") 
-    ProductType type,
-    
-    @NotBlank(message = "Item name required") 
-    String name,
-    
-    @Positive(message = "Quantity must be positive") 
-    Integer quantity,
-    
-    @Min(value = 0, message = "Age cannot be negative") 
-    @Max(value = 6, message = "Bread older than 6 days not allowed") 
-    Integer daysOld,
-    
-    @Positive(message = "Weight must be positive") 
-    Integer weightGrams,
-    
-    BeerOrigin origin
-) {}
+        @NotNull(message = "Product type required")
+        ProductType type,
+
+        @NotBlank(message = "Item name required")
+        String name,
+
+        @Positive(message = "Quantity must be positive")
+        Integer quantity,
+
+        @Min(value = 0, message = "Age cannot be negative")
+        @Max(value = 6, message = "Bread older than 6 days not allowed")
+        Integer daysOld,
+
+        @Positive(message = "Weight must be positive")
+        Integer weightGrams,
+
+        BeerOrigin origin
+) {
+}
 ```
 
 **OrderRequest**
+
 ```java
 public record OrderRequest(
     @NotEmpty(message = "At least one item required")
@@ -1058,23 +1142,27 @@ public record OrderRequest(
 ```
 
 **ReceiptResponse**
+
 ```java
 public record ReceiptResponse(
-    List<ReceiptLineResponse> lines,
-    BigDecimal subtotal,
-    BigDecimal totalDiscount,
-    BigDecimal total
-) {}
+        List<ReceiptLineResponse> lines,
+        BigDecimal subtotal,
+        BigDecimal totalDiscount,
+        BigDecimal total
+) {
+}
 
 public record ReceiptLineResponse(
-    String description,
-    BigDecimal originalPrice,
-    BigDecimal discount,
-    BigDecimal finalPrice
-) {}
+        String description,
+        BigDecimal originalPrice,
+        BigDecimal discount,
+        BigDecimal finalPrice
+) {
+}
 ```
 
 **Design Rationale**:
+
 - **Unified OrderItemRequest**: All product types in one DTO → extendable without changing API contract
 - **Optional fields**: Nullable Integer/BeerOrigin → type-specific validation handles requirement checking
 - **Bean Validation annotations**: @NotNull, @Positive, @Min, @Max applied at DTO level
@@ -1083,6 +1171,7 @@ public record ReceiptLineResponse(
 #### 4.7.2 OrderMapper (Responsibility: DTO → Domain Conversion + Type-Specific Validation)
 
 ```java
+
 @Component
 public class OrderMapper {
 
@@ -1092,9 +1181,9 @@ public class OrderMapper {
      */
     public Order mapToOrder(OrderRequest request) {
         List<OrderItem> items = request.items().stream()
-            .map(this::mapToOrderItem)
-            .toList();
-        
+                .map(this::mapToOrderItem)
+                .toList();
+
         return new Order(items);
     }
 
@@ -1105,21 +1194,21 @@ public class OrderMapper {
     private OrderItem mapToOrderItem(OrderItemRequest itemRequest) {
         // Validate type-specific required fields
         validateItemRequest(itemRequest);
-        
+
         return switch (itemRequest.type()) {
             case BREAD -> new BreadItem(
-                itemRequest.name(),
-                itemRequest.quantity(),      // NotNull after validation
-                itemRequest.daysOld()         // NotNull after validation
+                    itemRequest.name(),
+                    itemRequest.quantity(),      // NotNull after validation
+                    itemRequest.daysOld()         // NotNull after validation
             );
             case VEGETABLE -> new VegetableItem(
-                itemRequest.name(),
-                itemRequest.weightGrams()     // NotNull after validation
+                    itemRequest.name(),
+                    itemRequest.weightGrams()     // NotNull after validation
             );
             case BEER -> new BeerItem(
-                itemRequest.name(),
-                itemRequest.quantity(),       // NotNull after validation
-                itemRequest.origin()          // NotNull after validation
+                    itemRequest.name(),
+                    itemRequest.quantity(),       // NotNull after validation
+                    itemRequest.origin()          // NotNull after validation
             );
         };
     }
@@ -1133,33 +1222,33 @@ public class OrderMapper {
             case BREAD:
                 if (request.quantity() == null) {
                     throw new InvalidOrderException(
-                        "quantity field required for product type BREAD"
+                            "quantity field required for product type BREAD"
                     );
                 }
                 if (request.daysOld() == null) {
                     throw new InvalidOrderException(
-                        "daysOld field required for product type BREAD"
+                            "daysOld field required for product type BREAD"
                     );
                 }
                 break;
-                
+
             case VEGETABLE:
                 if (request.weightGrams() == null) {
                     throw new InvalidOrderException(
-                        "weightGrams field required for product type VEGETABLE"
+                            "weightGrams field required for product type VEGETABLE"
                     );
                 }
                 break;
-                
+
             case BEER:
                 if (request.quantity() == null) {
                     throw new InvalidOrderException(
-                        "quantity field required for product type BEER"
+                            "quantity field required for product type BEER"
                     );
                 }
                 if (request.origin() == null) {
                     throw new InvalidOrderException(
-                        "origin field required for product type BEER"
+                            "origin field required for product type BEER"
                     );
                 }
                 break;
@@ -1171,6 +1260,7 @@ public class OrderMapper {
 #### 4.7.3 OrderController Integration
 
 ```java
+
 @RestController
 @RequestMapping("/api/v1/orders")
 public class OrderController {
@@ -1179,8 +1269,8 @@ public class OrderController {
     private final OrderMapper orderMapper;
 
     public OrderController(
-        OrderPricingService pricingService,
-        OrderMapper orderMapper
+            OrderPricingService pricingService,
+            OrderMapper orderMapper
     ) {
         this.pricingService = pricingService;
         this.orderMapper = orderMapper;
@@ -1188,40 +1278,41 @@ public class OrderController {
 
     @PostMapping("/calculate")
     public ResponseEntity<ReceiptResponse> calculateOrder(
-        @Valid @RequestBody OrderRequest request
+            @Valid @RequestBody OrderRequest request
     ) {
         // Step 1: Spring validates @Valid constraints on OrderRequest
         // Step 2: OrderMapper converts DTO to domain Order + validates type-specific fields
         Order order = orderMapper.mapToOrder(request);
-        
+
         // Step 3: PricingService calculates receipt with all discounts
         Receipt receipt = pricingService.calculateReceipt(order);
-        
+
         // Step 4: Map domain Receipt to ReceiptResponse DTO for API response
         return ResponseEntity.ok(mapToResponse(receipt));
     }
 
     private ReceiptResponse mapToResponse(Receipt receipt) {
         List<ReceiptLineResponse> lineResponses = receipt.lines().stream()
-            .map(line -> new ReceiptLineResponse(
-                line.description(),
-                line.originalPrice(),
-                line.discount(),
-                line.finalPrice()
-            ))
-            .toList();
+                .map(line -> new ReceiptLineResponse(
+                        line.description(),
+                        line.originalPrice(),
+                        line.discount(),
+                        line.finalPrice()
+                ))
+                .toList();
 
         return new ReceiptResponse(
-            lineResponses,
-            receipt.subtotal(),
-            receipt.totalDiscount(),
-            receipt.total()
+                lineResponses,
+                receipt.subtotal(),
+                receipt.totalDiscount(),
+                receipt.total()
         );
     }
 }
 ```
 
 **Request Flow Diagram**
+
 ```
 HTTP POST /api/v1/orders/calculate
         ↓
@@ -1256,41 +1347,43 @@ HTTP 200 OK (JSON)
 #### 4.7.4 Example Request/Response
 
 **Request Example: Mixed Order (Bread + Vegetables + Beer)**
+
 ```json
 POST /api/v1/orders/calculate
 Content-Type: application/json
 
 {
-  "items": [
-    {
-      "type": "BREAD",
-      "name": "Sourdough",
-      "quantity": 3,
-      "daysOld": 3,
-      "weightGrams": null,
-      "origin": null
-    },
-    {
-      "type": "VEGETABLE",
-      "name": "Carrots",
-      "quantity": null,
-      "daysOld": null,
-      "weightGrams": 200,
-      "origin": null
-    },
-    {
-      "type": "BEER",
-      "name": "Heineken",
-      "quantity": 6,
-      "daysOld": null,
-      "weightGrams": null,
-      "origin": "DUTCH"
-    }
-  ]
+"items": [
+{
+"type": "BREAD",
+"name": "Sourdough",
+"quantity": 3,
+"daysOld": 3,
+"weightGrams": null,
+"origin": null
+},
+{
+"type": "VEGETABLE",
+"name": "Carrots",
+"quantity": null,
+"daysOld": null,
+"weightGrams": 200,
+"origin": null
+},
+{
+"type": "BEER",
+"name": "Heineken",
+"quantity": 6,
+"daysOld": null,
+"weightGrams": null,
+"origin": "DUTCH"
+}
+]
 }
 ```
 
 **Success Response (200 OK)**
+
 ```json
 {
   "lines": [
@@ -1320,6 +1413,7 @@ Content-Type: application/json
 ```
 
 **Validation Error Response (400 Bad Request)**
+
 ```json
 {
   "code": "VALIDATION_ERROR",
@@ -1331,6 +1425,7 @@ Content-Type: application/json
 ```
 
 **Business Logic Error Response (422 Unprocessable Entity)**
+
 ```json
 {
   "code": "INVALID_ORDER",
@@ -1340,6 +1435,7 @@ Content-Type: application/json
 ```
 
 **Example Request with Missing Type-Specific Field**
+
 ```json
 // This will pass @Valid (no annotation on weightGrams)
 // but fail in OrderMapper.validateItemRequest()
@@ -1360,6 +1456,7 @@ Content-Type: application/json
 ### 4.6 Exception Handling
 
 **GlobalExceptionHandler**
+
 ```java
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -1413,43 +1510,47 @@ public class GlobalExceptionHandler {
 ### Unit Tests (Core Focus)
 
 **Strategy Tests** (most important)
+
 - `BreadPricingStrategyTest`
-  - No discount (age 0-1)
-  - 50% discount (age 3)
-  - 66% discount (age 6)
-  - Multiple breads different ages
-  - Edge cases (negative age, >6 days)
+    - No discount (age 0-1)
+    - 50% discount (age 3)
+    - 66% discount (age 6)
+    - Multiple breads different ages
+    - Edge cases (negative age, >6 days)
 
 - `VegetablePricingStrategyTest`
-  - 5% discount (<100g)
-  - 7% discount (100-499g)
-  - 10% discount (500g+)
-  - Edge cases (0g, boundary values)
+    - 5% discount (<100g)
+    - 7% discount (100-499g)
+    - 10% discount (500g+)
+    - Edge cases (0g, boundary values)
 
 - `BeerPricingStrategyTest`
-  - Pack discount calculations
-  - Mixed packs + singles
-  - All three origins
-  - Edge cases (0 beers, 1 beer, 5 beers, 6 beers, 7 beers)
+    - Pack discount calculations
+    - Mixed packs + singles
+    - All three origins
+    - Edge cases (0 beers, 1 beer, 5 beers, 6 beers, 7 beers)
 
 **Service Tests**
+
 - `OrderPricingServiceTest`
-  - Mixed order (all product types)
-  - Single product type orders
-  - Empty order handling
+    - Mixed order (all product types)
+    - Single product type orders
+    - Empty order handling
 
 **Example Order Test (CRITICAL)**
+
 ```java
+
 @Test
 void shouldCalculateExampleOrderCorrectly() {
     // Given: Example order from requirements
     Order order = Order.builder()
-        .items(List.of(
-            new BreadItem("Bread", 3, 3),              // 3 breads, 3 days old
-            new VegetableItem("Vegetables", 200),       // 200g vegetables
-            new BeerItem("Dutch Beer", 6, BeerOrigin.DUTCH)  // 6 Dutch beers
-        ))
-        .build();
+            .items(List.of(
+                    new BreadItem("Bread", 3, 3),              // 3 breads, 3 days old
+                    new VegetableItem("Vegetables", 200),       // 200g vegetables
+                    new BeerItem("Dutch Beer", 6, BeerOrigin.DUTCH)  // 6 Dutch beers
+            ))
+            .build();
 
     // When
     Receipt receipt = orderPricingService.calculateReceipt(order);
@@ -1490,15 +1591,16 @@ void shouldCalculateExampleOrderCorrectly() {
 ```
 
 **Domain Tests**
+
 - Record validation tests
 - Immutability verification
 
 ### Integration Tests
 
 - `OrderControllerIntegrationTest` (with `@SpringBootTest`)
-  - Full request → response flow
-  - Validation error handling
-  - Configuration loading
+    - Full request → response flow
+    - Validation error handling
+    - Configuration loading
 
 ---
 
@@ -1519,7 +1621,9 @@ void shouldCalculateExampleOrderCorrectly() {
 **Example: New Year Beer Promotion (20% off all beers)**
 
 1. Create new rule class:
+
 ```java
+
 @Component
 public class NewYearBeerPromoRule implements BeerDiscountRule {
 
@@ -1564,6 +1668,7 @@ public class NewYearBeerPromoRule implements BeerDiscountRule {
 ## 7. Success Criteria
 
 ### Functional
+
 - ✅ All business rules correctly implemented
 - ✅ Origin-specific beer pricing prevents negative final prices
 - ✅ Example order calculation matches expected result (€4.86)
@@ -1571,6 +1676,7 @@ public class NewYearBeerPromoRule implements BeerDiscountRule {
 - ✅ Configuration validated on startup
 
 ### Technical
+
 - ✅ Clean architecture with clear separation
 - ✅ Strategy pattern properly applied
 - ✅ Config-driven pricing rules
@@ -1578,6 +1684,7 @@ public class NewYearBeerPromoRule implements BeerDiscountRule {
 - ✅ No code smells (magic numbers, duplication, etc.)
 
 ### Presentation
+
 - ✅ README
 - ✅ Code is self-documenting
 - ✅ Easy to extend (demonstrated with guide)
@@ -1616,19 +1723,23 @@ mvn spring-boot:run
 ```
 
 ## API Endpoints
+
 - `POST /api/v1/orders/calculate` - Calculate order with receipt
 - `GET /api/v1/discounts/rules` - List discount rules
 - `GET /api/v1/products/prices` - List product prices
 
 ## Configuration
+
 All pricing rules are in `application.yml`. Modify and restart to apply changes.
 
 ## Extensibility
 
 ### Adding New Discount Rule
+
 No need to modify existing pricing code!
 
 For beers:
+
 1. Implement `BeerDiscountRule` as a new `@Component`
 2. (Optional) Add config parameters under `pricing.beer`
 3. Write unit tests
@@ -1638,6 +1749,7 @@ The `BeerPricingStrategy` automatically discovers and applies all registered rul
 Example: See `BeerPackDiscountRule` implementation.
 
 ## Design Decisions
+
 - Strategy pattern for product-specific logic
 - Config-driven rules (no hardcoded magic numbers)
 - Records for immutable domain models

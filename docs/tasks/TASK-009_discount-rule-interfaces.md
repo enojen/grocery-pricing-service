@@ -1,12 +1,15 @@
 # TASK-009: Discount Rule Interfaces
 
 ## Status
+
 - [x] Completed
 
 ## Phase
+
 Phase 2: Pricing Logic
 
 ## Description
+
 Create interfaces for pluggable discount rules for each product type.
 
 ## Implementation Details
@@ -25,10 +28,10 @@ import java.math.BigDecimal;
  * Implementations are auto-discovered by Spring and applied by BeerPricingStrategy.
  */
 public interface BeerDiscountRule {
-    
+
     /**
      * Check if this discount rule applies to the given context.
-     * 
+     *
      * @param ctx Beer pricing context with all relevant data
      * @return true if this rule should be applied
      */
@@ -37,7 +40,7 @@ public interface BeerDiscountRule {
     /**
      * Calculate the discount amount for this rule.
      * Only called if isApplicable() returns true.
-     * 
+     *
      * @param ctx Beer pricing context with all relevant data
      * @return Discount amount to subtract from original price
      */
@@ -46,7 +49,7 @@ public interface BeerDiscountRule {
     /**
      * Order of execution (lower numbers execute first).
      * Use values like 100, 200, 300 to allow insertion between rules.
-     * 
+     *
      * @return Execution order priority
      */
     int order();
@@ -54,7 +57,7 @@ public interface BeerDiscountRule {
     /**
      * Human-readable description of this discount rule.
      * Used by GET /discounts/rules endpoint.
-     * 
+     *
      * @return Description for API documentation
      */
     String description();
@@ -75,10 +78,10 @@ import java.math.BigDecimal;
  * Implementations are auto-discovered by Spring and applied by BreadPricingStrategy.
  */
 public interface BreadDiscountRule {
-    
+
     /**
      * Check if this discount rule applies to the given context.
-     * 
+     *
      * @param ctx Bread pricing context with age, quantity, and price data
      * @return true if this rule should be applied
      */
@@ -87,7 +90,7 @@ public interface BreadDiscountRule {
     /**
      * Calculate the discount amount for this rule.
      * Only called if isApplicable() returns true.
-     * 
+     *
      * @param ctx Bread pricing context with age, quantity, and price data
      * @return Discount amount to subtract from original price
      */
@@ -95,14 +98,14 @@ public interface BreadDiscountRule {
 
     /**
      * Order of execution (lower numbers execute first).
-     * 
+     *
      * @return Execution order priority
      */
     int order();
 
     /**
      * Human-readable description of this discount rule.
-     * 
+     *
      * @return Description for API documentation
      */
     String description();
@@ -123,10 +126,10 @@ import java.math.BigDecimal;
  * Implementations are auto-discovered by Spring and applied by VegetablePricingStrategy.
  */
 public interface VegetableDiscountRule {
-    
+
     /**
      * Check if this discount rule applies to the given context.
-     * 
+     *
      * @param ctx Vegetable pricing context with weight and price data
      * @return true if this rule should be applied
      */
@@ -135,7 +138,7 @@ public interface VegetableDiscountRule {
     /**
      * Calculate the discount amount for this rule.
      * Only called if isApplicable() returns true.
-     * 
+     *
      * @param ctx Vegetable pricing context with weight and price data
      * @return Discount amount to subtract from original price
      */
@@ -143,14 +146,14 @@ public interface VegetableDiscountRule {
 
     /**
      * Order of execution (lower numbers execute first).
-     * 
+     *
      * @return Execution order priority
      */
     int order();
 
     /**
      * Human-readable description of this discount rule.
-     * 
+     *
      * @return Description for API documentation
      */
     String description();
@@ -160,21 +163,25 @@ public interface VegetableDiscountRule {
 ### Design Principles
 
 **Pluggable Architecture**:
+
 - New discount = new class implementing the interface
 - No changes to existing strategies needed
 - Spring auto-discovers all `@Component` implementations
 
 **Open/Closed Principle**:
+
 - Open for extension (new rules)
 - Closed for modification (existing code unchanged)
 
 **Self-Documenting**:
+
 - `description()` method provides API documentation automatically
 - GET /discounts/rules endpoint reads from implementations
 
 ### Adding a New Discount Rule (Example)
 
 ```java
+
 @Component
 public class NewYearBeerPromoRule implements BeerDiscountRule {
 

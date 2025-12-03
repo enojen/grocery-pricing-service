@@ -1,12 +1,15 @@
 # TASK-017: Example Order Test
 
 ## Status
+
 - [x] Completed
 
 ## Phase
+
 Phase 3: Service Layer
 
 ## Description
+
 Create a critical integration test that validates the example order calculation produces the expected €4.86 total.
 
 ## Implementation Details
@@ -14,20 +17,22 @@ Create a critical integration test that validates the example order calculation 
 ### Example Order Calculation
 
 **Order Contents:**
+
 - 3 x Bread (3 days old)
 - 200g Vegetables
 - 6 x Dutch Beer
 
 **Expected Calculations:**
 
-| Item | Original | Discount | Final |
-|------|----------|----------|-------|
-| Bread (3x, 3 days) | €3.00 | €1.00 | €2.00 |
-| Vegetables (200g) | €2.00 | €0.14 | €1.86 |
-| Dutch Beer (6x, 1 pack) | €3.00 | €2.00 | €1.00 |
-| **TOTAL** | **€8.00** | **€3.14** | **€4.86** |
+| Item                    | Original  | Discount  | Final     |
+|-------------------------|-----------|-----------|-----------|
+| Bread (3x, 3 days)      | €3.00     | €1.00     | €2.00     |
+| Vegetables (200g)       | €2.00     | €0.14     | €1.86     |
+| Dutch Beer (6x, 1 pack) | €3.00     | €2.00     | €1.00     |
+| **TOTAL**               | **€8.00** | **€3.14** | **€4.86** |
 
 ### Bread Calculation Details
+
 - 3 units × €1.00 = €3.00 original
 - Age 3 days = "buy 1 take 2" discount
 - 3 units ÷ 2 = 1 free item
@@ -35,12 +40,14 @@ Create a critical integration test that validates the example order calculation 
 - Final: €3.00 - €1.00 = €2.00
 
 ### Vegetable Calculation Details
+
 - 200g × €0.01/g = €2.00 original
 - 200g is in 100-499g tier = 7% discount
 - Discount: €2.00 × 0.07 = €0.14
 - Final: €2.00 - €0.14 = €1.86
 
 ### Beer Calculation Details
+
 - 6 bottles × €0.50 (Dutch base) = €3.00 original
 - 6 bottles = 1 complete pack
 - Dutch pack discount: €2.00
@@ -75,9 +82,9 @@ class ExampleOrderIntegrationTest {
     void shouldCalculateExampleOrderCorrectly() {
         // Given: Example order from requirements
         Order order = new Order(List.of(
-            new BreadItem("Bread", 3, 3),                    // 3 breads, 3 days old
-            new VegetableItem("Vegetables", 200),            // 200g vegetables
-            new BeerItem("Dutch Beer", 6, BeerOrigin.DUTCH)  // 6 Dutch beers
+                new BreadItem("Bread", 3, 3),                    // 3 breads, 3 days old
+                new VegetableItem("Vegetables", 200),            // 200g vegetables
+                new BeerItem("Dutch Beer", 6, BeerOrigin.DUTCH)  // 6 Dutch beers
         ));
 
         // When
@@ -111,7 +118,7 @@ class ExampleOrderIntegrationTest {
     void shouldCalculateBreadDiscountFor3DaysOld() {
         // Buy 1 take 2: For 3 breads, 1 is free
         Order order = new Order(List.of(
-            new BreadItem("Bread", 3, 3)
+                new BreadItem("Bread", 3, 3)
         ));
 
         Receipt receipt = orderPricingService.calculateReceipt(order);
@@ -123,7 +130,7 @@ class ExampleOrderIntegrationTest {
     void shouldCalculateBreadDiscountFor6DaysOld() {
         // Buy 1 take 3: For 3 breads, 2 are free (1 group of 3)
         Order order = new Order(List.of(
-            new BreadItem("Bread", 3, 6)
+                new BreadItem("Bread", 3, 6)
         ));
 
         Receipt receipt = orderPricingService.calculateReceipt(order);
@@ -138,7 +145,7 @@ class ExampleOrderIntegrationTest {
     void shouldCalculateVegetableDiscount5PercentForSmallWeight() {
         // < 100g = 5% discount
         Order order = new Order(List.of(
-            new VegetableItem("Carrots", 50)
+                new VegetableItem("Carrots", 50)
         ));
 
         Receipt receipt = orderPricingService.calculateReceipt(order);
@@ -152,7 +159,7 @@ class ExampleOrderIntegrationTest {
     void shouldCalculateVegetableDiscount10PercentForLargeWeight() {
         // >= 500g = 10% discount
         Order order = new Order(List.of(
-            new VegetableItem("Potatoes", 500)
+                new VegetableItem("Potatoes", 500)
         ));
 
         Receipt receipt = orderPricingService.calculateReceipt(order);
@@ -167,7 +174,7 @@ class ExampleOrderIntegrationTest {
     void shouldCalculateBeerPackDiscountForBelgian() {
         // Belgian: 6 × €0.60 = €3.60, discount €3.00, final €0.60
         Order order = new Order(List.of(
-            new BeerItem("Leffe", 6, BeerOrigin.BELGIAN)
+                new BeerItem("Leffe", 6, BeerOrigin.BELGIAN)
         ));
 
         Receipt receipt = orderPricingService.calculateReceipt(order);
@@ -181,7 +188,7 @@ class ExampleOrderIntegrationTest {
     void shouldCalculateBeerPackDiscountForGerman() {
         // German: 6 × €0.80 = €4.80, discount €4.00, final €0.80
         Order order = new Order(List.of(
-            new BeerItem("Beck's", 6, BeerOrigin.GERMAN)
+                new BeerItem("Beck's", 6, BeerOrigin.GERMAN)
         ));
 
         Receipt receipt = orderPricingService.calculateReceipt(order);
@@ -195,7 +202,7 @@ class ExampleOrderIntegrationTest {
     void shouldNotApplyBeerDiscountForSingles() {
         // 5 beers = 0 packs, 5 singles, no discount
         Order order = new Order(List.of(
-            new BeerItem("Heineken", 5, BeerOrigin.DUTCH)
+                new BeerItem("Heineken", 5, BeerOrigin.DUTCH)
         ));
 
         Receipt receipt = orderPricingService.calculateReceipt(order);
@@ -207,11 +214,11 @@ class ExampleOrderIntegrationTest {
 
     private ReceiptLine findLineByDescription(Receipt receipt, String keyword) {
         return receipt.lines().stream()
-            .filter(line -> line.description().toLowerCase().contains(keyword.toLowerCase()))
-            .findFirst()
-            .orElseThrow(() -> new AssertionError(
-                "No receipt line found containing: " + keyword
-            ));
+                .filter(line -> line.description().toLowerCase().contains(keyword.toLowerCase()))
+                .findFirst()
+                .orElseThrow(() -> new AssertionError(
+                        "No receipt line found containing: " + keyword
+                ));
     }
 }
 ```

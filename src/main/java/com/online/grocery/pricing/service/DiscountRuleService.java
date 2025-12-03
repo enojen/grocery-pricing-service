@@ -24,9 +24,9 @@ public class DiscountRuleService {
     private final List<VegetableDiscountRule> vegetableRules;
 
     public DiscountRuleService(
-        List<BeerDiscountRule> beerRules,
-        List<BreadDiscountRule> breadRules,
-        List<VegetableDiscountRule> vegetableRules
+            List<BeerDiscountRule> beerRules,
+            List<BreadDiscountRule> breadRules,
+            List<VegetableDiscountRule> vegetableRules
     ) {
         this.beerRules = beerRules;
         this.breadRules = breadRules;
@@ -40,26 +40,26 @@ public class DiscountRuleService {
      */
     public List<DiscountRuleResponse> getAllRules() {
         Stream<DiscountRuleResponse> beer = beerRules.stream()
-            .map(rule -> new DiscountRuleResponse(
-                ProductType.BEER.name(),
-                rule.description()
-            ));
+                .map(rule -> new DiscountRuleResponse(
+                        ProductType.BEER.name(),
+                        rule.description()
+                ));
 
         Stream<DiscountRuleResponse> bread = breadRules.stream()
-            .map(rule -> new DiscountRuleResponse(
-                ProductType.BREAD.name(),
-                rule.description()
-            ));
+                .map(rule -> new DiscountRuleResponse(
+                        ProductType.BREAD.name(),
+                        rule.description()
+                ));
 
         Stream<DiscountRuleResponse> veg = vegetableRules.stream()
-            .map(rule -> new DiscountRuleResponse(
-                ProductType.VEGETABLE.name(),
-                rule.description()
-            ));
+                .map(rule -> new DiscountRuleResponse(
+                        ProductType.VEGETABLE.name(),
+                        rule.description()
+                ));
 
         return Stream.of(bread, veg, beer)
-            .flatMap(Function.identity())
-            .toList();
+                .flatMap(Function.identity())
+                .toList();
     }
 
     /**
@@ -70,7 +70,7 @@ public class DiscountRuleService {
      */
     public List<DiscountRuleResponse> getRulesByProductType(ProductType productType) {
         return getAllRules().stream()
-            .filter(rule -> rule.productType().equals(productType.name()))
-            .toList();
+                .filter(rule -> rule.productType().equals(productType.name()))
+                .toList();
     }
 }

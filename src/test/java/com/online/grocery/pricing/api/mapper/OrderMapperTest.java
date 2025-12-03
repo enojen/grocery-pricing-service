@@ -29,7 +29,7 @@ class OrderMapperTest {
     @Test
     void shouldMapBreadItemCorrectly() {
         OrderItemRequest itemRequest = new OrderItemRequest(
-            ProductType.BREAD, "Sourdough", 3, 2, null, null
+                ProductType.BREAD, "Sourdough", 3, 2, null, null
         );
         OrderRequest request = new OrderRequest(List.of(itemRequest));
 
@@ -46,7 +46,7 @@ class OrderMapperTest {
     @Test
     void shouldMapVegetableItemCorrectly() {
         OrderItemRequest itemRequest = new OrderItemRequest(
-            ProductType.VEGETABLE, "Carrots", null, null, 200, null
+                ProductType.VEGETABLE, "Carrots", null, null, 200, null
         );
         OrderRequest request = new OrderRequest(List.of(itemRequest));
 
@@ -62,7 +62,7 @@ class OrderMapperTest {
     @Test
     void shouldMapBeerItemCorrectly() {
         OrderItemRequest itemRequest = new OrderItemRequest(
-            ProductType.BEER, "Heineken", 6, null, null, BeerOrigin.DUTCH
+                ProductType.BEER, "Heineken", 6, null, null, BeerOrigin.DUTCH
         );
         OrderRequest request = new OrderRequest(List.of(itemRequest));
 
@@ -79,9 +79,9 @@ class OrderMapperTest {
     @Test
     void shouldMapMixedOrder() {
         List<OrderItemRequest> items = List.of(
-            new OrderItemRequest(ProductType.BREAD, "Bread", 3, 3, null, null),
-            new OrderItemRequest(ProductType.VEGETABLE, "Veggies", null, null, 200, null),
-            new OrderItemRequest(ProductType.BEER, "Beer", 6, null, null, BeerOrigin.DUTCH)
+                new OrderItemRequest(ProductType.BREAD, "Bread", 3, 3, null, null),
+                new OrderItemRequest(ProductType.VEGETABLE, "Veggies", null, null, 200, null),
+                new OrderItemRequest(ProductType.BEER, "Beer", 6, null, null, BeerOrigin.DUTCH)
         );
         OrderRequest request = new OrderRequest(items);
 
@@ -93,60 +93,60 @@ class OrderMapperTest {
     @Test
     void shouldThrowExceptionWhenBreadMissingQuantity() {
         OrderItemRequest itemRequest = new OrderItemRequest(
-            ProductType.BREAD, "Bread", null, 2, null, null
+                ProductType.BREAD, "Bread", null, 2, null, null
         );
         OrderRequest request = new OrderRequest(List.of(itemRequest));
 
         assertThatThrownBy(() -> mapper.mapToOrder(request))
-            .isInstanceOf(InvalidOrderException.class)
-            .hasMessageContaining("quantity field required for product type BREAD");
+                .isInstanceOf(InvalidOrderException.class)
+                .hasMessageContaining("quantity field required for product type BREAD");
     }
 
     @Test
     void shouldThrowExceptionWhenBreadMissingDaysOld() {
         OrderItemRequest itemRequest = new OrderItemRequest(
-            ProductType.BREAD, "Bread", 3, null, null, null
+                ProductType.BREAD, "Bread", 3, null, null, null
         );
         OrderRequest request = new OrderRequest(List.of(itemRequest));
 
         assertThatThrownBy(() -> mapper.mapToOrder(request))
-            .isInstanceOf(InvalidOrderException.class)
-            .hasMessageContaining("daysOld field required for product type BREAD");
+                .isInstanceOf(InvalidOrderException.class)
+                .hasMessageContaining("daysOld field required for product type BREAD");
     }
 
     @Test
     void shouldThrowExceptionWhenVegetableMissingWeight() {
         OrderItemRequest itemRequest = new OrderItemRequest(
-            ProductType.VEGETABLE, "Carrots", null, null, null, null
+                ProductType.VEGETABLE, "Carrots", null, null, null, null
         );
         OrderRequest request = new OrderRequest(List.of(itemRequest));
 
         assertThatThrownBy(() -> mapper.mapToOrder(request))
-            .isInstanceOf(InvalidOrderException.class)
-            .hasMessageContaining("weightGrams field required for product type VEGETABLE");
+                .isInstanceOf(InvalidOrderException.class)
+                .hasMessageContaining("weightGrams field required for product type VEGETABLE");
     }
 
     @Test
     void shouldThrowExceptionWhenBeerMissingQuantity() {
         OrderItemRequest itemRequest = new OrderItemRequest(
-            ProductType.BEER, "Beer", null, null, null, BeerOrigin.DUTCH
+                ProductType.BEER, "Beer", null, null, null, BeerOrigin.DUTCH
         );
         OrderRequest request = new OrderRequest(List.of(itemRequest));
 
         assertThatThrownBy(() -> mapper.mapToOrder(request))
-            .isInstanceOf(InvalidOrderException.class)
-            .hasMessageContaining("quantity field required for product type BEER");
+                .isInstanceOf(InvalidOrderException.class)
+                .hasMessageContaining("quantity field required for product type BEER");
     }
 
     @Test
     void shouldThrowExceptionWhenBeerMissingOrigin() {
         OrderItemRequest itemRequest = new OrderItemRequest(
-            ProductType.BEER, "Beer", 6, null, null, null
+                ProductType.BEER, "Beer", 6, null, null, null
         );
         OrderRequest request = new OrderRequest(List.of(itemRequest));
 
         assertThatThrownBy(() -> mapper.mapToOrder(request))
-            .isInstanceOf(InvalidOrderException.class)
-            .hasMessageContaining("origin field required for product type BEER");
+                .isInstanceOf(InvalidOrderException.class)
+                .hasMessageContaining("origin field required for product type BEER");
     }
 }

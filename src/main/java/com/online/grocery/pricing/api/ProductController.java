@@ -36,45 +36,45 @@ public class ProductController {
      */
     @GetMapping("/prices")
     @Operation(
-        summary = "List product prices",
-        description = "Returns current base prices for all product types"
+            summary = "List product prices",
+            description = "Returns current base prices for all product types"
     )
     @ApiResponse(
-        responseCode = "200",
-        description = "Prices retrieved successfully",
-        content = @Content(
-            array = @ArraySchema(schema = @Schema(implementation = PriceInfoResponse.class))
-        )
+            responseCode = "200",
+            description = "Prices retrieved successfully",
+            content = @Content(
+                    array = @ArraySchema(schema = @Schema(implementation = PriceInfoResponse.class))
+            )
     )
     public ResponseEntity<List<PriceInfoResponse>> listPrices() {
         PricingConfiguration.BeerRules beerRules = config.getBeer();
 
         List<PriceInfoResponse> prices = List.of(
-            new PriceInfoResponse(
-                "Bread",
-                config.getBreadPrice(),
-                "per unit"
-            ),
-            new PriceInfoResponse(
-                "Vegetables",
-                config.getVegetablePricePer100g(),
-                "per 100g"
-            ),
-            new PriceInfoResponse(
-                "Beer (Belgian)",
-                beerRules.getBelgianBasePrice(),
-                "per bottle"
-            ),
-            new PriceInfoResponse(
-                "Beer (Dutch)",
-                beerRules.getDutchBasePrice(),
-                "per bottle"
-            ),
-            new PriceInfoResponse(
-                "Beer (German)",
-                beerRules.getGermanBasePrice(),
-                "per bottle"
-            )
+                new PriceInfoResponse(
+                        "Bread",
+                        config.getBreadPrice(),
+                        "per unit"
+                ),
+                new PriceInfoResponse(
+                        "Vegetables",
+                        config.getVegetablePricePer100g(),
+                        "per 100g"
+                ),
+                new PriceInfoResponse(
+                        "Beer (Belgian)",
+                        beerRules.getBelgianBasePrice(),
+                        "per bottle"
+                ),
+                new PriceInfoResponse(
+                        "Beer (Dutch)",
+                        beerRules.getDutchBasePrice(),
+                        "per bottle"
+                ),
+                new PriceInfoResponse(
+                        "Beer (German)",
+                        beerRules.getGermanBasePrice(),
+                        "per bottle"
+                )
         );
 
         return ResponseEntity.ok(prices);

@@ -7,6 +7,7 @@ package com.online.grocery.pricing.api.dto;
  * @param description Human-readable description of the discount rule
  */
 public record DiscountRuleResponse(
-    String productType,
-    String description
-) {}
+        String productType,
+        String description
+) {
+}

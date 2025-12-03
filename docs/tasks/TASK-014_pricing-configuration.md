@@ -1,12 +1,15 @@
 # TASK-014: Pricing Configuration
 
 ## Status
+
 - [x] Completed
 
 ## Phase
+
 Phase 3: Service Layer
 
 ## Description
+
 Create PricingConfiguration class with @ConfigurationProperties and application.yml for externalized pricing rules.
 
 ## Implementation Details
@@ -51,29 +54,52 @@ public class PricingConfiguration {
     private BeerRules beer = new BeerRules();
 
     // Getters and Setters
-    public BigDecimal getBreadPrice() { return breadPrice; }
-    public void setBreadPrice(BigDecimal breadPrice) { this.breadPrice = breadPrice; }
-
-    public BigDecimal getVegetablePricePer100g() { return vegetablePricePer100g; }
-    public void setVegetablePricePer100g(BigDecimal vegetablePricePer100g) { 
-        this.vegetablePricePer100g = vegetablePricePer100g; 
+    public BigDecimal getBreadPrice() {
+        return breadPrice;
     }
 
-    public BreadRules getBread() { return bread; }
-    public void setBread(BreadRules bread) { this.bread = bread; }
+    public void setBreadPrice(BigDecimal breadPrice) {
+        this.breadPrice = breadPrice;
+    }
 
-    public VegetableRules getVegetable() { return vegetable; }
-    public void setVegetable(VegetableRules vegetable) { this.vegetable = vegetable; }
+    public BigDecimal getVegetablePricePer100g() {
+        return vegetablePricePer100g;
+    }
 
-    public BeerRules getBeer() { return beer; }
-    public void setBeer(BeerRules beer) { this.beer = beer; }
+    public void setVegetablePricePer100g(BigDecimal vegetablePricePer100g) {
+        this.vegetablePricePer100g = vegetablePricePer100g;
+    }
+
+    public BreadRules getBread() {
+        return bread;
+    }
+
+    public void setBread(BreadRules bread) {
+        this.bread = bread;
+    }
+
+    public VegetableRules getVegetable() {
+        return vegetable;
+    }
+
+    public void setVegetable(VegetableRules vegetable) {
+        this.vegetable = vegetable;
+    }
+
+    public BeerRules getBeer() {
+        return beer;
+    }
+
+    public void setBeer(BeerRules beer) {
+        this.beer = beer;
+    }
 
     /**
      * Bread-specific discount rules configuration.
      */
     @Validated
     public static class BreadRules {
-        
+
         @Min(value = 0, message = "Max age days cannot be negative")
         private int maxAgeDays = 6;
 
@@ -86,17 +112,28 @@ public class PricingConfiguration {
         private int specialBundleAge = 6;
 
         // Getters and Setters
-        public int getMaxAgeDays() { return maxAgeDays; }
-        public void setMaxAgeDays(int maxAgeDays) { this.maxAgeDays = maxAgeDays; }
-
-        public int getBundleDiscountMinAge() { return bundleDiscountMinAge; }
-        public void setBundleDiscountMinAge(int bundleDiscountMinAge) { 
-            this.bundleDiscountMinAge = bundleDiscountMinAge; 
+        public int getMaxAgeDays() {
+            return maxAgeDays;
         }
 
-        public int getSpecialBundleAge() { return specialBundleAge; }
-        public void setSpecialBundleAge(int specialBundleAge) { 
-            this.specialBundleAge = specialBundleAge; 
+        public void setMaxAgeDays(int maxAgeDays) {
+            this.maxAgeDays = maxAgeDays;
+        }
+
+        public int getBundleDiscountMinAge() {
+            return bundleDiscountMinAge;
+        }
+
+        public void setBundleDiscountMinAge(int bundleDiscountMinAge) {
+            this.bundleDiscountMinAge = bundleDiscountMinAge;
+        }
+
+        public int getSpecialBundleAge() {
+            return specialBundleAge;
+        }
+
+        public void setSpecialBundleAge(int specialBundleAge) {
+            this.specialBundleAge = specialBundleAge;
         }
     }
 
@@ -105,7 +142,7 @@ public class PricingConfiguration {
      */
     @Validated
     public static class VegetableRules {
-        
+
         @Min(value = 1, message = "Small weight threshold must be positive")
         private int smallWeightThreshold = 100;
 
@@ -128,29 +165,44 @@ public class PricingConfiguration {
         private BigDecimal largeWeightDiscount = new BigDecimal("0.10");
 
         // Getters and Setters
-        public int getSmallWeightThreshold() { return smallWeightThreshold; }
-        public void setSmallWeightThreshold(int smallWeightThreshold) { 
-            this.smallWeightThreshold = smallWeightThreshold; 
+        public int getSmallWeightThreshold() {
+            return smallWeightThreshold;
         }
 
-        public int getMediumWeightThreshold() { return mediumWeightThreshold; }
-        public void setMediumWeightThreshold(int mediumWeightThreshold) { 
-            this.mediumWeightThreshold = mediumWeightThreshold; 
+        public void setSmallWeightThreshold(int smallWeightThreshold) {
+            this.smallWeightThreshold = smallWeightThreshold;
         }
 
-        public BigDecimal getSmallWeightDiscount() { return smallWeightDiscount; }
-        public void setSmallWeightDiscount(BigDecimal smallWeightDiscount) { 
-            this.smallWeightDiscount = smallWeightDiscount; 
+        public int getMediumWeightThreshold() {
+            return mediumWeightThreshold;
         }
 
-        public BigDecimal getMediumWeightDiscount() { return mediumWeightDiscount; }
-        public void setMediumWeightDiscount(BigDecimal mediumWeightDiscount) { 
-            this.mediumWeightDiscount = mediumWeightDiscount; 
+        public void setMediumWeightThreshold(int mediumWeightThreshold) {
+            this.mediumWeightThreshold = mediumWeightThreshold;
         }
 
-        public BigDecimal getLargeWeightDiscount() { return largeWeightDiscount; }
-        public void setLargeWeightDiscount(BigDecimal largeWeightDiscount) { 
-            this.largeWeightDiscount = largeWeightDiscount; 
+        public BigDecimal getSmallWeightDiscount() {
+            return smallWeightDiscount;
+        }
+
+        public void setSmallWeightDiscount(BigDecimal smallWeightDiscount) {
+            this.smallWeightDiscount = smallWeightDiscount;
+        }
+
+        public BigDecimal getMediumWeightDiscount() {
+            return mediumWeightDiscount;
+        }
+
+        public void setMediumWeightDiscount(BigDecimal mediumWeightDiscount) {
+            this.mediumWeightDiscount = mediumWeightDiscount;
+        }
+
+        public BigDecimal getLargeWeightDiscount() {
+            return largeWeightDiscount;
+        }
+
+        public void setLargeWeightDiscount(BigDecimal largeWeightDiscount) {
+            this.largeWeightDiscount = largeWeightDiscount;
         }
     }
 
@@ -159,7 +211,7 @@ public class PricingConfiguration {
      */
     @Validated
     public static class BeerRules {
-        
+
         @Min(value = 1, message = "Pack size must be at least 1")
         private int packSize = 6;
 
@@ -190,37 +242,60 @@ public class PricingConfiguration {
         private BigDecimal germanPackDiscount = new BigDecimal("4.00");
 
         // Getters and Setters
-        public int getPackSize() { return packSize; }
-        public void setPackSize(int packSize) { this.packSize = packSize; }
-
-        public BigDecimal getBelgianBasePrice() { return belgianBasePrice; }
-        public void setBelgianBasePrice(BigDecimal belgianBasePrice) { 
-            this.belgianBasePrice = belgianBasePrice; 
+        public int getPackSize() {
+            return packSize;
         }
 
-        public BigDecimal getDutchBasePrice() { return dutchBasePrice; }
-        public void setDutchBasePrice(BigDecimal dutchBasePrice) { 
-            this.dutchBasePrice = dutchBasePrice; 
+        public void setPackSize(int packSize) {
+            this.packSize = packSize;
         }
 
-        public BigDecimal getGermanBasePrice() { return germanBasePrice; }
-        public void setGermanBasePrice(BigDecimal germanBasePrice) { 
-            this.germanBasePrice = germanBasePrice; 
+        public BigDecimal getBelgianBasePrice() {
+            return belgianBasePrice;
         }
 
-        public BigDecimal getBelgianPackDiscount() { return belgianPackDiscount; }
-        public void setBelgianPackDiscount(BigDecimal belgianPackDiscount) { 
-            this.belgianPackDiscount = belgianPackDiscount; 
+        public void setBelgianBasePrice(BigDecimal belgianBasePrice) {
+            this.belgianBasePrice = belgianBasePrice;
         }
 
-        public BigDecimal getDutchPackDiscount() { return dutchPackDiscount; }
-        public void setDutchPackDiscount(BigDecimal dutchPackDiscount) { 
-            this.dutchPackDiscount = dutchPackDiscount; 
+        public BigDecimal getDutchBasePrice() {
+            return dutchBasePrice;
         }
 
-        public BigDecimal getGermanPackDiscount() { return germanPackDiscount; }
-        public void setGermanPackDiscount(BigDecimal germanPackDiscount) { 
-            this.germanPackDiscount = germanPackDiscount; 
+        public void setDutchBasePrice(BigDecimal dutchBasePrice) {
+            this.dutchBasePrice = dutchBasePrice;
+        }
+
+        public BigDecimal getGermanBasePrice() {
+            return germanBasePrice;
+        }
+
+        public void setGermanBasePrice(BigDecimal germanBasePrice) {
+            this.germanBasePrice = germanBasePrice;
+        }
+
+        public BigDecimal getBelgianPackDiscount() {
+            return belgianPackDiscount;
+        }
+
+        public void setBelgianPackDiscount(BigDecimal belgianPackDiscount) {
+            this.belgianPackDiscount = belgianPackDiscount;
+        }
+
+        public BigDecimal getDutchPackDiscount() {
+            return dutchPackDiscount;
+        }
+
+        public void setDutchPackDiscount(BigDecimal dutchPackDiscount) {
+            this.dutchPackDiscount = dutchPackDiscount;
+        }
+
+        public BigDecimal getGermanPackDiscount() {
+            return germanPackDiscount;
+        }
+
+        public void setGermanPackDiscount(BigDecimal germanPackDiscount) {
+            this.germanPackDiscount = germanPackDiscount;
         }
     }
 }

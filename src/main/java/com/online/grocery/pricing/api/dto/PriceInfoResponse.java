@@ -6,7 +6,8 @@ import java.math.BigDecimal;
  * Response DTO for product price information.
  */
 public record PriceInfoResponse(
-    String productName,
-    BigDecimal price,
-    String unit
-) {}
+        String productName,
+        BigDecimal price,
+        String unit
+) {
+}

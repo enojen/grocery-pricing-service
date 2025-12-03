@@ -36,15 +36,15 @@ public class DiscountController {
      */
     @GetMapping("/rules")
     @Operation(
-        summary = "List discount rules",
-        description = "Returns all registered discount rules with their descriptions"
+            summary = "List discount rules",
+            description = "Returns all registered discount rules with their descriptions"
     )
     @ApiResponse(
-        responseCode = "200",
-        description = "Discount rules retrieved successfully",
-        content = @Content(
-            array = @ArraySchema(schema = @Schema(implementation = DiscountRuleResponse.class))
-        )
+            responseCode = "200",
+            description = "Discount rules retrieved successfully",
+            content = @Content(
+                    array = @ArraySchema(schema = @Schema(implementation = DiscountRuleResponse.class))
+            )
     )
     public ResponseEntity<List<DiscountRuleResponse>> listDiscountRules() {
         return ResponseEntity.ok(ruleService.getAllRules());

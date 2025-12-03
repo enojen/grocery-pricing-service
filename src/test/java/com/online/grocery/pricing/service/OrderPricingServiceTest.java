@@ -10,7 +10,8 @@ import org.junit.jupiter.api.Test;
 import java.math.BigDecimal;
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.*;
 
 class OrderPricingServiceTest {
@@ -41,13 +42,13 @@ class OrderPricingServiceTest {
         Order order = new Order(List.of(bread, veg, beer));
 
         when(breadStrategy.calculatePrice(anyList())).thenReturn(List.of(
-            new ReceiptLine("3 x Bread (3 days old)", new BigDecimal("3.00"), new BigDecimal("1.00"), new BigDecimal("2.00"))
+                new ReceiptLine("3 x Bread (3 days old)", new BigDecimal("3.00"), new BigDecimal("1.00"), new BigDecimal("2.00"))
         ));
         when(vegetableStrategy.calculatePrice(anyList())).thenReturn(List.of(
-            new ReceiptLine("200g Vegetables", new BigDecimal("2.00"), new BigDecimal("0.14"), new BigDecimal("1.86"))
+                new ReceiptLine("200g Vegetables", new BigDecimal("2.00"), new BigDecimal("0.14"), new BigDecimal("1.86"))
         ));
         when(beerStrategy.calculatePrice(anyList())).thenReturn(List.of(
-            new ReceiptLine("6 x DUTCH Beer (1 packs + 0 singles)", new BigDecimal("3.00"), new BigDecimal("2.00"), new BigDecimal("1.00"))
+                new ReceiptLine("6 x DUTCH Beer (1 packs + 0 singles)", new BigDecimal("3.00"), new BigDecimal("2.00"), new BigDecimal("1.00"))
         ));
 
         Receipt receipt = service.calculateReceipt(order);
@@ -64,7 +65,7 @@ class OrderPricingServiceTest {
         Order order = new Order(List.of(bread));
 
         when(breadStrategy.calculatePrice(anyList())).thenReturn(List.of(
-            new ReceiptLine("1 x Bread", new BigDecimal("1.00"), BigDecimal.ZERO, new BigDecimal("1.00"))
+                new ReceiptLine("1 x Bread", new BigDecimal("1.00"), BigDecimal.ZERO, new BigDecimal("1.00"))
         ));
 
         service.calculateReceipt(order);
@@ -81,7 +82,7 @@ class OrderPricingServiceTest {
         Order order = new Order(List.of(veg1, veg2));
 
         when(vegetableStrategy.calculatePrice(anyList())).thenReturn(List.of(
-            new ReceiptLine("300g Vegetables", new BigDecimal("3.00"), new BigDecimal("0.21"), new BigDecimal("2.79"))
+                new ReceiptLine("300g Vegetables", new BigDecimal("3.00"), new BigDecimal("0.21"), new BigDecimal("2.79"))
         ));
 
         Receipt receipt = service.calculateReceipt(order);
@@ -96,7 +97,7 @@ class OrderPricingServiceTest {
         Order order = new Order(List.of(bread));
 
         when(breadStrategy.calculatePrice(anyList())).thenReturn(List.of(
-            new ReceiptLine("2 x Bread (0 days old)", new BigDecimal("2.00"), BigDecimal.ZERO, new BigDecimal("2.00"))
+                new ReceiptLine("2 x Bread (0 days old)", new BigDecimal("2.00"), BigDecimal.ZERO, new BigDecimal("2.00"))
         ));
 
         Receipt receipt = service.calculateReceipt(order);
@@ -116,7 +117,7 @@ class OrderPricingServiceTest {
         Order order = new Order(List.of(veg));
 
         assertThatThrownBy(() -> limitedService.calculateReceipt(order))
-            .isInstanceOf(IllegalStateException.class)
-            .hasMessageContaining("No pricing strategy registered for product type: VEGETABLE");
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessageContaining("No pricing strategy registered for product type: VEGETABLE");
     }
 }

@@ -8,7 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Critical integration test validating the example order calculation.
@@ -24,9 +24,9 @@ class ExampleOrderIntegrationTest {
     void shouldCalculateExampleOrderCorrectly() {
         // Given: Example order from requirements
         Order order = new Order(List.of(
-            new BreadItem("Bread", 3, 3),
-            new VegetableItem("Vegetables", 200),
-            new BeerItem("Dutch Beer", 6, BeerOrigin.DUTCH)
+                new BreadItem("Bread", 3, 3),
+                new VegetableItem("Vegetables", 200),
+                new BeerItem("Dutch Beer", 6, BeerOrigin.DUTCH)
         ));
 
         // When
@@ -60,7 +60,7 @@ class ExampleOrderIntegrationTest {
     void shouldCalculateBreadDiscountFor3DaysOld() {
         // Buy 1 take 2: For 3 breads, 1 is free
         Order order = new Order(List.of(
-            new BreadItem("Bread", 3, 3)
+                new BreadItem("Bread", 3, 3)
         ));
 
         Receipt receipt = orderPricingService.calculateReceipt(order);
@@ -72,7 +72,7 @@ class ExampleOrderIntegrationTest {
     void shouldCalculateBreadDiscountFor6DaysOld() {
         // Buy 1 take 3: For 3 breads, 2 are free (1 group of 3)
         Order order = new Order(List.of(
-            new BreadItem("Bread", 3, 6)
+                new BreadItem("Bread", 3, 6)
         ));
 
         Receipt receipt = orderPricingService.calculateReceipt(order);
@@ -87,7 +87,7 @@ class ExampleOrderIntegrationTest {
     void shouldCalculateVegetableDiscount5PercentForSmallWeight() {
         // < 100g = 5% discount
         Order order = new Order(List.of(
-            new VegetableItem("Carrots", 50)
+                new VegetableItem("Carrots", 50)
         ));
 
         Receipt receipt = orderPricingService.calculateReceipt(order);
@@ -101,7 +101,7 @@ class ExampleOrderIntegrationTest {
     void shouldCalculateVegetableDiscount10PercentForLargeWeight() {
         // >= 500g = 10% discount
         Order order = new Order(List.of(
-            new VegetableItem("Potatoes", 500)
+                new VegetableItem("Potatoes", 500)
         ));
 
         Receipt receipt = orderPricingService.calculateReceipt(order);
@@ -116,7 +116,7 @@ class ExampleOrderIntegrationTest {
     void shouldCalculateBeerPackDiscountForBelgian() {
         // Belgian: 6 x 0.60 = 3.60, discount 3.00, final 0.60
         Order order = new Order(List.of(
-            new BeerItem("Leffe", 6, BeerOrigin.BELGIAN)
+                new BeerItem("Leffe", 6, BeerOrigin.BELGIAN)
         ));
 
         Receipt receipt = orderPricingService.calculateReceipt(order);
@@ -130,7 +130,7 @@ class ExampleOrderIntegrationTest {
     void shouldCalculateBeerPackDiscountForGerman() {
         // German: 6 x 0.80 = 4.80, discount 4.00, final 0.80
         Order order = new Order(List.of(
-            new BeerItem("Beck's", 6, BeerOrigin.GERMAN)
+                new BeerItem("Beck's", 6, BeerOrigin.GERMAN)
         ));
 
         Receipt receipt = orderPricingService.calculateReceipt(order);
@@ -144,7 +144,7 @@ class ExampleOrderIntegrationTest {
     void shouldNotApplyBeerDiscountForSingles() {
         // 5 beers = 0 packs, 5 singles, no discount
         Order order = new Order(List.of(
-            new BeerItem("Heineken", 5, BeerOrigin.DUTCH)
+                new BeerItem("Heineken", 5, BeerOrigin.DUTCH)
         ));
 
         Receipt receipt = orderPricingService.calculateReceipt(order);
@@ -156,10 +156,10 @@ class ExampleOrderIntegrationTest {
 
     private ReceiptLine findLineByDescription(Receipt receipt, String keyword) {
         return receipt.lines().stream()
-            .filter(line -> line.description().toLowerCase().contains(keyword.toLowerCase()))
-            .findFirst()
-            .orElseThrow(() -> new AssertionError(
-                "No receipt line found containing: " + keyword
-            ));
+                .filter(line -> line.description().toLowerCase().contains(keyword.toLowerCase()))
+                .findFirst()
+                .orElseThrow(() -> new AssertionError(
+                        "No receipt line found containing: " + keyword
+                ));
     }
 }

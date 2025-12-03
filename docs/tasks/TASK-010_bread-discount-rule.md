@@ -1,17 +1,21 @@
 # TASK-010: Bread Discount Rule
 
 ## Status
+
 - [x] Completed
 
 ## Phase
+
 Phase 2: Pricing Logic
 
 ## Description
+
 Implement BreadAgeBundleRule for age-based bundle discounts on bread items.
 
 ## Business Rules
 
 **Bread Age-Based Discounts** (applied per age group):
+
 - **0-2 days old**: No discount
 - **3-5 days old**: "Buy 1 take 2" (in groups of 2, pay for 1)
 - **6 days old**: "Buy 1 take 3" (in groups of 3, pay for 1)
@@ -32,7 +36,7 @@ import java.math.BigDecimal;
 
 /**
  * Age-based bundle discount rule for bread.
- * 
+ *
  * <ul>
  *   <li>3-5 days old: "Buy 1 take 2" - In groups of 2, pay for 1</li>
  *   <li>6 days old: "Buy 1 take 3" - In groups of 3, pay for 1</li>
@@ -93,8 +97,8 @@ public class BreadAgeBundleRule implements BreadDiscountRule {
         int minAge = config.getBread().getBundleDiscountMinAge();
         int specialAge = config.getBread().getSpecialBundleAge();
         return String.format(
-            "Age-based bundle discounts: %d-%d days old = buy 1 take 2, %d days old = buy 1 take 3",
-            minAge, specialAge - 1, specialAge
+                "Age-based bundle discounts: %d-%d days old = buy 1 take 2, %d days old = buy 1 take 3",
+                minAge, specialAge - 1, specialAge
         );
     }
 }
@@ -126,78 +130,78 @@ class BreadAgeBundleRuleTest {
     void setUp() {
         config = mock(PricingConfiguration.class);
         PricingConfiguration.BreadRules breadRules = mock(PricingConfiguration.BreadRules.class);
-        
+
         when(config.getBread()).thenReturn(breadRules);
         when(breadRules.getBundleDiscountMinAge()).thenReturn(3);
         when(breadRules.getSpecialBundleAge()).thenReturn(6);
-        
+
         rule = new BreadAgeBundleRule(config);
     }
 
     @ParameterizedTest
     @CsvSource({
-        "0, false",  // Too fresh
-        "1, false",  // Too fresh
-        "2, false",  // Too fresh
-        "3, true",   // In discount range
-        "4, true",   // In discount range
-        "5, true",   // In discount range
-        "6, true"    // Special age
+            "0, false",  // Too fresh
+            "1, false",  // Too fresh
+            "2, false",  // Too fresh
+            "3, true",   // In discount range
+            "4, true",   // In discount range
+            "5, true",   // In discount range
+            "6, true"    // Special age
     })
     void shouldCheckApplicability(int age, boolean expected) {
         BreadPricingContext ctx = new BreadPricingContext(
-            age, 3, BigDecimal.ONE, new BigDecimal("3.00")
+                age, 3, BigDecimal.ONE, new BigDecimal("3.00")
         );
-        
+
         assertThat(rule.isApplicable(ctx)).isEqualTo(expected);
     }
 
     @ParameterizedTest
     @CsvSource({
-        // age, quantity, expectedDiscount
-        "3, 2, 1.00",   // 2 breads at 3 days: 1 free
-        "3, 3, 1.00",   // 3 breads at 3 days: 1 free (3/2=1)
-        "3, 4, 2.00",   // 4 breads at 3 days: 2 free (4/2=2)
-        "3, 5, 2.00",   // 5 breads at 3 days: 2 free (5/2=2)
-        "4, 6, 3.00",   // 6 breads at 4 days: 3 free (6/2=3)
-        "5, 1, 0.00"    // 1 bread at 5 days: 0 free (1/2=0)
+            // age, quantity, expectedDiscount
+            "3, 2, 1.00",   // 2 breads at 3 days: 1 free
+            "3, 3, 1.00",   // 3 breads at 3 days: 1 free (3/2=1)
+            "3, 4, 2.00",   // 4 breads at 3 days: 2 free (4/2=2)
+            "3, 5, 2.00",   // 5 breads at 3 days: 2 free (5/2=2)
+            "4, 6, 3.00",   // 6 breads at 4 days: 3 free (6/2=3)
+            "5, 1, 0.00"    // 1 bread at 5 days: 0 free (1/2=0)
     })
     void shouldCalculateBuyOneTakeTwoDiscount(int age, int qty, String expectedDiscount) {
         BreadPricingContext ctx = new BreadPricingContext(
-            age, qty, BigDecimal.ONE, BigDecimal.valueOf(qty)
+                age, qty, BigDecimal.ONE, BigDecimal.valueOf(qty)
         );
-        
+
         BigDecimal discount = rule.calculateDiscount(ctx);
-        
+
         assertThat(discount).isEqualByComparingTo(expectedDiscount);
     }
 
     @ParameterizedTest
     @CsvSource({
-        // quantity, expectedDiscount
-        "3, 2.00",   // 1 group × 2 free = 2 free
-        "6, 4.00",   // 2 groups × 2 free = 4 free
-        "7, 4.00",   // 2 groups × 2 free = 4 free (7/3=2)
-        "9, 6.00",   // 3 groups × 2 free = 6 free
-        "1, 0.00",   // 0 groups
-        "2, 0.00"    // 0 groups
+            // quantity, expectedDiscount
+            "3, 2.00",   // 1 group × 2 free = 2 free
+            "6, 4.00",   // 2 groups × 2 free = 4 free
+            "7, 4.00",   // 2 groups × 2 free = 4 free (7/3=2)
+            "9, 6.00",   // 3 groups × 2 free = 6 free
+            "1, 0.00",   // 0 groups
+            "2, 0.00"    // 0 groups
     })
     void shouldCalculateBuyOneTakeThreeDiscount(int qty, String expectedDiscount) {
         BreadPricingContext ctx = new BreadPricingContext(
-            6, qty, BigDecimal.ONE, BigDecimal.valueOf(qty)
+                6, qty, BigDecimal.ONE, BigDecimal.valueOf(qty)
         );
-        
+
         BigDecimal discount = rule.calculateDiscount(ctx);
-        
+
         assertThat(discount).isEqualByComparingTo(expectedDiscount);
     }
 
     @Test
     void shouldReturnZeroForFreshBread() {
         BreadPricingContext ctx = new BreadPricingContext(
-            1, 10, BigDecimal.ONE, new BigDecimal("10.00")
+                1, 10, BigDecimal.ONE, new BigDecimal("10.00")
         );
-        
+
         // Rule is not applicable for age < 3
         assertThat(rule.isApplicable(ctx)).isFalse();
     }
