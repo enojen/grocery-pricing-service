@@ -6,7 +6,7 @@
 
 ## Phase
 
-Phase 3: Documentation
+Phase 6: Maintenance & Improvements
 
 ## Description
 

@@ -6,7 +6,7 @@
 
 ## Phase
 
-Phase 3: Business Rule Updates
+Phase 6: Maintenance & Improvements
 
 ## Description
 
