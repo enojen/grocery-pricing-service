@@ -1,7 +1,7 @@
 # TASK-020: Order Controller
 
 ## Status
-- [ ] Not Started
+- [X] Completed
 
 ## Phase
 Phase 4: REST API
@@ -280,9 +280,9 @@ HTTP 200 OK (JSON)
 
 ## Acceptance Criteria
 
-- [ ] POST /api/v1/orders/calculate endpoint functional
-- [ ] Returns 200 OK with ReceiptResponse for valid requests
-- [ ] Returns 400 Bad Request for validation errors
-- [ ] Returns 422 Unprocessable Entity for business rule violations
-- [ ] OpenAPI annotations for Swagger documentation
-- [ ] All controller tests pass
+- [X] POST /api/v1/orders/calculate endpoint functional
+- [X] Returns 200 OK with ReceiptResponse for valid requests
+- [X] Returns 400 Bad Request for validation errors
+- [X] Returns 422 Unprocessable Entity for business rule violations
+- [X] OpenAPI annotations for Swagger documentation
+- [X] All controller tests pass

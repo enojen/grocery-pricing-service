@@ -1,7 +1,7 @@
 # TASK-023: Exception Handling
 
 ## Status
-- [ ] Not Started
+- [X] Completed
 
 ## Phase
 Phase 4: REST API
@@ -264,11 +264,11 @@ class GlobalExceptionHandlerTest {
 
 ## Acceptance Criteria
 
-- [ ] InvalidOrderException for business rule violations
-- [ ] GlobalExceptionHandler with @RestControllerAdvice
-- [ ] Handles MethodArgumentNotValidException → 400 Bad Request
-- [ ] Handles InvalidOrderException → 422 Unprocessable Entity
-- [ ] Handles IllegalArgumentException → 422 Unprocessable Entity
-- [ ] Handles generic Exception → 500 Internal Server Error
-- [ ] All error responses use standard ErrorResponse format
-- [ ] All unit tests pass
+- [X] InvalidOrderException for business rule violations
+- [X] GlobalExceptionHandler with @RestControllerAdvice
+- [X] Handles MethodArgumentNotValidException → 400 Bad Request
+- [X] Handles InvalidOrderException → 422 Unprocessable Entity
+- [X] Handles IllegalArgumentException → 422 Unprocessable Entity
+- [X] Handles generic Exception → 500 Internal Server Error
+- [X] All error responses use standard ErrorResponse format
+- [X] All unit tests pass

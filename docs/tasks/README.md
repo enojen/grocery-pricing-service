@@ -74,8 +74,12 @@ This document serves as an index for all implementation tasks based on the archi
 
 - [X] Phase 1: Foundation (6/6)
 - [X] Phase 2: Pricing Logic (7/7)
-- [ ] Phase 3: Service Layer (1/4)
-- [ ] Phase 4: REST API (0/7)
+- [X] Phase 3: Service Layer (4/4)
+- [ ] Phase 4: REST API (4/7)
 - [ ] Phase 5: Polish (0/3)
 
-**Overall Progress:** 14/27 tasks completed
+**Overall Progress:** 21/27 tasks completed
+
+## Notes
+
+- TASK-020 (Order Controller) depends on TASK-023 (Exception Handling) for proper 400/422 error responses
