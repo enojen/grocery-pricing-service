@@ -17,7 +17,7 @@ import java.math.BigDecimal;
  * </ul>
  */
 @Component
-public class BeerPackDiscountRule implements BeerDiscountRule {
+public final class BeerPackDiscountRule implements BeerDiscountRule {
 
     private final PricingConfiguration config;
 

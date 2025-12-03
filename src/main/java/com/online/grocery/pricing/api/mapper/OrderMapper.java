@@ -2,7 +2,11 @@ package com.online.grocery.pricing.api.mapper;
 
 import com.online.grocery.pricing.api.dto.OrderItemRequest;
 import com.online.grocery.pricing.api.dto.OrderRequest;
-import com.online.grocery.pricing.domain.model.*;
+import com.online.grocery.pricing.domain.model.BreadItem;
+import com.online.grocery.pricing.domain.model.Order;
+import com.online.grocery.pricing.domain.model.OrderItem;
+import com.online.grocery.pricing.domain.model.VegetableItem;
+import com.online.grocery.pricing.domain.model.BeerItem;
 import com.online.grocery.pricing.exception.InvalidOrderException;
 import org.springframework.stereotype.Component;
 

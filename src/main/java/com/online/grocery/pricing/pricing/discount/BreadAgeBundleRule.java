@@ -15,7 +15,7 @@ import java.math.BigDecimal;
  * </ul>
  */
 @Component
-public class BreadAgeBundleRule implements BreadDiscountRule {
+public final class BreadAgeBundleRule implements BreadDiscountRule {
 
     private final PricingConfiguration config;
 

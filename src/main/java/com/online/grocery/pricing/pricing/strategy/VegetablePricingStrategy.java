@@ -16,7 +16,7 @@ import java.util.Comparator;
 import java.util.List;
 
 @Component
-public class VegetablePricingStrategy implements PricingStrategy {
+public final class VegetablePricingStrategy implements PricingStrategy {
 
     private final PricingConfiguration config;
     private final List<VegetableDiscountRule> discountRules;

@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Component
-public class BeerPricingStrategy implements PricingStrategy {
+public final class BeerPricingStrategy implements PricingStrategy {
 
     private final PricingConfiguration config;
     private final List<BeerDiscountRule> discountRules;

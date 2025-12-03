@@ -1,7 +1,13 @@
 package com.online.grocery.pricing.config;
 
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.DecimalMax;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.validation.annotation.Validated;
@@ -12,6 +18,8 @@ import java.math.BigDecimal;
  * Configuration properties for all pricing rules.
  * Values are loaded from application.yml under the "pricing" prefix.
  */
+@Setter
+@Getter
 @Configuration
 @ConfigurationProperties(prefix = "pricing")
 @Validated
@@ -34,49 +42,11 @@ public class PricingConfiguration {
     @Valid
     private BeerRules beer = new BeerRules();
 
-    public BigDecimal getBreadPrice() {
-        return breadPrice;
-    }
-
-    public void setBreadPrice(BigDecimal breadPrice) {
-        this.breadPrice = breadPrice;
-    }
-
-    public BigDecimal getVegetablePricePer100g() {
-        return vegetablePricePer100g;
-    }
-
-    public void setVegetablePricePer100g(BigDecimal vegetablePricePer100g) {
-        this.vegetablePricePer100g = vegetablePricePer100g;
-    }
-
-    public BreadRules getBread() {
-        return bread;
-    }
-
-    public void setBread(BreadRules bread) {
-        this.bread = bread;
-    }
-
-    public VegetableRules getVegetable() {
-        return vegetable;
-    }
-
-    public void setVegetable(VegetableRules vegetable) {
-        this.vegetable = vegetable;
-    }
-
-    public BeerRules getBeer() {
-        return beer;
-    }
-
-    public void setBeer(BeerRules beer) {
-        this.beer = beer;
-    }
-
     /**
      * Bread-specific discount rules configuration.
      */
+    @Setter
+    @Getter
     @Validated
     public static class BreadRules {
 
@@ -91,34 +61,13 @@ public class PricingConfiguration {
         @Max(value = 6, message = "Special bundle age cannot exceed 6")
         private int specialBundleAge = 6;
 
-        public int getMaxAgeDays() {
-            return maxAgeDays;
-        }
-
-        public void setMaxAgeDays(int maxAgeDays) {
-            this.maxAgeDays = maxAgeDays;
-        }
-
-        public int getBundleDiscountMinAge() {
-            return bundleDiscountMinAge;
-        }
-
-        public void setBundleDiscountMinAge(int bundleDiscountMinAge) {
-            this.bundleDiscountMinAge = bundleDiscountMinAge;
-        }
-
-        public int getSpecialBundleAge() {
-            return specialBundleAge;
-        }
-
-        public void setSpecialBundleAge(int specialBundleAge) {
-            this.specialBundleAge = specialBundleAge;
-        }
     }
 
     /**
      * Vegetable-specific discount rules configuration.
      */
+    @Setter
+    @Getter
     @Validated
     public static class VegetableRules {
 
@@ -143,50 +92,13 @@ public class PricingConfiguration {
         @DecimalMax(value = "1.00", message = "Discount cannot exceed 100%")
         private BigDecimal largeWeightDiscount = new BigDecimal("0.10");
 
-        public int getSmallWeightThreshold() {
-            return smallWeightThreshold;
-        }
-
-        public void setSmallWeightThreshold(int smallWeightThreshold) {
-            this.smallWeightThreshold = smallWeightThreshold;
-        }
-
-        public int getMediumWeightThreshold() {
-            return mediumWeightThreshold;
-        }
-
-        public void setMediumWeightThreshold(int mediumWeightThreshold) {
-            this.mediumWeightThreshold = mediumWeightThreshold;
-        }
-
-        public BigDecimal getSmallWeightDiscount() {
-            return smallWeightDiscount;
-        }
-
-        public void setSmallWeightDiscount(BigDecimal smallWeightDiscount) {
-            this.smallWeightDiscount = smallWeightDiscount;
-        }
-
-        public BigDecimal getMediumWeightDiscount() {
-            return mediumWeightDiscount;
-        }
-
-        public void setMediumWeightDiscount(BigDecimal mediumWeightDiscount) {
-            this.mediumWeightDiscount = mediumWeightDiscount;
-        }
-
-        public BigDecimal getLargeWeightDiscount() {
-            return largeWeightDiscount;
-        }
-
-        public void setLargeWeightDiscount(BigDecimal largeWeightDiscount) {
-            this.largeWeightDiscount = largeWeightDiscount;
-        }
     }
 
     /**
      * Beer-specific pricing and discount rules configuration.
      */
+    @Setter
+    @Getter
     @Validated
     public static class BeerRules {
 
@@ -217,60 +129,5 @@ public class PricingConfiguration {
         @DecimalMin(value = "0.00", message = "Discount cannot be negative")
         private BigDecimal germanPackDiscount = new BigDecimal("4.00");
 
-        public int getPackSize() {
-            return packSize;
-        }
-
-        public void setPackSize(int packSize) {
-            this.packSize = packSize;
-        }
-
-        public BigDecimal getBelgianBasePrice() {
-            return belgianBasePrice;
-        }
-
-        public void setBelgianBasePrice(BigDecimal belgianBasePrice) {
-            this.belgianBasePrice = belgianBasePrice;
-        }
-
-        public BigDecimal getDutchBasePrice() {
-            return dutchBasePrice;
-        }
-
-        public void setDutchBasePrice(BigDecimal dutchBasePrice) {
-            this.dutchBasePrice = dutchBasePrice;
-        }
-
-        public BigDecimal getGermanBasePrice() {
-            return germanBasePrice;
-        }
-
-        public void setGermanBasePrice(BigDecimal germanBasePrice) {
-            this.germanBasePrice = germanBasePrice;
-        }
-
-        public BigDecimal getBelgianPackDiscount() {
-            return belgianPackDiscount;
-        }
-
-        public void setBelgianPackDiscount(BigDecimal belgianPackDiscount) {
-            this.belgianPackDiscount = belgianPackDiscount;
-        }
-
-        public BigDecimal getDutchPackDiscount() {
-            return dutchPackDiscount;
-        }
-
-        public void setDutchPackDiscount(BigDecimal dutchPackDiscount) {
-            this.dutchPackDiscount = dutchPackDiscount;
-        }
-
-        public BigDecimal getGermanPackDiscount() {
-            return germanPackDiscount;
-        }
-
-        public void setGermanPackDiscount(BigDecimal germanPackDiscount) {
-            this.germanPackDiscount = germanPackDiscount;
-        }
     }
 }

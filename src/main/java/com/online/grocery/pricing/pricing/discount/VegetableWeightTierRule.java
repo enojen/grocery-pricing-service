@@ -16,7 +16,7 @@ import java.math.BigDecimal;
  * </ul>
  */
 @Component
-public class VegetableWeightTierRule implements VegetableDiscountRule {
+public final class VegetableWeightTierRule implements VegetableDiscountRule {
 
     private final PricingConfiguration config;
 
