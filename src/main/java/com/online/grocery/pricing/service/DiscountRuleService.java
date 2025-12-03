@@ -2,14 +2,10 @@ package com.online.grocery.pricing.service;
 
 import com.online.grocery.pricing.api.dto.DiscountRuleResponse;
 import com.online.grocery.pricing.domain.enums.ProductType;
-import com.online.grocery.pricing.pricing.discount.BeerDiscountRule;
-import com.online.grocery.pricing.pricing.discount.BreadDiscountRule;
-import com.online.grocery.pricing.pricing.discount.VegetableDiscountRule;
+import com.online.grocery.pricing.pricing.discount.DiscountRule;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.function.Function;
-import java.util.stream.Stream;
 
 /**
  * Service for retrieving discount rule metadata.
@@ -19,18 +15,10 @@ import java.util.stream.Stream;
 @Service
 public class DiscountRuleService {
 
-    private final List<BeerDiscountRule> beerRules;
-    private final List<BreadDiscountRule> breadRules;
-    private final List<VegetableDiscountRule> vegetableRules;
+    private final List<DiscountRule> allRules;
 
-    public DiscountRuleService(
-            List<BeerDiscountRule> beerRules,
-            List<BreadDiscountRule> breadRules,
-            List<VegetableDiscountRule> vegetableRules
-    ) {
-        this.beerRules = beerRules;
-        this.breadRules = breadRules;
-        this.vegetableRules = vegetableRules;
+    public DiscountRuleService(List<DiscountRule> allRules) {
+        this.allRules = allRules;
     }
 
     /**
@@ -39,26 +27,11 @@ public class DiscountRuleService {
      * @return List of discount rules with product type and description
      */
     public List<DiscountRuleResponse> getAllRules() {
-        Stream<DiscountRuleResponse> beer = beerRules.stream()
+        return allRules.stream()
                 .map(rule -> new DiscountRuleResponse(
-                        ProductType.BEER.name(),
+                        rule.productType().name(),
                         rule.description()
-                ));
-
-        Stream<DiscountRuleResponse> bread = breadRules.stream()
-                .map(rule -> new DiscountRuleResponse(
-                        ProductType.BREAD.name(),
-                        rule.description()
-                ));
-
-        Stream<DiscountRuleResponse> veg = vegetableRules.stream()
-                .map(rule -> new DiscountRuleResponse(
-                        ProductType.VEGETABLE.name(),
-                        rule.description()
-                ));
-
-        return Stream.of(bread, veg, beer)
-                .flatMap(Function.identity())
+                ))
                 .toList();
     }
 

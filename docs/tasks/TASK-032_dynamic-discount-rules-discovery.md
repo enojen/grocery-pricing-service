@@ -2,7 +2,7 @@
 
 ## Status
 
-- [ ] Not Started
+- [x] Completed
 
 ## Phase
 
@@ -93,13 +93,13 @@ public class DiscountRuleService {
 
 ## Acceptance Criteria
 
-- [ ] `DiscountRule` base interface created with `productType()` and `description()` methods
-- [ ] All product-specific discount rule interfaces extend `DiscountRule`
-- [ ] `DiscountRuleService` uses single `List<DiscountRule>` injection
-- [ ] GET `/api/v1/discounts/rules` returns same response as before
-- [ ] Adding a new discount rule only requires creating a `@Component` class
-- [ ] All existing unit tests pass
-- [ ] All integration tests pass
+- [x] `DiscountRule` base interface created with `productType()` and `description()` methods
+- [x] All product-specific discount rule interfaces extend `DiscountRule`
+- [x] `DiscountRuleService` uses single `List<DiscountRule>` injection
+- [x] GET `/api/v1/discounts/rules` returns same response as before
+- [x] Adding a new discount rule only requires creating a `@Component` class
+- [x] All existing unit tests pass
+- [x] All integration tests pass
 
 ## Benefits
 

@@ -2,9 +2,7 @@ package com.online.grocery.pricing.service;
 
 import com.online.grocery.pricing.api.dto.DiscountRuleResponse;
 import com.online.grocery.pricing.domain.enums.ProductType;
-import com.online.grocery.pricing.pricing.discount.BeerDiscountRule;
-import com.online.grocery.pricing.pricing.discount.BreadDiscountRule;
-import com.online.grocery.pricing.pricing.discount.VegetableDiscountRule;
+import com.online.grocery.pricing.pricing.discount.DiscountRule;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -16,26 +14,25 @@ import static org.mockito.Mockito.when;
 
 class DiscountRuleServiceTest {
 
-    private BeerDiscountRule beerRule;
-    private BreadDiscountRule breadRule;
-    private VegetableDiscountRule vegetableRule;
+    private DiscountRule beerRule;
+    private DiscountRule breadRule;
+    private DiscountRule vegetableRule;
     private DiscountRuleService service;
 
     @BeforeEach
     void setUp() {
-        beerRule = mock(BeerDiscountRule.class);
-        breadRule = mock(BreadDiscountRule.class);
-        vegetableRule = mock(VegetableDiscountRule.class);
+        beerRule = mock(DiscountRule.class);
+        breadRule = mock(DiscountRule.class);
+        vegetableRule = mock(DiscountRule.class);
 
+        when(beerRule.productType()).thenReturn(ProductType.BEER);
         when(beerRule.description()).thenReturn("Beer pack discount");
+        when(breadRule.productType()).thenReturn(ProductType.BREAD);
         when(breadRule.description()).thenReturn("Bread age bundle discount");
+        when(vegetableRule.productType()).thenReturn(ProductType.VEGETABLE);
         when(vegetableRule.description()).thenReturn("Vegetable weight tier discount");
 
-        service = new DiscountRuleService(
-                List.of(beerRule),
-                List.of(breadRule),
-                List.of(vegetableRule)
-        );
+        service = new DiscountRuleService(List.of(beerRule, breadRule, vegetableRule));
     }
 
     @Test
@@ -70,13 +67,12 @@ class DiscountRuleServiceTest {
 
     @Test
     void shouldHandleMultipleRulesPerType() {
-        BeerDiscountRule secondBeerRule = mock(BeerDiscountRule.class);
+        DiscountRule secondBeerRule = mock(DiscountRule.class);
+        when(secondBeerRule.productType()).thenReturn(ProductType.BEER);
         when(secondBeerRule.description()).thenReturn("Holiday beer discount");
 
         DiscountRuleService serviceWithMultipleRules = new DiscountRuleService(
-                List.of(beerRule, secondBeerRule),
-                List.of(breadRule),
-                List.of(vegetableRule)
+                List.of(beerRule, breadRule, vegetableRule, secondBeerRule)
         );
 
         List<DiscountRuleResponse> rules = serviceWithMultipleRules.getAllRules();
@@ -87,11 +83,7 @@ class DiscountRuleServiceTest {
 
     @Test
     void shouldReturnEmptyListForTypeWithNoRules() {
-        DiscountRuleService emptyService = new DiscountRuleService(
-                List.of(),
-                List.of(),
-                List.of()
-        );
+        DiscountRuleService emptyService = new DiscountRuleService(List.of());
 
         List<DiscountRuleResponse> rules = emptyService.getAllRules();
 

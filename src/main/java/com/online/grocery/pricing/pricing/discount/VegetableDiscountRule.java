@@ -1,5 +1,6 @@
 package com.online.grocery.pricing.pricing.discount;
 
+import com.online.grocery.pricing.domain.enums.ProductType;
 import com.online.grocery.pricing.pricing.context.VegetablePricingContext;
 
 import java.math.BigDecimal;
@@ -8,7 +9,12 @@ import java.math.BigDecimal;
  * Interface for vegetable discount rules.
  * Implementations are auto-discovered by Spring and applied by VegetablePricingStrategy.
  */
-public interface VegetableDiscountRule {
+public interface VegetableDiscountRule extends DiscountRule {
+
+    @Override
+    default ProductType productType() {
+        return ProductType.VEGETABLE;
+    }
 
     /**
      * Check if this discount rule applies to the given context.

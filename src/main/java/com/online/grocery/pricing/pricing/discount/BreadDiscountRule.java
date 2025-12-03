@@ -1,5 +1,6 @@
 package com.online.grocery.pricing.pricing.discount;
 
+import com.online.grocery.pricing.domain.enums.ProductType;
 import com.online.grocery.pricing.pricing.context.BreadPricingContext;
 
 import java.math.BigDecimal;
@@ -8,7 +9,12 @@ import java.math.BigDecimal;
  * Interface for bread discount rules.
  * Implementations are auto-discovered by Spring and applied by BreadPricingStrategy.
  */
-public interface BreadDiscountRule {
+public interface BreadDiscountRule extends DiscountRule {
+
+    @Override
+    default ProductType productType() {
+        return ProductType.BREAD;
+    }
 
     /**
      * Check if this discount rule applies to the given context.
