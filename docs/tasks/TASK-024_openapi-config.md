@@ -1,7 +1,7 @@
 # TASK-024: OpenAPI Configuration
 
 ## Status
-- [ ] Not Started
+- [x] Completed
 
 ## Phase
 Phase 4: REST API
@@ -202,10 +202,10 @@ class OpenApiConfigurationTest {
 
 ## Acceptance Criteria
 
-- [ ] OpenApiConfiguration with API info, description, servers
-- [ ] Swagger UI accessible at /swagger-ui.html
-- [ ] OpenAPI docs accessible at /api-docs
-- [ ] All endpoints documented with descriptions
-- [ ] Request/Response schemas visible in Swagger UI
-- [ ] Business rules documented in API description
-- [ ] Integration test verifies OpenAPI docs availability
+- [x] OpenApiConfiguration with API info, description, servers
+- [x] Swagger UI accessible at /swagger-ui.html
+- [x] OpenAPI docs accessible at /api-docs
+- [x] All endpoints documented with descriptions
+- [x] Request/Response schemas visible in Swagger UI
+- [x] Business rules documented in API description
+- [x] Integration test verifies OpenAPI docs availability
