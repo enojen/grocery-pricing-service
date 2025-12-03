@@ -1,19 +1,3 @@
-# TASK-026: README
-
-## Status
-- [x] Completed
-
-## Phase
-Phase 5: Polish
-
-## Description
-Create comprehensive project README with architecture documentation and usage examples.
-
-## Implementation Details
-
-### README.md Content
-
-```markdown
 # Grocery Pricing Service
 
 REST API for calculating grocery order totals with product-specific discounts.
@@ -60,12 +44,12 @@ This service calculates order totals for a grocery store, applying automatic dis
 
 - **Strategy Pattern**: Product-specific pricing logic
 - **Pluggable Rules**: Add new discounts without modifying existing code
-- **Config-driven**: All pricing rules externalized to application.yml
+- **Config-driven**: All pricing rules externalized to application.yaml
 
 ## Quick Start
 
 ### Prerequisites
-- Java 17+
+- Java 21+
 - Maven 3.6+
 
 ### Build & Run
@@ -81,7 +65,7 @@ mvn test
 mvn spring-boot:run
 
 # Or run the JAR
-java -jar target/pricing-service-1.0.0-SNAPSHOT.jar
+java -jar target/grocery-pricing-service-0.0.1-SNAPSHOT.jar
 ```
 
 ### Access
@@ -156,24 +140,25 @@ GET /api/v1/products/prices
 
 ## Configuration
 
-All pricing rules can be modified in `application.yml`:
+All pricing rules can be modified in `application.yaml`:
 
 ```yaml
 pricing:
   bread-price: 1.00
   vegetable-price-per100g: 1.00
-  
+
   bread:
+    max-age-days: 6
     bundle-discount-min-age: 3
     special-bundle-age: 6
-  
+
   vegetable:
     small-weight-threshold: 100
     medium-weight-threshold: 500
     small-weight-discount: 0.05
     medium-weight-discount: 0.07
     large-weight-discount: 0.10
-  
+
   beer:
     pack-size: 6
     belgian-base-price: 0.60
@@ -197,15 +182,15 @@ public class HolidayBeerPromoRule implements BeerDiscountRule {
     public boolean isApplicable(BeerPricingContext ctx) {
         return isHolidaySeason();
     }
-    
+
     @Override
     public BigDecimal calculateDiscount(BeerPricingContext ctx) {
         return ctx.originalPrice().multiply(new BigDecimal("0.15"));
     }
-    
+
     @Override
     public int order() { return 200; }
-    
+
     @Override
     public String description() {
         return "Holiday promotion: 15% off all beers";
@@ -238,30 +223,22 @@ open target/site/jacoco/index.html
 ## Project Structure
 
 ```
-src/main/java/com/grocery/pricing/
+src/main/java/com/online/grocery/pricing/
 ├── api/                    # REST controllers and DTOs
+│   ├── dto/                # Request/Response DTOs
+│   └── mapper/             # Object mappers
 ├── config/                 # Configuration classes
 ├── domain/                 # Domain models and enums
+│   ├── enums/              # ProductType, BeerOrigin
+│   └── model/              # OrderItem, Receipt, etc.
 ├── exception/              # Exception handling
 ├── pricing/                # Pricing strategies and rules
+│   ├── context/            # Pricing contexts
+│   ├── discount/           # Discount rule implementations
+│   └── strategy/           # Pricing strategies
 └── service/                # Business services
 ```
 
 ## License
 
 MIT License
-```
-
-## Files to Create
-
-- `README.md` (project root)
-
-## Acceptance Criteria
-
-- [x] README includes architecture overview
-- [x] Quick start instructions provided
-- [x] All API endpoints documented with examples
-- [x] Business rules clearly explained
-- [x] Configuration options documented
-- [x] Extensibility guide included
-- [x] Project structure documented
