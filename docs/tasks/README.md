@@ -4,7 +4,7 @@
 
 This document serves as an index for all implementation tasks based on the architecture plan in `PLAN.md`.
 
-**Total Tasks:** 27
+**Total Tasks:** 32
 
 ---
 
@@ -70,15 +70,28 @@ This document serves as an index for all implementation tasks based on the archi
 
 ---
 
+## Phase 6: Maintenance & Improvements
+
+| Task Code                                                    | Name                           | Description                                     |
+|--------------------------------------------------------------|--------------------------------|-------------------------------------------------|
+| [TASK-028](TASK-028_bread-discount-rules-update.md)          | Bread Discount Rules Update    | Exact-age-based bread discounts (3 and 6 days)  |
+| [TASK-029](TASK-029_remove-name-fields.md)                   | Remove Name Fields             | Remove name fields from products and orders     |
+| [TASK-030](TASK-030_vegetable-discount-rules-update.md)      | Vegetable Discount Rules Update| Include 500g in medium tier (inclusive)         |
+| [TASK-031](TASK-031_beer-minimum-price-documentation.md)     | Beer Minimum Price Docs        | Document beer price protection mechanism        |
+| [TASK-032](TASK-032_dynamic-discount-rules-discovery.md)     | Dynamic Discount Rules Discovery| Refactor to auto-discover discount rules       |
+
+---
+
 ## Progress Tracking
 
 - [X] Phase 1: Foundation (6/6)
 - [X] Phase 2: Pricing Logic (7/7)
 - [X] Phase 3: Service Layer (4/4)
-- [ ] Phase 4: REST API (4/7)
-- [ ] Phase 5: Polish (0/3)
+- [X] Phase 4: REST API (7/7)
+- [X] Phase 5: Polish (3/3)
+- [ ] Phase 6: Maintenance & Improvements (3/5)
 
-**Overall Progress:** 21/27 tasks completed
+**Overall Progress:** 30/32 tasks completed
 
 ## Notes
 

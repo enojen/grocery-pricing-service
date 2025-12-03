@@ -124,20 +124,21 @@ GET /api/v1/products/prices
 
 ### Bread
 
-| Age      | Discount                                |
-|----------|-----------------------------------------|
-| 0-2 days | No discount                             |
-| 3-5 days | "Buy 1 take 2" (50% off in groups of 2) |
-| 6 days   | "Buy 1 take 3" (66% off in groups of 3) |
-| >6 days  | Not allowed                             |
+| Age            | Discount                                 |
+|----------------|------------------------------------------|
+| 0-2 days       | No discount                              |
+| 3 days exactly | "Buy 1 take 2" (50% off in groups of 2)  |
+| 4-5 days       | No discount                              |
+| 6 days exactly | "Pay 1 take 3" (66% off in groups of 3)  |
+| >6 days        | Not allowed                              |
 
 ### Vegetables
 
 | Weight   | Discount |
 |----------|----------|
 | 0-99g    | 5%       |
-| 100-499g | 7%       |
-| 500g+    | 10%      |
+| 100-500g | 7%       |
+| >500g    | 10%      |
 
 ### Beer
 
@@ -146,6 +147,11 @@ GET /api/v1/products/prices
 | Belgian | €0.60/bottle | €3.00         | €0.60          |
 | Dutch   | €0.50/bottle | €2.00         | €1.00          |
 | German  | €0.80/bottle | €4.00         | €0.80          |
+
+**Minimum Price Protection:** Pack discounts are configured to ensure the final price per bottle never falls below a reasonable minimum. With current configuration:
+- Belgian: 6 x €0.60 = €3.60, discount €3.00, final = €0.60 (€0.10/bottle)
+- Dutch: 6 x €0.50 = €3.00, discount €2.00, final = €1.00 (€0.17/bottle)
+- German: 6 x €0.80 = €4.80, discount €4.00, final = €0.80 (€0.13/bottle)
 
 ## Configuration
 
@@ -158,8 +164,8 @@ pricing:
 
   bread:
     max-age-days: 6
-    bundle-discount-min-age: 3
-    special-bundle-age: 6
+    buy-one-take-two-age: 3
+    pay-one-take-three-age: 6
 
   vegetable:
     small-weight-threshold: 100
@@ -247,6 +253,10 @@ src/main/java/com/online/grocery/pricing/
 │   └── strategy/           # Pricing strategies
 └── service/                # Business services
 ```
+
+## Task Documentation
+
+For detailed implementation tasks and project history, see [docs/tasks/README.md](docs/tasks/README.md).
 
 ## License
 
