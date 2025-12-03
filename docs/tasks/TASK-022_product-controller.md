@@ -1,7 +1,7 @@
 # TASK-022: Product Controller
 
 ## Status
-- [ ] Not Started
+- [x] Completed
 
 ## Phase
 Phase 4: REST API
@@ -202,9 +202,9 @@ class ProductControllerTest {
 
 ## Acceptance Criteria
 
-- [ ] GET /api/v1/products/prices endpoint functional
-- [ ] Returns prices for all product types (Bread, Vegetables, Beer variants)
-- [ ] Each price includes productName, price, and unit
-- [ ] Prices come from PricingConfiguration (config-driven)
-- [ ] OpenAPI annotations for Swagger documentation
-- [ ] All tests pass
+- [x] GET /api/v1/products/prices endpoint functional
+- [x] Returns prices for all product types (Bread, Vegetables, Beer variants)
+- [x] Each price includes productName, price, and unit
+- [x] Prices come from PricingConfiguration (config-driven)
+- [x] OpenAPI annotations for Swagger documentation
+- [x] All tests pass
