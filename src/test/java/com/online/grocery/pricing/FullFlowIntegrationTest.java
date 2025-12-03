@@ -45,9 +45,9 @@ class FullFlowIntegrationTest {
 
         // Step 3: Calculate order
         OrderRequest request = new OrderRequest(List.of(
-                new OrderItemRequest(ProductType.BREAD, "Bread", 3, 3, null, null),
-                new OrderItemRequest(ProductType.VEGETABLE, "Veggies", null, null, 200, null),
-                new OrderItemRequest(ProductType.BEER, "Beer", 6, null, null, BeerOrigin.DUTCH)
+                new OrderItemRequest(ProductType.BREAD, 3, 3, null, null),
+                new OrderItemRequest(ProductType.VEGETABLE, null, null, 200, null),
+                new OrderItemRequest(ProductType.BEER, 6, null, null, BeerOrigin.DUTCH)
         ));
 
         mockMvc.perform(post("/api/v1/orders/calculate")

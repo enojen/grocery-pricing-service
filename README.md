@@ -86,9 +86,9 @@ Content-Type: application/json
 
 {
   "items": [
-    {"type": "BREAD", "name": "Sourdough", "quantity": 3, "daysOld": 3},
-    {"type": "VEGETABLE", "name": "Carrots", "weightGrams": 200},
-    {"type": "BEER", "name": "Heineken", "quantity": 6, "origin": "DUTCH"}
+    {"type": "BREAD", "quantity": 3, "daysOld": 3},
+    {"type": "VEGETABLE", "weightGrams": 200},
+    {"type": "BEER", "quantity": 6, "origin": "DUTCH"}
   ]
 }
 ```

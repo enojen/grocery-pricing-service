@@ -2,7 +2,6 @@ package com.online.grocery.pricing.api.dto;
 
 import com.online.grocery.pricing.domain.enums.BeerOrigin;
 import com.online.grocery.pricing.domain.enums.ProductType;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Min;
@@ -15,9 +14,6 @@ import jakarta.validation.constraints.Max;
 public record OrderItemRequest(
         @NotNull(message = "Product type required")
         ProductType type,
-
-        @NotBlank(message = "Item name required")
-        String name,
 
         @Positive(message = "Quantity must be positive")
         Integer quantity,

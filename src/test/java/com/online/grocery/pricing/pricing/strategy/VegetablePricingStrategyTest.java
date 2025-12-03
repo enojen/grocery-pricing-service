@@ -42,7 +42,7 @@ class VegetablePricingStrategyTest {
         when(discountRule.isApplicable(any())).thenReturn(true);
         when(discountRule.calculateDiscount(any())).thenReturn(new BigDecimal("0.025"));
 
-        List<OrderItem> items = List.of(new VegetableItem("Carrots", 50));
+        List<OrderItem> items = List.of(new VegetableItem(50));
         List<ReceiptLine> result = strategy.calculatePrice(items);
 
         assertThat(result).hasSize(1);
@@ -56,7 +56,7 @@ class VegetablePricingStrategyTest {
         when(discountRule.isApplicable(any())).thenReturn(true);
         when(discountRule.calculateDiscount(any())).thenReturn(new BigDecimal("0.21"));
 
-        List<OrderItem> items = List.of(new VegetableItem("Potatoes", 300));
+        List<OrderItem> items = List.of(new VegetableItem(300));
         List<ReceiptLine> result = strategy.calculatePrice(items);
 
         assertThat(result).hasSize(1);
@@ -70,7 +70,7 @@ class VegetablePricingStrategyTest {
         when(discountRule.isApplicable(any())).thenReturn(true);
         when(discountRule.calculateDiscount(any())).thenReturn(new BigDecimal("0.50"));
 
-        List<OrderItem> items = List.of(new VegetableItem("Mixed Vegetables", 500));
+        List<OrderItem> items = List.of(new VegetableItem(500));
         List<ReceiptLine> result = strategy.calculatePrice(items);
 
         assertThat(result).hasSize(1);
@@ -84,9 +84,9 @@ class VegetablePricingStrategyTest {
         when(discountRule.isApplicable(any())).thenReturn(false);
 
         List<OrderItem> items = List.of(
-                new VegetableItem("Carrots", 100),
-                new VegetableItem("Potatoes", 200),
-                new VegetableItem("Onions", 150)
+                new VegetableItem(100),
+                new VegetableItem(200),
+                new VegetableItem(150)
         );
         List<ReceiptLine> result = strategy.calculatePrice(items);
 
@@ -103,7 +103,7 @@ class VegetablePricingStrategyTest {
         when(discountRule.isApplicable(any())).thenReturn(true);
         when(discountRule.calculateDiscount(any())).thenReturn(new BigDecimal("0.50"));
 
-        List<OrderItem> items = List.of(new VegetableItem("Vegetables", 500));
+        List<OrderItem> items = List.of(new VegetableItem(500));
         List<ReceiptLine> result = strategy.calculatePrice(items);
 
         ReceiptLine line = result.get(0);
@@ -128,7 +128,7 @@ class VegetablePricingStrategyTest {
                 config, List.of(rule1, rule2)
         );
 
-        List<OrderItem> items = List.of(new VegetableItem("Veggies", 200));
+        List<OrderItem> items = List.of(new VegetableItem(200));
         List<ReceiptLine> result = strategyWithMultipleRules.calculatePrice(items);
 
         assertThat(result.get(0).discount()).isEqualByComparingTo("0.30");
@@ -139,7 +139,7 @@ class VegetablePricingStrategyTest {
         when(config.getVegetablePricePer100g()).thenReturn(new BigDecimal("1.00"));
         when(discountRule.isApplicable(any())).thenReturn(false);
 
-        List<OrderItem> items = List.of(new VegetableItem("Veggies", 33));
+        List<OrderItem> items = List.of(new VegetableItem(33));
         List<ReceiptLine> result = strategy.calculatePrice(items);
 
         assertThat(result.get(0).originalPrice().scale()).isEqualTo(2);
@@ -151,9 +151,9 @@ class VegetablePricingStrategyTest {
         when(discountRule.isApplicable(any())).thenReturn(false);
 
         List<OrderItem> items = List.of(
-                new VegetableItem("A", 100),
-                new VegetableItem("B", 100),
-                new VegetableItem("C", 100)
+                new VegetableItem(100),
+                new VegetableItem(100),
+                new VegetableItem(100)
         );
         List<ReceiptLine> result = strategy.calculatePrice(items);
 

@@ -41,7 +41,7 @@ class BreadPricingStrategyTest {
     void shouldCalculatePriceForFreshBread() {
         when(discountRule.isApplicable(any())).thenReturn(false);
 
-        List<OrderItem> items = List.of(new BreadItem("Fresh Bread", 2, 0));
+        List<OrderItem> items = List.of(new BreadItem(2, 0));
         List<ReceiptLine> result = strategy.calculatePrice(items);
 
         assertThat(result).hasSize(1);
@@ -57,7 +57,7 @@ class BreadPricingStrategyTest {
         when(discountRule.isApplicable(any())).thenReturn(true);
         when(discountRule.calculateDiscount(any())).thenReturn(new BigDecimal("1.00"));
 
-        List<OrderItem> items = List.of(new BreadItem("Old Bread", 4, 3));
+        List<OrderItem> items = List.of(new BreadItem(4, 3));
         List<ReceiptLine> result = strategy.calculatePrice(items);
 
         assertThat(result).hasSize(1);
@@ -73,9 +73,9 @@ class BreadPricingStrategyTest {
         when(discountRule.isApplicable(any())).thenReturn(false);
 
         List<OrderItem> items = List.of(
-                new BreadItem("Fresh", 2, 0),
-                new BreadItem("Old", 3, 3),
-                new BreadItem("More Fresh", 1, 0)
+                new BreadItem(2, 0),
+                new BreadItem(3, 3),
+                new BreadItem(1, 0)
         );
         List<ReceiptLine> result = strategy.calculatePrice(items);
 
@@ -110,7 +110,7 @@ class BreadPricingStrategyTest {
                 config, List.of(rule1, rule2)
         );
 
-        List<OrderItem> items = List.of(new BreadItem("Bread", 2, 4));
+        List<OrderItem> items = List.of(new BreadItem(2, 4));
         List<ReceiptLine> result = strategyWithMultipleRules.calculatePrice(items);
 
         assertThat(result.get(0).discount()).isEqualByComparingTo("0.80");
@@ -120,7 +120,7 @@ class BreadPricingStrategyTest {
     void shouldFilterNonBreadItems() {
         when(discountRule.isApplicable(any())).thenReturn(false);
 
-        List<OrderItem> items = List.of(new BreadItem("Bread", 1, 0));
+        List<OrderItem> items = List.of(new BreadItem(1, 0));
         List<ReceiptLine> result = strategy.calculatePrice(items);
 
         assertThat(result).hasSize(1);
@@ -135,7 +135,7 @@ class BreadPricingStrategyTest {
                 config, List.of(discountRule)
         );
 
-        List<OrderItem> items = List.of(new BreadItem("Bread", 1, 0));
+        List<OrderItem> items = List.of(new BreadItem(1, 0));
         List<ReceiptLine> result = strategyWithPrecision.calculatePrice(items);
 
         assertThat(result.get(0).originalPrice().scale()).isEqualTo(2);

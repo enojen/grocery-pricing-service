@@ -14,9 +14,8 @@ class BeerItemTest {
 
     @Test
     void shouldCreateValidBeerItem() {
-        BeerItem beer = new BeerItem("Heineken", 6, BeerOrigin.DUTCH);
+        BeerItem beer = new BeerItem(6, BeerOrigin.DUTCH);
 
-        assertThat(beer.name()).isEqualTo("Heineken");
         assertThat(beer.quantity()).isEqualTo(6);
         assertThat(beer.origin()).isEqualTo(BeerOrigin.DUTCH);
         assertThat(beer.getType()).isEqualTo(ProductType.BEER);
@@ -25,14 +24,14 @@ class BeerItemTest {
     @ParameterizedTest
     @ValueSource(ints = {0, -1, -100})
     void shouldRejectNonPositiveQuantity(int quantity) {
-        assertThatThrownBy(() -> new BeerItem("Beer", quantity, BeerOrigin.BELGIAN))
+        assertThatThrownBy(() -> new BeerItem(quantity, BeerOrigin.BELGIAN))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("Quantity must be positive");
     }
 
     @Test
     void shouldRejectNullOrigin() {
-        assertThatThrownBy(() -> new BeerItem("Beer", 6, null))
+        assertThatThrownBy(() -> new BeerItem(6, null))
                 .isInstanceOf(NullPointerException.class)
                 .hasMessageContaining("Beer origin required");
     }
@@ -40,7 +39,7 @@ class BeerItemTest {
     @ParameterizedTest
     @EnumSource(BeerOrigin.class)
     void shouldAcceptAllOrigins(BeerOrigin origin) {
-        BeerItem beer = new BeerItem("Beer", 1, origin);
+        BeerItem beer = new BeerItem(1, origin);
         assertThat(beer.origin()).isEqualTo(origin);
     }
 }

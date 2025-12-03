@@ -32,9 +32,9 @@ class OrderControllerIntegrationTest {
     @Test
     void shouldCalculateExampleOrderCorrectly() throws Exception {
         OrderRequest request = new OrderRequest(List.of(
-                new OrderItemRequest(ProductType.BREAD, "Bread", 3, 3, null, null),
-                new OrderItemRequest(ProductType.VEGETABLE, "Veggies", null, null, 200, null),
-                new OrderItemRequest(ProductType.BEER, "Beer", 6, null, null, BeerOrigin.DUTCH)
+                new OrderItemRequest(ProductType.BREAD, 3, 3, null, null),
+                new OrderItemRequest(ProductType.VEGETABLE, null, null, 200, null),
+                new OrderItemRequest(ProductType.BEER, 6, null, null, BeerOrigin.DUTCH)
         ));
 
         mockMvc.perform(post("/api/v1/orders/calculate")
@@ -49,7 +49,7 @@ class OrderControllerIntegrationTest {
     @Test
     void shouldCalculateBreadOnlyOrder() throws Exception {
         OrderRequest request = new OrderRequest(List.of(
-                new OrderItemRequest(ProductType.BREAD, "Fresh Bread", 5, 0, null, null)
+                new OrderItemRequest(ProductType.BREAD, 5, 0, null, null)
         ));
 
         mockMvc.perform(post("/api/v1/orders/calculate")
@@ -64,7 +64,7 @@ class OrderControllerIntegrationTest {
     @Test
     void shouldCalculateVegetableOnlyOrder() throws Exception {
         OrderRequest request = new OrderRequest(List.of(
-                new OrderItemRequest(ProductType.VEGETABLE, "Potatoes", null, null, 500, null)
+                new OrderItemRequest(ProductType.VEGETABLE, null, null, 500, null)
         ));
 
         mockMvc.perform(post("/api/v1/orders/calculate")
@@ -86,7 +86,7 @@ class OrderControllerIntegrationTest {
             BeerOrigin origin, int qty, double subtotal, double discount, double total
     ) throws Exception {
         OrderRequest request = new OrderRequest(List.of(
-                new OrderItemRequest(ProductType.BEER, "Beer", qty, null, null, origin)
+                new OrderItemRequest(ProductType.BEER, qty, null, null, origin)
         ));
 
         mockMvc.perform(post("/api/v1/orders/calculate")
@@ -112,7 +112,7 @@ class OrderControllerIntegrationTest {
     @Test
     void shouldRejectBreadWithMissingAge() throws Exception {
         OrderRequest request = new OrderRequest(List.of(
-                new OrderItemRequest(ProductType.BREAD, "Bread", 3, null, null, null)
+                new OrderItemRequest(ProductType.BREAD, 3, null, null, null)
         ));
 
         mockMvc.perform(post("/api/v1/orders/calculate")
@@ -126,7 +126,7 @@ class OrderControllerIntegrationTest {
     @Test
     void shouldRejectBeerWithMissingOrigin() throws Exception {
         OrderRequest request = new OrderRequest(List.of(
-                new OrderItemRequest(ProductType.BEER, "Beer", 6, null, null, null)
+                new OrderItemRequest(ProductType.BEER, 6, null, null, null)
         ));
 
         mockMvc.perform(post("/api/v1/orders/calculate")
@@ -140,12 +140,12 @@ class OrderControllerIntegrationTest {
     @Test
     void shouldHandleLargeOrder() throws Exception {
         OrderRequest request = new OrderRequest(List.of(
-                new OrderItemRequest(ProductType.BREAD, "Bread1", 100, 3, null, null),
-                new OrderItemRequest(ProductType.BREAD, "Bread2", 100, 6, null, null),
-                new OrderItemRequest(ProductType.VEGETABLE, "Veggies", null, null, 10000, null),
-                new OrderItemRequest(ProductType.BEER, "Beer1", 60, null, null, BeerOrigin.BELGIAN),
-                new OrderItemRequest(ProductType.BEER, "Beer2", 60, null, null, BeerOrigin.DUTCH),
-                new OrderItemRequest(ProductType.BEER, "Beer3", 60, null, null, BeerOrigin.GERMAN)
+                new OrderItemRequest(ProductType.BREAD, 100, 3, null, null),
+                new OrderItemRequest(ProductType.BREAD, 100, 6, null, null),
+                new OrderItemRequest(ProductType.VEGETABLE, null, null, 10000, null),
+                new OrderItemRequest(ProductType.BEER, 60, null, null, BeerOrigin.BELGIAN),
+                new OrderItemRequest(ProductType.BEER, 60, null, null, BeerOrigin.DUTCH),
+                new OrderItemRequest(ProductType.BEER, 60, null, null, BeerOrigin.GERMAN)
         ));
 
         mockMvc.perform(post("/api/v1/orders/calculate")

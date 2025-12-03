@@ -48,7 +48,7 @@ class BeerPricingStrategyTest {
     void shouldCalculatePriceForSingleBottles() {
         when(discountRule.isApplicable(any())).thenReturn(false);
 
-        List<OrderItem> items = List.of(new BeerItem("Belgian Ale", 3, BeerOrigin.BELGIAN));
+        List<OrderItem> items = List.of(new BeerItem(3, BeerOrigin.BELGIAN));
         List<ReceiptLine> result = strategy.calculatePrice(items);
 
         assertThat(result).hasSize(1);
@@ -64,7 +64,7 @@ class BeerPricingStrategyTest {
         when(discountRule.isApplicable(any())).thenReturn(true);
         when(discountRule.calculateDiscount(any())).thenReturn(new BigDecimal("3.00"));
 
-        List<OrderItem> items = List.of(new BeerItem("Belgian Ale", 6, BeerOrigin.BELGIAN));
+        List<OrderItem> items = List.of(new BeerItem(6, BeerOrigin.BELGIAN));
         List<ReceiptLine> result = strategy.calculatePrice(items);
 
         assertThat(result).hasSize(1);
@@ -80,7 +80,7 @@ class BeerPricingStrategyTest {
         when(discountRule.isApplicable(any())).thenReturn(true);
         when(discountRule.calculateDiscount(any())).thenReturn(new BigDecimal("2.00"));
 
-        List<OrderItem> items = List.of(new BeerItem("Dutch Lager", 7, BeerOrigin.DUTCH));
+        List<OrderItem> items = List.of(new BeerItem(7, BeerOrigin.DUTCH));
         List<ReceiptLine> result = strategy.calculatePrice(items);
 
         assertThat(result).hasSize(1);
@@ -94,9 +94,9 @@ class BeerPricingStrategyTest {
         when(discountRule.isApplicable(any())).thenReturn(false);
 
         List<OrderItem> items = List.of(
-                new BeerItem("Belgian", 3, BeerOrigin.BELGIAN),
-                new BeerItem("Dutch", 4, BeerOrigin.DUTCH),
-                new BeerItem("More Belgian", 2, BeerOrigin.BELGIAN)
+                new BeerItem(3, BeerOrigin.BELGIAN),
+                new BeerItem(4, BeerOrigin.DUTCH),
+                new BeerItem(2, BeerOrigin.BELGIAN)
         );
         List<ReceiptLine> result = strategy.calculatePrice(items);
 
@@ -119,7 +119,7 @@ class BeerPricingStrategyTest {
     void shouldCalculatePriceForGermanBeer() {
         when(discountRule.isApplicable(any())).thenReturn(false);
 
-        List<OrderItem> items = List.of(new BeerItem("German Pilsner", 5, BeerOrigin.GERMAN));
+        List<OrderItem> items = List.of(new BeerItem(5, BeerOrigin.GERMAN));
         List<ReceiptLine> result = strategy.calculatePrice(items);
 
         assertThat(result).hasSize(1);
@@ -144,7 +144,7 @@ class BeerPricingStrategyTest {
                 config, List.of(rule1, rule2)
         );
 
-        List<OrderItem> items = List.of(new BeerItem("Beer", 6, BeerOrigin.BELGIAN));
+        List<OrderItem> items = List.of(new BeerItem(6, BeerOrigin.BELGIAN));
         List<ReceiptLine> result = strategyWithMultipleRules.calculatePrice(items);
 
         assertThat(result.get(0).discount()).isEqualByComparingTo("1.50");
@@ -155,7 +155,7 @@ class BeerPricingStrategyTest {
         when(discountRule.isApplicable(any())).thenReturn(true);
         when(discountRule.calculateDiscount(any())).thenReturn(new BigDecimal("6.00"));
 
-        List<OrderItem> items = List.of(new BeerItem("Belgian", 13, BeerOrigin.BELGIAN));
+        List<OrderItem> items = List.of(new BeerItem(13, BeerOrigin.BELGIAN));
         List<ReceiptLine> result = strategy.calculatePrice(items);
 
         assertThat(result).hasSize(1);
@@ -168,7 +168,7 @@ class BeerPricingStrategyTest {
     void shouldNormalizeMonetaryValues() {
         when(discountRule.isApplicable(any())).thenReturn(false);
 
-        List<OrderItem> items = List.of(new BeerItem("Beer", 1, BeerOrigin.BELGIAN));
+        List<OrderItem> items = List.of(new BeerItem(1, BeerOrigin.BELGIAN));
         List<ReceiptLine> result = strategy.calculatePrice(items);
 
         assertThat(result.get(0).originalPrice().scale()).isEqualTo(2);

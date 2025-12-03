@@ -44,16 +44,13 @@ public class OrderMapper {
 
         return switch (itemRequest.type()) {
             case BREAD -> new BreadItem(
-                    itemRequest.name(),
                     itemRequest.quantity(),
                     itemRequest.daysOld()
             );
             case VEGETABLE -> new VegetableItem(
-                    itemRequest.name(),
                     itemRequest.weightGrams()
             );
             case BEER -> new BeerItem(
-                    itemRequest.name(),
                     itemRequest.quantity(),
                     itemRequest.origin()
             );

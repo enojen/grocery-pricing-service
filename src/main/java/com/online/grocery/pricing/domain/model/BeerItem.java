@@ -8,12 +8,10 @@ import java.util.Objects;
 /**
  * Represents beer items in an order.
  *
- * @param name     Item name/description
  * @param quantity Number of bottles
  * @param origin   Beer origin (BELGIAN, DUTCH, GERMAN)
  */
 public record BeerItem(
-        String name,
         int quantity,
         BeerOrigin origin
 ) implements OrderItem {
@@ -28,10 +26,5 @@ public record BeerItem(
     @Override
     public ProductType getType() {
         return ProductType.BEER;
-    }
-
-    @Override
-    public String getName() {
-        return name;
     }
 }

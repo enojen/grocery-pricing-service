@@ -30,9 +30,9 @@ class OrderControllerTest {
     @Test
     void shouldCalculateOrderSuccessfully() throws Exception {
         OrderRequest request = new OrderRequest(List.of(
-                new OrderItemRequest(ProductType.BREAD, "Bread", 3, 3, null, null),
-                new OrderItemRequest(ProductType.VEGETABLE, "Vegetables", null, null, 200, null),
-                new OrderItemRequest(ProductType.BEER, "Dutch Beer", 6, null, null, BeerOrigin.DUTCH)
+                new OrderItemRequest(ProductType.BREAD, 3, 3, null, null),
+                new OrderItemRequest(ProductType.VEGETABLE, null, null, 200, null),
+                new OrderItemRequest(ProductType.BEER, 6, null, null, BeerOrigin.DUTCH)
         ));
 
         mockMvc.perform(post("/api/v1/orders/calculate")
@@ -62,7 +62,6 @@ class OrderControllerTest {
                 {
                   "items": [
                     {
-                      "name": "Bread",
                       "quantity": 3,
                       "daysOld": 2
                     }
@@ -79,7 +78,7 @@ class OrderControllerTest {
     @Test
     void shouldReturnBadRequestForInvalidBreadAge() throws Exception {
         OrderRequest request = new OrderRequest(List.of(
-                new OrderItemRequest(ProductType.BREAD, "Bread", 3, 7, null, null)
+                new OrderItemRequest(ProductType.BREAD, 3, 7, null, null)
         ));
 
         mockMvc.perform(post("/api/v1/orders/calculate")
@@ -91,7 +90,7 @@ class OrderControllerTest {
     @Test
     void shouldReturnUnprocessableEntityForMissingBeerOrigin() throws Exception {
         OrderRequest request = new OrderRequest(List.of(
-                new OrderItemRequest(ProductType.BEER, "Beer", 6, null, null, null)
+                new OrderItemRequest(ProductType.BEER, 6, null, null, null)
         ));
 
         mockMvc.perform(post("/api/v1/orders/calculate")
@@ -105,7 +104,7 @@ class OrderControllerTest {
     @Test
     void shouldReturnUnprocessableEntityForMissingBreadQuantity() throws Exception {
         OrderRequest request = new OrderRequest(List.of(
-                new OrderItemRequest(ProductType.BREAD, "Bread", null, 3, null, null)
+                new OrderItemRequest(ProductType.BREAD, null, 3, null, null)
         ));
 
         mockMvc.perform(post("/api/v1/orders/calculate")
@@ -119,7 +118,7 @@ class OrderControllerTest {
     @Test
     void shouldReturnUnprocessableEntityForMissingVegetableWeight() throws Exception {
         OrderRequest request = new OrderRequest(List.of(
-                new OrderItemRequest(ProductType.VEGETABLE, "Veggies", null, null, null, null)
+                new OrderItemRequest(ProductType.VEGETABLE, null, null, null, null)
         ));
 
         mockMvc.perform(post("/api/v1/orders/calculate")

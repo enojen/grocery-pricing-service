@@ -36,9 +36,9 @@ class OrderPricingServiceTest {
 
     @Test
     void shouldCalculateReceiptForMixedOrder() {
-        BreadItem bread = new BreadItem("Bread", 3, 3);
-        VegetableItem veg = new VegetableItem("Carrots", 200);
-        BeerItem beer = new BeerItem("Heineken", 6, BeerOrigin.DUTCH);
+        BreadItem bread = new BreadItem(3, 3);
+        VegetableItem veg = new VegetableItem(200);
+        BeerItem beer = new BeerItem(6, BeerOrigin.DUTCH);
         Order order = new Order(List.of(bread, veg, beer));
 
         when(breadStrategy.calculatePrice(anyList())).thenReturn(List.of(
@@ -61,7 +61,7 @@ class OrderPricingServiceTest {
 
     @Test
     void shouldDelegateToCorrectStrategy() {
-        BreadItem bread = new BreadItem("Bread", 1, 0);
+        BreadItem bread = new BreadItem(1, 0);
         Order order = new Order(List.of(bread));
 
         when(breadStrategy.calculatePrice(anyList())).thenReturn(List.of(
@@ -77,8 +77,8 @@ class OrderPricingServiceTest {
 
     @Test
     void shouldHandleSingleProductTypeOrder() {
-        VegetableItem veg1 = new VegetableItem("Carrots", 100);
-        VegetableItem veg2 = new VegetableItem("Potatoes", 200);
+        VegetableItem veg1 = new VegetableItem(100);
+        VegetableItem veg2 = new VegetableItem(200);
         Order order = new Order(List.of(veg1, veg2));
 
         when(vegetableStrategy.calculatePrice(anyList())).thenReturn(List.of(
@@ -93,7 +93,7 @@ class OrderPricingServiceTest {
 
     @Test
     void shouldCalculateCorrectTotals() {
-        BreadItem bread = new BreadItem("Bread", 2, 0);
+        BreadItem bread = new BreadItem(2, 0);
         Order order = new Order(List.of(bread));
 
         when(breadStrategy.calculatePrice(anyList())).thenReturn(List.of(
@@ -113,7 +113,7 @@ class OrderPricingServiceTest {
         when(onlyBreadStrategy.getProductType()).thenReturn(ProductType.BREAD);
         OrderPricingService limitedService = new OrderPricingService(List.of(onlyBreadStrategy));
 
-        VegetableItem veg = new VegetableItem("Carrots", 100);
+        VegetableItem veg = new VegetableItem(100);
         Order order = new Order(List.of(veg));
 
         assertThatThrownBy(() -> limitedService.calculateReceipt(order))

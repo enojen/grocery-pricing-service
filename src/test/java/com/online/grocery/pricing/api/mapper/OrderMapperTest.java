@@ -29,7 +29,7 @@ class OrderMapperTest {
     @Test
     void shouldMapBreadItemCorrectly() {
         OrderItemRequest itemRequest = new OrderItemRequest(
-                ProductType.BREAD, "Sourdough", 3, 2, null, null
+                ProductType.BREAD, 3, 2, null, null
         );
         OrderRequest request = new OrderRequest(List.of(itemRequest));
 
@@ -38,7 +38,6 @@ class OrderMapperTest {
         assertThat(order.getItems()).hasSize(1);
         assertThat(order.getItems().get(0)).isInstanceOf(BreadItem.class);
         BreadItem bread = (BreadItem) order.getItems().get(0);
-        assertThat(bread.name()).isEqualTo("Sourdough");
         assertThat(bread.quantity()).isEqualTo(3);
         assertThat(bread.daysOld()).isEqualTo(2);
     }
@@ -46,7 +45,7 @@ class OrderMapperTest {
     @Test
     void shouldMapVegetableItemCorrectly() {
         OrderItemRequest itemRequest = new OrderItemRequest(
-                ProductType.VEGETABLE, "Carrots", null, null, 200, null
+                ProductType.VEGETABLE, null, null, 200, null
         );
         OrderRequest request = new OrderRequest(List.of(itemRequest));
 
@@ -55,14 +54,13 @@ class OrderMapperTest {
         assertThat(order.getItems()).hasSize(1);
         assertThat(order.getItems().get(0)).isInstanceOf(VegetableItem.class);
         VegetableItem veg = (VegetableItem) order.getItems().get(0);
-        assertThat(veg.name()).isEqualTo("Carrots");
         assertThat(veg.weightGrams()).isEqualTo(200);
     }
 
     @Test
     void shouldMapBeerItemCorrectly() {
         OrderItemRequest itemRequest = new OrderItemRequest(
-                ProductType.BEER, "Heineken", 6, null, null, BeerOrigin.DUTCH
+                ProductType.BEER, 6, null, null, BeerOrigin.DUTCH
         );
         OrderRequest request = new OrderRequest(List.of(itemRequest));
 
@@ -71,7 +69,6 @@ class OrderMapperTest {
         assertThat(order.getItems()).hasSize(1);
         assertThat(order.getItems().get(0)).isInstanceOf(BeerItem.class);
         BeerItem beer = (BeerItem) order.getItems().get(0);
-        assertThat(beer.name()).isEqualTo("Heineken");
         assertThat(beer.quantity()).isEqualTo(6);
         assertThat(beer.origin()).isEqualTo(BeerOrigin.DUTCH);
     }
@@ -79,9 +76,9 @@ class OrderMapperTest {
     @Test
     void shouldMapMixedOrder() {
         List<OrderItemRequest> items = List.of(
-                new OrderItemRequest(ProductType.BREAD, "Bread", 3, 3, null, null),
-                new OrderItemRequest(ProductType.VEGETABLE, "Veggies", null, null, 200, null),
-                new OrderItemRequest(ProductType.BEER, "Beer", 6, null, null, BeerOrigin.DUTCH)
+                new OrderItemRequest(ProductType.BREAD, 3, 3, null, null),
+                new OrderItemRequest(ProductType.VEGETABLE, null, null, 200, null),
+                new OrderItemRequest(ProductType.BEER, 6, null, null, BeerOrigin.DUTCH)
         );
         OrderRequest request = new OrderRequest(items);
 
@@ -93,7 +90,7 @@ class OrderMapperTest {
     @Test
     void shouldThrowExceptionWhenBreadMissingQuantity() {
         OrderItemRequest itemRequest = new OrderItemRequest(
-                ProductType.BREAD, "Bread", null, 2, null, null
+                ProductType.BREAD, null, 2, null, null
         );
         OrderRequest request = new OrderRequest(List.of(itemRequest));
 
@@ -105,7 +102,7 @@ class OrderMapperTest {
     @Test
     void shouldThrowExceptionWhenBreadMissingDaysOld() {
         OrderItemRequest itemRequest = new OrderItemRequest(
-                ProductType.BREAD, "Bread", 3, null, null, null
+                ProductType.BREAD, 3, null, null, null
         );
         OrderRequest request = new OrderRequest(List.of(itemRequest));
 
@@ -117,7 +114,7 @@ class OrderMapperTest {
     @Test
     void shouldThrowExceptionWhenVegetableMissingWeight() {
         OrderItemRequest itemRequest = new OrderItemRequest(
-                ProductType.VEGETABLE, "Carrots", null, null, null, null
+                ProductType.VEGETABLE, null, null, null, null
         );
         OrderRequest request = new OrderRequest(List.of(itemRequest));
 
@@ -129,7 +126,7 @@ class OrderMapperTest {
     @Test
     void shouldThrowExceptionWhenBeerMissingQuantity() {
         OrderItemRequest itemRequest = new OrderItemRequest(
-                ProductType.BEER, "Beer", null, null, null, BeerOrigin.DUTCH
+                ProductType.BEER, null, null, null, BeerOrigin.DUTCH
         );
         OrderRequest request = new OrderRequest(List.of(itemRequest));
 
@@ -141,7 +138,7 @@ class OrderMapperTest {
     @Test
     void shouldThrowExceptionWhenBeerMissingOrigin() {
         OrderItemRequest itemRequest = new OrderItemRequest(
-                ProductType.BEER, "Beer", 6, null, null, null
+                ProductType.BEER, 6, null, null, null
         );
         OrderRequest request = new OrderRequest(List.of(itemRequest));
 

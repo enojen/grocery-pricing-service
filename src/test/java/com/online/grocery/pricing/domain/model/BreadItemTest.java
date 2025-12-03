@@ -13,9 +13,8 @@ class BreadItemTest {
 
     @Test
     void shouldCreateValidBreadItem() {
-        BreadItem bread = new BreadItem("Sourdough", 3, 2);
+        BreadItem bread = new BreadItem(3, 2);
 
-        assertThat(bread.name()).isEqualTo("Sourdough");
         assertThat(bread.quantity()).isEqualTo(3);
         assertThat(bread.daysOld()).isEqualTo(2);
         assertThat(bread.getType()).isEqualTo(ProductType.BREAD);
@@ -24,21 +23,21 @@ class BreadItemTest {
     @ParameterizedTest
     @ValueSource(ints = {0, -1, -100})
     void shouldRejectNonPositiveQuantity(int quantity) {
-        assertThatThrownBy(() -> new BreadItem("Bread", quantity, 1))
+        assertThatThrownBy(() -> new BreadItem(quantity, 1))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("Quantity must be positive");
     }
 
     @Test
     void shouldRejectNegativeAge() {
-        assertThatThrownBy(() -> new BreadItem("Bread", 1, -1))
+        assertThatThrownBy(() -> new BreadItem(1, -1))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("Age cannot be negative");
     }
 
     @Test
     void shouldRejectBreadOlderThan6Days() {
-        assertThatThrownBy(() -> new BreadItem("Bread", 1, 7))
+        assertThatThrownBy(() -> new BreadItem(1, 7))
                 .isInstanceOf(InvalidOrderException.class)
                 .hasMessageContaining("Bread older than 6 days");
     }
@@ -46,7 +45,7 @@ class BreadItemTest {
     @ParameterizedTest
     @ValueSource(ints = {0, 1, 2, 3, 4, 5, 6})
     void shouldAcceptValidAges(int age) {
-        BreadItem bread = new BreadItem("Bread", 1, age);
+        BreadItem bread = new BreadItem(1, age);
         assertThat(bread.daysOld()).isEqualTo(age);
     }
 }

@@ -12,9 +12,8 @@ class VegetableItemTest {
 
     @Test
     void shouldCreateValidVegetableItem() {
-        VegetableItem vegetable = new VegetableItem("Carrots", 200);
+        VegetableItem vegetable = new VegetableItem(200);
 
-        assertThat(vegetable.name()).isEqualTo("Carrots");
         assertThat(vegetable.weightGrams()).isEqualTo(200);
         assertThat(vegetable.getType()).isEqualTo(ProductType.VEGETABLE);
     }
@@ -22,14 +21,14 @@ class VegetableItemTest {
     @ParameterizedTest
     @ValueSource(ints = {0, -1, -100})
     void shouldRejectNonPositiveWeight(int weight) {
-        assertThatThrownBy(() -> new VegetableItem("Carrots", weight))
+        assertThatThrownBy(() -> new VegetableItem(weight))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("Weight must be positive");
     }
 
     @Test
     void shouldAcceptMinimumWeight() {
-        VegetableItem vegetable = new VegetableItem("Lettuce", 1);
+        VegetableItem vegetable = new VegetableItem(1);
         assertThat(vegetable.weightGrams()).isEqualTo(1);
     }
 }

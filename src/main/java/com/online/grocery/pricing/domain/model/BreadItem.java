@@ -6,12 +6,10 @@ import com.online.grocery.pricing.exception.InvalidOrderException;
 /**
  * Represents bread items in an order.
  *
- * @param name     Item name/description
  * @param quantity Number of bread units
  * @param daysOld  Age of bread in days (0-6 valid)
  */
 public record BreadItem(
-        String name,
         int quantity,
         int daysOld
 ) implements OrderItem {
@@ -31,10 +29,5 @@ public record BreadItem(
     @Override
     public ProductType getType() {
         return ProductType.BREAD;
-    }
-
-    @Override
-    public String getName() {
-        return name;
     }
 }
