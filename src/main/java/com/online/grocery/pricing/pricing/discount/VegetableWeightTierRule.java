@@ -11,8 +11,8 @@ import java.math.BigDecimal;
  *
  * <ul>
  *   <li>0-99g: 5% discount</li>
- *   <li>100-499g: 7% discount</li>
- *   <li>500g+: 10% discount</li>
+ *   <li>100-500g: 7% discount</li>
+ *   <li>501g+: 10% discount</li>
  * </ul>
  */
 @Component
@@ -38,7 +38,7 @@ public final class VegetableWeightTierRule implements VegetableDiscountRule {
 
         if (weight < rules.getSmallWeightThreshold()) {
             discountPercent = rules.getSmallWeightDiscount();
-        } else if (weight < rules.getMediumWeightThreshold()) {
+        } else if (weight <= rules.getMediumWeightThreshold()) {
             discountPercent = rules.getMediumWeightDiscount();
         } else {
             discountPercent = rules.getLargeWeightDiscount();
@@ -56,11 +56,11 @@ public final class VegetableWeightTierRule implements VegetableDiscountRule {
     public String description() {
         PricingConfiguration.VegetableRules rules = config.getVegetable();
         return String.format(
-                "Weight-based discounts: <%dg = %.0f%%, %d-%dg = %.0f%%, %dg+ = %.0f%%",
+                "Weight-based discounts: <%dg = %.0f%%, %d-%dg = %.0f%%, >%dg = %.0f%%",
                 rules.getSmallWeightThreshold(),
                 rules.getSmallWeightDiscount().multiply(new BigDecimal("100")),
                 rules.getSmallWeightThreshold(),
-                rules.getMediumWeightThreshold() - 1,
+                rules.getMediumWeightThreshold(),
                 rules.getMediumWeightDiscount().multiply(new BigDecimal("100")),
                 rules.getMediumWeightThreshold(),
                 rules.getLargeWeightDiscount().multiply(new BigDecimal("100"))

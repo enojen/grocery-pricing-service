@@ -58,7 +58,8 @@ class VegetableWeightTierRuleTest {
             "100, 1.00, 0.07",
             "200, 2.00, 0.14",
             "499, 4.99, 0.3493",
-            "500, 5.00, 0.50",
+            "500, 5.00, 0.35",
+            "501, 5.01, 0.501",
             "1000, 10.00, 1.00"
     })
     void shouldCalculateCorrectDiscount(int weight, String originalPrice, String expectedDiscount) {
@@ -124,7 +125,18 @@ class VegetableWeightTierRuleTest {
 
         BigDecimal discount = rule.calculateDiscount(ctx);
 
-        assertThat(discount).isEqualByComparingTo("0.50");
+        assertThat(discount).isEqualByComparingTo("0.35");
+    }
+
+    @Test
+    void shouldHandleBoundaryAt501g() {
+        VegetablePricingContext ctx = new VegetablePricingContext(
+                501, new BigDecimal("0.01"), new BigDecimal("5.01")
+        );
+
+        BigDecimal discount = rule.calculateDiscount(ctx);
+
+        assertThat(discount).isEqualByComparingTo("0.501");
     }
 
     @Test

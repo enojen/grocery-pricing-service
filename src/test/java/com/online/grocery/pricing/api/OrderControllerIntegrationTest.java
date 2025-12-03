@@ -64,16 +64,16 @@ class OrderControllerIntegrationTest {
     @Test
     void shouldCalculateVegetableOnlyOrder() throws Exception {
         OrderRequest request = new OrderRequest(List.of(
-                new OrderItemRequest(ProductType.VEGETABLE, null, null, 500, null)
+                new OrderItemRequest(ProductType.VEGETABLE, null, null, 501, null)
         ));
 
         mockMvc.perform(post("/api/v1/orders/calculate")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.subtotal", is(5.00)))
+                .andExpect(jsonPath("$.subtotal", is(5.01)))
                 .andExpect(jsonPath("$.totalDiscount", is(0.50)))
-                .andExpect(jsonPath("$.total", is(4.50)));
+                .andExpect(jsonPath("$.total", is(4.51)));
     }
 
     @ParameterizedTest

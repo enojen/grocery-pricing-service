@@ -99,17 +99,17 @@ class ExampleOrderIntegrationTest {
 
     @Test
     void shouldCalculateVegetableDiscount10PercentForLargeWeight() {
-        // >= 500g = 10% discount
+        // > 500g = 10% discount
         Order order = new Order(List.of(
-                new VegetableItem(500)
+                new VegetableItem(501)
         ));
 
         Receipt receipt = orderPricingService.calculateReceipt(order);
 
-        // 500g x 0.01/g = 5.00, discount = 10% = 0.50
-        assertThat(receipt.subtotal()).isEqualByComparingTo("5.00");
+        // 501g x 0.01/g = 5.01, discount = 10% = 0.501
+        assertThat(receipt.subtotal()).isEqualByComparingTo("5.01");
         assertThat(receipt.totalDiscount()).isEqualByComparingTo("0.50");
-        assertThat(receipt.total()).isEqualByComparingTo("4.50");
+        assertThat(receipt.total()).isEqualByComparingTo("4.51");
     }
 
     @Test
