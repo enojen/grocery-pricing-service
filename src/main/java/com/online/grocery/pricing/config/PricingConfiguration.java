@@ -137,5 +137,7 @@ public class PricingConfiguration {
         @DecimalMin(value = "0.00", message = "Discount cannot be negative")
         private BigDecimal spanishPackDiscount = new BigDecimal("2.50");
 
+        @Min(value = 3, message = "One free must be at least 3")
+        private int oneFreeThreshold = 3;
     }
 }
