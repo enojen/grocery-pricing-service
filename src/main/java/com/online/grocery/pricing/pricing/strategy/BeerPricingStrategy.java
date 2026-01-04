@@ -66,7 +66,11 @@ public final class BeerPricingStrategy implements PricingStrategy {
 
         BigDecimal originalPrice = originBasePrice.multiply(BigDecimal.valueOf(totalBottles));
 
-        int packSize = beerRules.getPackSize();
+        int packSize = switch (origin) {
+            case GERMAN -> beerRules.getGermanPackSize();
+            default -> beerRules.getPackSize();
+        };
+
         int packs = totalBottles / packSize;
         int singles = totalBottles % packSize;
 
@@ -83,6 +87,11 @@ public final class BeerPricingStrategy implements PricingStrategy {
                 .filter(rule -> rule.isApplicable(ctx))
                 .map(rule -> rule.calculateDiscount(ctx))
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        // Cap discount at original price to prevent negative final price
+        if (totalDiscount.compareTo(originalPrice) > 0) {
+            totalDiscount = originalPrice;
+        }
 
         BigDecimal finalPrice = originalPrice.subtract(totalDiscount);
 

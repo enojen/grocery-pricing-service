@@ -50,10 +50,11 @@ class ExampleOrderIntegrationTest {
         assertThat(beerLine.discount()).isEqualByComparingTo("2.00");
         assertThat(beerLine.finalPrice()).isEqualByComparingTo("1.00");
 
-        // Then - Validate totals
+        // Then - Validate totals (includes 5% combo discount for bread + vegetables)
+        // Combo discount: 5% of 4.86 = 0.243, total discount: 3.14 + 0.243 = 3.383
         assertThat(receipt.subtotal()).isEqualByComparingTo("8.00");
-        assertThat(receipt.totalDiscount()).isEqualByComparingTo("3.14");
-        assertThat(receipt.total()).isEqualByComparingTo("4.86");
+        assertThat(receipt.totalDiscount()).isEqualByComparingTo("3.383");
+        assertThat(receipt.total()).isEqualByComparingTo("4.617");
     }
 
     @Test
@@ -114,7 +115,8 @@ class ExampleOrderIntegrationTest {
 
     @Test
     void shouldCalculateBeerPackDiscountForBelgian() {
-        // Belgian: 6 x 0.60 = 3.60, discount 3.00, final 0.60
+        // Belgian: 6 x 0.60 = 3.60
+        // Pack discount: 3.00 + Buy 2 Get 1 Free: 1.20 = 4.20 (capped at 3.60)
         Order order = new Order(List.of(
                 new BeerItem(6, BeerOrigin.BELGIAN)
         ));
@@ -122,22 +124,22 @@ class ExampleOrderIntegrationTest {
         Receipt receipt = orderPricingService.calculateReceipt(order);
 
         assertThat(receipt.subtotal()).isEqualByComparingTo("3.60");
-        assertThat(receipt.totalDiscount()).isEqualByComparingTo("3.00");
-        assertThat(receipt.total()).isEqualByComparingTo("0.60");
+        assertThat(receipt.totalDiscount()).isEqualByComparingTo("3.60");
+        assertThat(receipt.total()).isEqualByComparingTo("0.00");
     }
 
     @Test
     void shouldCalculateBeerPackDiscountForGerman() {
-        // German: 6 x 0.80 = 4.80, discount 4.00, final 0.80
+        // German: 12-pack size, 12 x 0.80 = 9.60, discount 4.00, final 5.60
         Order order = new Order(List.of(
-                new BeerItem(6, BeerOrigin.GERMAN)
+                new BeerItem(12, BeerOrigin.GERMAN)
         ));
 
         Receipt receipt = orderPricingService.calculateReceipt(order);
 
-        assertThat(receipt.subtotal()).isEqualByComparingTo("4.80");
+        assertThat(receipt.subtotal()).isEqualByComparingTo("9.60");
         assertThat(receipt.totalDiscount()).isEqualByComparingTo("4.00");
-        assertThat(receipt.total()).isEqualByComparingTo("0.80");
+        assertThat(receipt.total()).isEqualByComparingTo("5.60");
     }
 
     @Test

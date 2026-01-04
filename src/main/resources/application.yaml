@@ -6,6 +6,8 @@ pricing:
   bread-price: 1.00
   vegetable-price-per100g: 1.00
 
+  combo-discount-rate: 0.05
+
   bread:
     max-age-days: 6
     buy-one-take-two-age: 3
@@ -20,6 +22,7 @@ pricing:
 
   beer:
     pack-size: 6
+    german-pack-size: 12
     belgian-base-price: 0.60
     dutch-base-price: 0.50
     german-base-price: 0.80

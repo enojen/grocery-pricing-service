@@ -1,18 +1,19 @@
 package com.online.grocery.pricing.config;
 
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.DecimalMin;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.DecimalMax;
-import lombok.Getter;
-import lombok.Setter;
+import java.math.BigDecimal;
+
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.validation.annotation.Validated;
 
-import java.math.BigDecimal;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.DecimalMax;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Configuration properties for all pricing rules.
@@ -105,6 +106,9 @@ public class PricingConfiguration {
         @Min(value = 1, message = "Pack size must be at least 1")
         private int packSize = 6;
 
+        @Min(value = 1, message = "Pack size must be at least 1")
+        private int germanPackSize = 12;
+
         @NotNull
         @DecimalMin(value = "0.01", message = "Base price must be positive")
         private BigDecimal belgianBasePrice = new BigDecimal("0.60");
@@ -140,4 +144,8 @@ public class PricingConfiguration {
         @Min(value = 3, message = "One free must be at least 3")
         private int oneFreeThreshold = 3;
     }
+
+    @DecimalMin("0.00")
+    @DecimalMax("1.00")
+    private BigDecimal comboDiscountRate = new BigDecimal("0.05");
 }

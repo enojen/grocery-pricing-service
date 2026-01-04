@@ -31,6 +31,7 @@ class BeerPricingStrategyTest {
 
         when(config.getBeer()).thenReturn(beerRules);
         when(beerRules.getPackSize()).thenReturn(6);
+        when(beerRules.getGermanPackSize()).thenReturn(12);
         when(beerRules.getBelgianBasePrice()).thenReturn(new BigDecimal("0.60"));
         when(beerRules.getDutchBasePrice()).thenReturn(new BigDecimal("0.50"));
         when(beerRules.getGermanBasePrice()).thenReturn(new BigDecimal("0.80"));
@@ -116,16 +117,30 @@ class BeerPricingStrategyTest {
     }
 
     @Test
-    void shouldCalculatePriceForGermanBeer() {
+    void shouldNotCalculatePriceForGermanBeer() {
         when(discountRule.isApplicable(any())).thenReturn(false);
 
-        List<OrderItem> items = List.of(new BeerItem(5, BeerOrigin.GERMAN));
+        List<OrderItem> items = List.of(new BeerItem(6, BeerOrigin.GERMAN));
         List<ReceiptLine> result = strategy.calculatePrice(items);
 
         assertThat(result).hasSize(1);
         ReceiptLine line = result.get(0);
-        assertThat(line.description()).isEqualTo("5 x GERMAN Beer (0 packs + 5 singles)");
-        assertThat(line.originalPrice()).isEqualByComparingTo("4.00");
+        assertThat(line.description()).isEqualTo("6 x GERMAN Beer (0 packs + 6 singles)");
+        assertThat(line.originalPrice()).isEqualByComparingTo("4.80");
+    }
+
+    @Test
+    void shouldCalculatePriceForGermanBeer() {
+        when(discountRule.isApplicable(any())).thenReturn(true);
+        when(discountRule.calculateDiscount(any())).thenReturn(new BigDecimal("4.00"));
+
+        List<OrderItem> items = List.of(new BeerItem(12, BeerOrigin.GERMAN));
+        List<ReceiptLine> result = strategy.calculatePrice(items);
+
+        assertThat(result).hasSize(1);
+        ReceiptLine line = result.get(0);
+        assertThat(line.description()).isEqualTo("12 x GERMAN Beer (1 packs + 0 singles)");
+        assertThat(line.originalPrice()).isEqualByComparingTo("9.60");
     }
 
     @Test

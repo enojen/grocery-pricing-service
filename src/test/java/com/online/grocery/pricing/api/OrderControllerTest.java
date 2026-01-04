@@ -35,14 +35,15 @@ class OrderControllerTest {
                 new OrderItemRequest(ProductType.BEER, 6, null, null, BeerOrigin.DUTCH)
         ));
 
+        // Includes 5% combo discount for bread + vegetables (5% of 4.86 = 0.243)
         mockMvc.perform(post("/api/v1/orders/calculate")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.lines", hasSize(3)))
                 .andExpect(jsonPath("$.subtotal", is(8.00)))
-                .andExpect(jsonPath("$.totalDiscount", is(3.14)))
-                .andExpect(jsonPath("$.total", is(4.86)));
+                .andExpect(jsonPath("$.totalDiscount", is(3.383)))
+                .andExpect(jsonPath("$.total", is(4.617)));
     }
 
     @Test

@@ -50,11 +50,12 @@ class FullFlowIntegrationTest {
                 new OrderItemRequest(ProductType.BEER, 6, null, null, BeerOrigin.DUTCH)
         ));
 
+        // Includes 5% combo discount for bread + vegetables
         mockMvc.perform(post("/api/v1/orders/calculate")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.total", is(4.86)));
+                .andExpect(jsonPath("$.total", is(4.617)));
     }
 
     @Test

@@ -37,13 +37,14 @@ class OrderControllerIntegrationTest {
                 new OrderItemRequest(ProductType.BEER, 6, null, null, BeerOrigin.DUTCH)
         ));
 
+        // Includes 5% combo discount for bread + vegetables (5% of 4.86 = 0.243)
         mockMvc.perform(post("/api/v1/orders/calculate")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.subtotal", is(8.00)))
-                .andExpect(jsonPath("$.totalDiscount", is(3.14)))
-                .andExpect(jsonPath("$.total", is(4.86)));
+                .andExpect(jsonPath("$.totalDiscount", is(3.383)))
+                .andExpect(jsonPath("$.total", is(4.617)));
     }
 
     @Test
@@ -78,9 +79,9 @@ class OrderControllerIntegrationTest {
 
     @ParameterizedTest
     @CsvSource({
-            "BELGIAN, 6, 3.60, 3.00, 0.60",
+            "BELGIAN, 6, 3.60, 3.60, 0.00",
             "DUTCH, 6, 3.00, 2.00, 1.00",
-            "GERMAN, 6, 4.80, 4.00, 0.80"
+            "GERMAN, 12, 9.60, 4.00, 5.60"
     })
     void shouldCalculateBeerPackDiscounts(
             BeerOrigin origin, int qty, double subtotal, double discount, double total
