@@ -118,6 +118,10 @@ public class PricingConfiguration {
         private BigDecimal germanBasePrice = new BigDecimal("0.80");
 
         @NotNull
+        @DecimalMin(value = "0.01", message = "Base price must be positive")
+        private BigDecimal spanishBasePrice = new BigDecimal("0.55");
+
+        @NotNull
         @DecimalMin(value = "0.00", message = "Discount cannot be negative")
         private BigDecimal belgianPackDiscount = new BigDecimal("3.00");
 
@@ -128,6 +132,10 @@ public class PricingConfiguration {
         @NotNull
         @DecimalMin(value = "0.00", message = "Discount cannot be negative")
         private BigDecimal germanPackDiscount = new BigDecimal("4.00");
+
+        @NotNull
+        @DecimalMin(value = "0.00", message = "Discount cannot be negative")
+        private BigDecimal spanishPackDiscount = new BigDecimal("2.50");
 
     }
 }

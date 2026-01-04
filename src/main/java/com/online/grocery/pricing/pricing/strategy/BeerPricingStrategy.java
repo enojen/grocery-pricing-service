@@ -61,6 +61,7 @@ public final class BeerPricingStrategy implements PricingStrategy {
             case BELGIAN -> beerRules.getBelgianBasePrice();
             case DUTCH -> beerRules.getDutchBasePrice();
             case GERMAN -> beerRules.getGermanBasePrice();
+            case SPANISH -> beerRules.getSpanishBasePrice();
         };
 
         BigDecimal originalPrice = originBasePrice.multiply(BigDecimal.valueOf(totalBottles));

@@ -38,6 +38,7 @@ public final class BeerPackDiscountRule implements BeerDiscountRule {
             case BELGIAN -> beerRules.getBelgianPackDiscount();
             case DUTCH -> beerRules.getDutchPackDiscount();
             case GERMAN -> beerRules.getGermanPackDiscount();
+            case SPANISH -> beerRules.getSpanishPackDiscount();
         };
 
         return perPackDiscount.multiply(BigDecimal.valueOf(ctx.packs()));
@@ -52,10 +53,11 @@ public final class BeerPackDiscountRule implements BeerDiscountRule {
     public String description() {
         PricingConfiguration.BeerRules rules = config.getBeer();
         return String.format(
-                "Fixed discount per 6-pack: Belgian €%.2f, Dutch €%.2f, German €%.2f",
+                "Fixed discount per 6-pack: Belgian €%.2f, Dutch €%.2f, German €%.2f, Spanish €%.2f",
                 rules.getBelgianPackDiscount(),
                 rules.getDutchPackDiscount(),
-                rules.getGermanPackDiscount()
+                rules.getGermanPackDiscount(),
+                rules.getSpanishPackDiscount()
         );
     }
 }

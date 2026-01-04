@@ -6,5 +6,6 @@ package com.online.grocery.pricing.domain.enums;
 public enum BeerOrigin {
     BELGIAN,
     DUTCH,
-    GERMAN
+    GERMAN,
+    SPANISH
 }

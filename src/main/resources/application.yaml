@@ -26,6 +26,8 @@ pricing:
     belgian-pack-discount: 3.00
     dutch-pack-discount: 2.00
     german-pack-discount: 4.00
+    spanish-base-price: 0.55
+    spanish-pack-discount: 2.50
 
 server:
   port: 8080
