@@ -3,6 +3,7 @@ package com.online.grocery.pricing.service;
 import com.online.grocery.pricing.domain.enums.BeerOrigin;
 import com.online.grocery.pricing.domain.enums.ProductType;
 import com.online.grocery.pricing.domain.model.*;
+import com.online.grocery.pricing.pricing.discount.OrderDiscountRule;
 import com.online.grocery.pricing.pricing.strategy.PricingStrategy;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -31,7 +32,7 @@ class OrderPricingServiceTest {
         when(vegetableStrategy.getProductType()).thenReturn(ProductType.VEGETABLE);
         when(beerStrategy.getProductType()).thenReturn(ProductType.BEER);
 
-        service = new OrderPricingService(List.of(breadStrategy, vegetableStrategy, beerStrategy));
+        service = new OrderPricingService(List.of(breadStrategy, vegetableStrategy, beerStrategy), List.of());
     }
 
     @Test
@@ -111,7 +112,7 @@ class OrderPricingServiceTest {
     void shouldThrowExceptionForUnknownProductType() {
         PricingStrategy onlyBreadStrategy = mock(PricingStrategy.class);
         when(onlyBreadStrategy.getProductType()).thenReturn(ProductType.BREAD);
-        OrderPricingService limitedService = new OrderPricingService(List.of(onlyBreadStrategy));
+        OrderPricingService limitedService = new OrderPricingService(List.of(onlyBreadStrategy), List.of());
 
         VegetableItem veg = new VegetableItem(100);
         Order order = new Order(List.of(veg));

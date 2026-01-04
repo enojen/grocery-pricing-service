@@ -32,7 +32,7 @@ class DiscountRuleServiceTest {
         when(vegetableRule.productType()).thenReturn(ProductType.VEGETABLE);
         when(vegetableRule.description()).thenReturn("Vegetable weight tier discount");
 
-        service = new DiscountRuleService(List.of(beerRule, breadRule, vegetableRule));
+        service = new DiscountRuleService(List.of(beerRule, breadRule, vegetableRule), List.of());
     }
 
     @Test
@@ -72,7 +72,8 @@ class DiscountRuleServiceTest {
         when(secondBeerRule.description()).thenReturn("Holiday beer discount");
 
         DiscountRuleService serviceWithMultipleRules = new DiscountRuleService(
-                List.of(beerRule, breadRule, vegetableRule, secondBeerRule)
+                List.of(beerRule, breadRule, vegetableRule, secondBeerRule),
+                List.of()
         );
 
         List<DiscountRuleResponse> rules = serviceWithMultipleRules.getAllRules();
@@ -83,7 +84,7 @@ class DiscountRuleServiceTest {
 
     @Test
     void shouldReturnEmptyListForTypeWithNoRules() {
-        DiscountRuleService emptyService = new DiscountRuleService(List.of());
+        DiscountRuleService emptyService = new DiscountRuleService(List.of(), List.of());
 
         List<DiscountRuleResponse> rules = emptyService.getAllRules();
 
