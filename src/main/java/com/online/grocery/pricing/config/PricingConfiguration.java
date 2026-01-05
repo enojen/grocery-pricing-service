@@ -34,10 +34,6 @@ public class PricingConfiguration {
     @DecimalMin(value = "0.01", message = "Vegetable price must be at least 0.01")
     private BigDecimal vegetablePricePer100g;
 
-    @NotNull(message = "Diary price is required")
-    @DecimalMin(value = "0.01", message = "Diary price must be at least 0.01")
-    private BigDecimal diaryPrice;
-
     @Valid
     private BreadRules bread = new BreadRules();
 
