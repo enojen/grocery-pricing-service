@@ -5,7 +5,8 @@ import com.online.grocery.pricing.domain.enums.ProductType;
 import com.online.grocery.pricing.domain.model.OrderItem;
 import com.online.grocery.pricing.domain.model.ReceiptLine;
 import com.online.grocery.pricing.domain.model.VegetableItem;
-import com.online.grocery.pricing.pricing.discount.VegetableDiscountRule;
+import com.online.grocery.pricing.pricing.context.VegetablePricingContext;
+import com.online.grocery.pricing.pricing.discount.DiscountRule;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -15,16 +16,17 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
+@SuppressWarnings("unchecked")
 class VegetablePricingStrategyTest {
 
     private PricingConfiguration config;
-    private VegetableDiscountRule discountRule;
+    private DiscountRule<VegetablePricingContext> discountRule;
     private VegetablePricingStrategy strategy;
 
     @BeforeEach
     void setUp() {
         config = mock(PricingConfiguration.class);
-        discountRule = mock(VegetableDiscountRule.class);
+        discountRule = mock(DiscountRule.class);
 
         when(config.getVegetablePricePer100g()).thenReturn(new BigDecimal("1.00"));
         when(discountRule.order()).thenReturn(100);
@@ -114,8 +116,8 @@ class VegetablePricingStrategyTest {
 
     @Test
     void shouldApplyMultipleDiscountRulesInOrder() {
-        VegetableDiscountRule rule1 = mock(VegetableDiscountRule.class);
-        VegetableDiscountRule rule2 = mock(VegetableDiscountRule.class);
+        DiscountRule<VegetablePricingContext> rule1 = mock(DiscountRule.class);
+        DiscountRule<VegetablePricingContext> rule2 = mock(DiscountRule.class);
 
         when(rule1.order()).thenReturn(200);
         when(rule2.order()).thenReturn(100);

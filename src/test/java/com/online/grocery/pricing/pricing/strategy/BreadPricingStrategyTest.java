@@ -5,7 +5,8 @@ import com.online.grocery.pricing.domain.enums.ProductType;
 import com.online.grocery.pricing.domain.model.BreadItem;
 import com.online.grocery.pricing.domain.model.OrderItem;
 import com.online.grocery.pricing.domain.model.ReceiptLine;
-import com.online.grocery.pricing.pricing.discount.BreadDiscountRule;
+import com.online.grocery.pricing.pricing.context.BreadPricingContext;
+import com.online.grocery.pricing.pricing.discount.DiscountRule;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -15,16 +16,17 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
+@SuppressWarnings("unchecked")
 class BreadPricingStrategyTest {
 
     private PricingConfiguration config;
-    private BreadDiscountRule discountRule;
+    private DiscountRule<BreadPricingContext> discountRule;
     private BreadPricingStrategy strategy;
 
     @BeforeEach
     void setUp() {
         config = mock(PricingConfiguration.class);
-        discountRule = mock(BreadDiscountRule.class);
+        discountRule = mock(DiscountRule.class);
 
         when(config.getBreadPrice()).thenReturn(new BigDecimal("1.00"));
         when(discountRule.order()).thenReturn(100);
@@ -96,8 +98,8 @@ class BreadPricingStrategyTest {
 
     @Test
     void shouldApplyDiscountRulesInOrder() {
-        BreadDiscountRule rule1 = mock(BreadDiscountRule.class);
-        BreadDiscountRule rule2 = mock(BreadDiscountRule.class);
+        DiscountRule<BreadPricingContext> rule1 = mock(DiscountRule.class);
+        DiscountRule<BreadPricingContext> rule2 = mock(DiscountRule.class);
 
         when(rule1.order()).thenReturn(200);
         when(rule2.order()).thenReturn(100);

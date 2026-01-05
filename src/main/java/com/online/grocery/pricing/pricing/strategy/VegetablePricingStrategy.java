@@ -1,35 +1,30 @@
 package com.online.grocery.pricing.pricing.strategy;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.util.Comparator;
-import java.util.List;
-
-import org.springframework.stereotype.Component;
-
 import com.online.grocery.pricing.config.PricingConfiguration;
 import com.online.grocery.pricing.domain.enums.ProductType;
-import com.online.grocery.pricing.domain.model.MoneyUtils;
-import com.online.grocery.pricing.domain.model.OrderItem;
 import com.online.grocery.pricing.domain.model.ReceiptLine;
 import com.online.grocery.pricing.domain.model.VegetableItem;
 import com.online.grocery.pricing.pricing.context.VegetablePricingContext;
 import com.online.grocery.pricing.pricing.discount.DiscountRule;
 
+import org.springframework.stereotype.Component;
+
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.List;
+
 @Component
-public final class VegetablePricingStrategy implements PricingStrategy {
+public final class VegetablePricingStrategy
+        extends AbstractPricingStrategy<VegetableItem, VegetablePricingContext> {
 
     private final PricingConfiguration config;
-    private final List<DiscountRule<VegetablePricingContext>> discountRules;
 
     public VegetablePricingStrategy(
             PricingConfiguration config,
             List<DiscountRule<VegetablePricingContext>> discountRules
     ) {
+        super(discountRules);
         this.config = config;
-        this.discountRules = discountRules.stream()
-                .sorted(Comparator.comparingInt(DiscountRule<VegetablePricingContext>::order))
-                .toList();
     }
 
     @Override
@@ -38,9 +33,12 @@ public final class VegetablePricingStrategy implements PricingStrategy {
     }
 
     @Override
-    public List<ReceiptLine> calculatePrice(List<OrderItem> items) {
-        List<VegetableItem> vegetables = castToType(items, VegetableItem.class);
+    protected Class<VegetableItem> getItemType() {
+        return VegetableItem.class;
+    }
 
+    @Override
+    protected List<ReceiptLine> calculateTypedPrice(List<VegetableItem> vegetables) {
         int totalWeight = vegetables.stream()
                 .mapToInt(VegetableItem::weightGrams)
                 .sum();
@@ -56,27 +54,7 @@ public final class VegetablePricingStrategy implements PricingStrategy {
                 originalPrice
         );
 
-        BigDecimal totalDiscount = discountRules.stream()
-                .filter(rule -> rule.isApplicable(ctx))
-                .map(rule -> rule.calculateDiscount(ctx))
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
-
-        BigDecimal finalPrice = originalPrice.subtract(totalDiscount);
-
         String description = String.format("%dg Vegetables", totalWeight);
-        return List.of(new ReceiptLine(
-                description,
-                MoneyUtils.normalize(originalPrice),
-                MoneyUtils.normalize(totalDiscount),
-                MoneyUtils.normalize(finalPrice)
-        ));
-    }
-
-    @SuppressWarnings("unchecked")
-    private <T extends OrderItem> List<T> castToType(List<OrderItem> items, Class<T> type) {
-        return items.stream()
-                .filter(type::isInstance)
-                .map(type::cast)
-                .toList();
+        return List.of(applyDiscountsAndCreateLine(description, ctx));
     }
 }

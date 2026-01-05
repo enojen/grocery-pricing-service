@@ -3,8 +3,6 @@ package com.online.grocery.pricing.pricing.strategy;
 import com.online.grocery.pricing.config.PricingConfiguration;
 import com.online.grocery.pricing.domain.enums.ProductType;
 import com.online.grocery.pricing.domain.model.BreadItem;
-import com.online.grocery.pricing.domain.model.MoneyUtils;
-import com.online.grocery.pricing.domain.model.OrderItem;
 import com.online.grocery.pricing.domain.model.ReceiptLine;
 import com.online.grocery.pricing.pricing.context.BreadPricingContext;
 import com.online.grocery.pricing.pricing.discount.DiscountRule;
@@ -12,25 +10,22 @@ import com.online.grocery.pricing.pricing.discount.DiscountRule;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 @Component
-public final class BreadPricingStrategy implements PricingStrategy {
+public final class BreadPricingStrategy
+        extends AbstractPricingStrategy<BreadItem, BreadPricingContext> {
 
     private final PricingConfiguration config;
-    private final List<DiscountRule<BreadPricingContext>> discountRules;
 
     public BreadPricingStrategy(
             PricingConfiguration config,
             List<DiscountRule<BreadPricingContext>> discountRules
     ) {
+        super(discountRules);
         this.config = config;
-        this.discountRules = discountRules.stream()
-                .sorted(Comparator.comparingInt(DiscountRule<BreadPricingContext>::order))
-                .toList();
     }
 
     @Override
@@ -39,9 +34,12 @@ public final class BreadPricingStrategy implements PricingStrategy {
     }
 
     @Override
-    public List<ReceiptLine> calculatePrice(List<OrderItem> items) {
-        List<BreadItem> breads = castToType(items, BreadItem.class);
+    protected Class<BreadItem> getItemType() {
+        return BreadItem.class;
+    }
 
+    @Override
+    protected List<ReceiptLine> calculateTypedPrice(List<BreadItem> breads) {
         Map<Integer, List<BreadItem>> byAge = breads.stream()
                 .collect(Collectors.groupingBy(BreadItem::daysOld));
 
@@ -65,27 +63,7 @@ public final class BreadPricingStrategy implements PricingStrategy {
                 originalPrice
         );
 
-        BigDecimal totalDiscount = discountRules.stream()
-                .filter(rule -> rule.isApplicable(ctx))
-                .map(rule -> rule.calculateDiscount(ctx))
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
-
-        BigDecimal finalPrice = originalPrice.subtract(totalDiscount);
-
         String description = String.format("%d x Bread (%d days old)", totalQty, age);
-        return new ReceiptLine(
-                description,
-                MoneyUtils.normalize(originalPrice),
-                MoneyUtils.normalize(totalDiscount),
-                MoneyUtils.normalize(finalPrice)
-        );
-    }
-
-    @SuppressWarnings("unchecked")
-    private <T extends OrderItem> List<T> castToType(List<OrderItem> items, Class<T> type) {
-        return items.stream()
-                .filter(type::isInstance)
-                .map(type::cast)
-                .toList();
+        return applyDiscountsAndCreateLine(description, ctx);
     }
 }

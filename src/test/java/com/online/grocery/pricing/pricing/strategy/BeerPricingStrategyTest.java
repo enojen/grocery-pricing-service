@@ -6,7 +6,8 @@ import com.online.grocery.pricing.domain.enums.ProductType;
 import com.online.grocery.pricing.domain.model.BeerItem;
 import com.online.grocery.pricing.domain.model.OrderItem;
 import com.online.grocery.pricing.domain.model.ReceiptLine;
-import com.online.grocery.pricing.pricing.discount.BeerDiscountRule;
+import com.online.grocery.pricing.pricing.context.BeerPricingContext;
+import com.online.grocery.pricing.pricing.discount.DiscountRule;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -20,14 +21,15 @@ class BeerPricingStrategyTest {
 
     private PricingConfiguration config;
     private PricingConfiguration.BeerRules beerRules;
-    private BeerDiscountRule discountRule;
+    @SuppressWarnings("unchecked")
+    private DiscountRule<BeerPricingContext> discountRule;
     private BeerPricingStrategy strategy;
 
     @BeforeEach
     void setUp() {
         config = mock(PricingConfiguration.class);
         beerRules = mock(PricingConfiguration.BeerRules.class);
-        discountRule = mock(BeerDiscountRule.class);
+        discountRule = mock(DiscountRule.class);
 
         when(config.getBeer()).thenReturn(beerRules);
         when(beerRules.getPackSize()).thenReturn(6);
@@ -144,9 +146,10 @@ class BeerPricingStrategyTest {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     void shouldApplyDiscountRulesInOrder() {
-        BeerDiscountRule rule1 = mock(BeerDiscountRule.class);
-        BeerDiscountRule rule2 = mock(BeerDiscountRule.class);
+        DiscountRule<BeerPricingContext> rule1 = mock(DiscountRule.class);
+        DiscountRule<BeerPricingContext> rule2 = mock(DiscountRule.class);
 
         when(rule1.order()).thenReturn(200);
         when(rule2.order()).thenReturn(100);

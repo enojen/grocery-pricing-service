@@ -40,7 +40,7 @@ public class BreadVegetableComboRule implements OrderDiscountRule {
 
     @Override
     public BigDecimal calculateDiscount(OrderPricingContext ctx) {
-        return ctx.currentTotal().multiply(config.getComboDiscountRate());
+        return ctx.originalPrice().multiply(config.getComboDiscountRate());
     }
 
     @Override

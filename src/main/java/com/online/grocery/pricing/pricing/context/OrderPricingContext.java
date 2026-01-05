@@ -15,6 +15,6 @@ import java.math.BigDecimal;
 public record OrderPricingContext(
         Order order,
         BigDecimal subtotal,
-        BigDecimal currentTotal
+        BigDecimal originalPrice
 ) implements PricingContext {
 }
