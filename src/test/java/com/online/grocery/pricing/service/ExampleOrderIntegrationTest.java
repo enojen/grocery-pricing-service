@@ -130,7 +130,7 @@ class ExampleOrderIntegrationTest {
 
     @Test
     void shouldCalculateBeerPackDiscountForGerman() {
-        // German: 12-pack size, 12 x 0.80 = 9.60, discount 4.00, final 5.60
+        // German: 6-pack size, 12 x 0.80 = 9.60, 2 packs x 4.00 = 8.00 discount, final 1.60
         Order order = new Order(List.of(
                 new BeerItem(12, BeerOrigin.GERMAN)
         ));
@@ -138,8 +138,8 @@ class ExampleOrderIntegrationTest {
         Receipt receipt = orderPricingService.calculateReceipt(order);
 
         assertThat(receipt.subtotal()).isEqualByComparingTo("9.60");
-        assertThat(receipt.totalDiscount()).isEqualByComparingTo("4.00");
-        assertThat(receipt.total()).isEqualByComparingTo("5.60");
+        assertThat(receipt.totalDiscount()).isEqualByComparingTo("8.00");
+        assertThat(receipt.total()).isEqualByComparingTo("1.60");
     }
 
     @Test

@@ -33,9 +33,6 @@ class BeerPackDiscountRuleTest {
         when(beerRules.getBelgianPackDiscount()).thenReturn(new BigDecimal("3.00"));
         when(beerRules.getDutchPackDiscount()).thenReturn(new BigDecimal("2.00"));
         when(beerRules.getGermanPackDiscount()).thenReturn(new BigDecimal("4.00"));
-        //Spanish
-        when(beerRules.getSpanishBasePrice()).thenReturn(new BigDecimal("2.00"));
-        when(beerRules.getSpanishPackDiscount()).thenReturn(new BigDecimal("2.50"));
 
         rule = new BeerPackDiscountRule(config);
     }

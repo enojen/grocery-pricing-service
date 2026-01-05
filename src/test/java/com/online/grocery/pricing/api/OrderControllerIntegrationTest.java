@@ -81,7 +81,7 @@ class OrderControllerIntegrationTest {
     @CsvSource({
             "BELGIAN, 6, 3.60, 3.60, 0.00",
             "DUTCH, 6, 3.00, 2.00, 1.00",
-            "GERMAN, 12, 9.60, 4.00, 5.60"
+            "GERMAN, 12, 9.60, 8.00, 1.60"
     })
     void shouldCalculateBeerPackDiscounts(
             BeerOrigin origin, int qty, double subtotal, double discount, double total
