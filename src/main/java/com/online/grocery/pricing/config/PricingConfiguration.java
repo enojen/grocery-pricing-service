@@ -47,27 +47,6 @@ public class PricingConfiguration {
     @Valid
     private BeerRules beer = new BeerRules();
 
-    @Valid
-    private DiaryRules diary = new DiaryRules();
-
-
-    /**
-     * Bread-specific discount rules configuration.
-     */
-    @Setter
-    @Getter
-    @Validated
-    public static class DiaryRules {
-
-        @NotNull
-        @DecimalMin(value = "0.01", message = "Price threshold must be positive")
-        private BigDecimal priceThreshold = new BigDecimal("5.00");
-
-        @NotNull
-        @DecimalMin(value = "0.01", message = "Discount percents must be positive")
-        private BigDecimal discountPercents = new BigDecimal("0.90");
-    }
-
     /**
      * Bread-specific discount rules configuration.
      */
@@ -131,9 +110,6 @@ public class PricingConfiguration {
         @Min(value = 1, message = "Pack size must be at least 1")
         private int packSize = 6;
 
-        @Min(value = 1, message = "Pack size must be at least 1")
-        private int germanPackSize = 12;
-
         @NotNull
         @DecimalMin(value = "0.01", message = "Base price must be positive")
         private BigDecimal belgianBasePrice = new BigDecimal("0.60");
@@ -147,10 +123,6 @@ public class PricingConfiguration {
         private BigDecimal germanBasePrice = new BigDecimal("0.80");
 
         @NotNull
-        @DecimalMin(value = "0.01", message = "Base price must be positive")
-        private BigDecimal spanishBasePrice = new BigDecimal("0.55");
-
-        @NotNull
         @DecimalMin(value = "0.00", message = "Discount cannot be negative")
         private BigDecimal belgianPackDiscount = new BigDecimal("3.00");
 
@@ -161,10 +133,6 @@ public class PricingConfiguration {
         @NotNull
         @DecimalMin(value = "0.00", message = "Discount cannot be negative")
         private BigDecimal germanPackDiscount = new BigDecimal("4.00");
-
-        @NotNull
-        @DecimalMin(value = "0.00", message = "Discount cannot be negative")
-        private BigDecimal spanishPackDiscount = new BigDecimal("2.50");
 
         @Min(value = 3, message = "One free must be at least 3")
         private int oneFreeThreshold = 3;

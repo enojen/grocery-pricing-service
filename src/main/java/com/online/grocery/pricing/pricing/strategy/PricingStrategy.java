@@ -8,7 +8,7 @@ import java.util.List;
 
 /**
  * Strategy interface for product-specific pricing calculations.
- * Each product type (Bread, Beer, Vegetable, Diary) has its own implementation.
+ * Each product type (Bread, Beer, Vegetable) has its own implementation.
  *
  * <p>Implementations should extend AbstractPricingStrategy.
  * Discovered by Spring DI and registered by product type in OrderPricingService.</p>

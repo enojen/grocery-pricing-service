@@ -5,7 +5,6 @@ spring:
 pricing:
   bread-price: 1.00
   vegetable-price-per100g: 1.00
-  diary-price: 1.00
 
   combo-discount-rate: 0.05
 

@@ -60,15 +60,11 @@ public final class BeerPricingStrategy
             case BELGIAN -> beerRules.getBelgianBasePrice();
             case DUTCH -> beerRules.getDutchBasePrice();
             case GERMAN -> beerRules.getGermanBasePrice();
-            case SPANISH -> beerRules.getSpanishBasePrice();
         };
 
         BigDecimal originalPrice = originBasePrice.multiply(BigDecimal.valueOf(totalBottles));
 
-        int packSize = switch (origin) {
-            case GERMAN -> beerRules.getGermanPackSize();
-            default -> beerRules.getPackSize();
-        };
+        int packSize = beerRules.getPackSize();
 
         int packs = totalBottles / packSize;
         int singles = totalBottles % packSize;
