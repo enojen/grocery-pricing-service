@@ -6,6 +6,5 @@ package com.online.grocery.pricing.domain.enums;
 public enum ProductType {
     BREAD,
     VEGETABLE,
-    BEER,
-    DIARY
+    BEER
 }

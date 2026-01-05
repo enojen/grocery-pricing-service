@@ -22,7 +22,7 @@ import java.util.List;
  */
 public abstract sealed class AbstractPricingStrategy<I extends OrderItem, C extends PricingContext>
         implements PricingStrategy
-        permits BeerPricingStrategy, BreadPricingStrategy, VegetablePricingStrategy, DiaryPricingStrategy {
+        permits BeerPricingStrategy, BreadPricingStrategy, VegetablePricingStrategy {
 
     protected final List<? extends DiscountRule<C>> discountRules;
 
