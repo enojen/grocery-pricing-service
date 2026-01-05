@@ -4,6 +4,7 @@ import com.online.grocery.pricing.api.dto.ErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -73,6 +74,23 @@ public class GlobalExceptionHandler {
                 null
         );
         return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(response);
+    }
+
+    /**
+     * Handle JSON parsing/deserialization errors (invalid enum values, malformed JSON).
+     * Returns HTTP 400 Bad Request.
+     */
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<ErrorResponse> handleMessageNotReadable(
+            HttpMessageNotReadableException ex
+    ) {
+        String message = ex.getMostSpecificCause().getMessage();
+        ErrorResponse response = new ErrorResponse(
+                "VALIDATION_ERROR",
+                message != null ? message : "Malformed JSON request",
+                null
+        );
+        return ResponseEntity.badRequest().body(response);
     }
 
     /**

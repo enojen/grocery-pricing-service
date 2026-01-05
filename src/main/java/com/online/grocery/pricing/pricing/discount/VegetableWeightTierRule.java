@@ -1,6 +1,7 @@
 package com.online.grocery.pricing.pricing.discount;
 
 import com.online.grocery.pricing.config.PricingConfiguration;
+import com.online.grocery.pricing.domain.enums.ProductType;
 import com.online.grocery.pricing.pricing.context.VegetablePricingContext;
 import org.springframework.stereotype.Component;
 
@@ -16,7 +17,7 @@ import java.math.BigDecimal;
  * </ul>
  */
 @Component
-public final class VegetableWeightTierRule implements VegetableDiscountRule {
+public final class VegetableWeightTierRule implements DiscountRule<VegetablePricingContext> {
 
     private final PricingConfiguration config;
 
@@ -65,5 +66,10 @@ public final class VegetableWeightTierRule implements VegetableDiscountRule {
                 rules.getMediumWeightThreshold(),
                 rules.getLargeWeightDiscount().multiply(new BigDecimal("100"))
         );
+    }
+
+    @Override
+    public ProductType productType() {
+        return ProductType.VEGETABLE;
     }
 }

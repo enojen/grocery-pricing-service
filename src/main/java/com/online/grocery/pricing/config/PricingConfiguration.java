@@ -34,6 +34,10 @@ public class PricingConfiguration {
     @DecimalMin(value = "0.01", message = "Vegetable price must be at least 0.01")
     private BigDecimal vegetablePricePer100g;
 
+    @NotNull(message = "Diary price is required")
+    @DecimalMin(value = "0.01", message = "Diary price must be at least 0.01")
+    private BigDecimal diaryPrice;
+
     @Valid
     private BreadRules bread = new BreadRules();
 
@@ -42,6 +46,27 @@ public class PricingConfiguration {
 
     @Valid
     private BeerRules beer = new BeerRules();
+
+    @Valid
+    private DiaryRules diary = new DiaryRules();
+
+
+    /**
+     * Bread-specific discount rules configuration.
+     */
+    @Setter
+    @Getter
+    @Validated
+    public static class DiaryRules {
+
+        @NotNull
+        @DecimalMin(value = "0.01", message = "Price threshold must be positive")
+        private BigDecimal priceThreshold = new BigDecimal("5.00");
+
+        @NotNull
+        @DecimalMin(value = "0.01", message = "Discount percents must be positive")
+        private BigDecimal discountPercents = new BigDecimal("0.90");
+    }
 
     /**
      * Bread-specific discount rules configuration.

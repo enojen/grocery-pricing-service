@@ -6,10 +6,11 @@ import org.springframework.stereotype.Component;
 
 import com.online.grocery.pricing.config.PricingConfiguration;
 import com.online.grocery.pricing.domain.enums.BeerOrigin;
+import com.online.grocery.pricing.domain.enums.ProductType;
 import com.online.grocery.pricing.pricing.context.BeerPricingContext;
 
 @Component
-public class BeerBuyTwoGetOne implements BeerDiscountRule {
+public class BeerBuyTwoGetOne implements DiscountRule<BeerPricingContext> {
     private final PricingConfiguration config;
 
     public BeerBuyTwoGetOne(PricingConfiguration config) {
@@ -24,16 +25,8 @@ public class BeerBuyTwoGetOne implements BeerDiscountRule {
     @Override
     public BigDecimal calculateDiscount(BeerPricingContext ctx) {
         PricingConfiguration.BeerRules beerRules = config.getBeer();
-
-        BigDecimal basePrice = switch (ctx.origin()) {
-            case BELGIAN -> beerRules.getBelgianBasePrice();
-            case DUTCH -> beerRules.getDutchBasePrice();
-            case GERMAN -> beerRules.getGermanBasePrice();
-            case SPANISH -> beerRules.getSpanishBasePrice();
-        };
-
         var free = ctx.totalBottles() / beerRules.getOneFreeThreshold();
-        return BigDecimal.valueOf(free).multiply(basePrice);
+        return BigDecimal.valueOf(free).multiply(ctx.originBasePrice());
     }
 
     @Override
@@ -48,6 +41,11 @@ public class BeerBuyTwoGetOne implements BeerDiscountRule {
                 "Buy %d Get 1 Free on Belgian beer",
                 rules.getOneFreeThreshold()
         );
+    }
+
+    @Override
+    public ProductType productType() {
+        return ProductType.BEER;
     }
     
 }

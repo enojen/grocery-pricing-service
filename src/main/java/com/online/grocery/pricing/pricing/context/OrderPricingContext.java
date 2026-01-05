@@ -16,5 +16,5 @@ public record OrderPricingContext(
         Order order,
         BigDecimal subtotal,
         BigDecimal currentTotal
-) {
+) implements PricingContext {
 }

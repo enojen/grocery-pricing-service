@@ -3,6 +3,7 @@ package com.online.grocery.pricing.api.mapper;
 import com.online.grocery.pricing.api.dto.OrderItemRequest;
 import com.online.grocery.pricing.api.dto.OrderRequest;
 import com.online.grocery.pricing.domain.model.BreadItem;
+import com.online.grocery.pricing.domain.model.DiaryItem;
 import com.online.grocery.pricing.domain.model.Order;
 import com.online.grocery.pricing.domain.model.OrderItem;
 import com.online.grocery.pricing.domain.model.VegetableItem;
@@ -54,6 +55,10 @@ public class OrderMapper {
                     itemRequest.quantity(),
                     itemRequest.origin()
             );
+            case DIARY -> new DiaryItem(
+                    itemRequest.quantity()
+            );
+            
         };
     }
 
@@ -93,6 +98,13 @@ public class OrderMapper {
                 if (request.origin() == null) {
                     throw new InvalidOrderException(
                             "origin field required for product type BEER"
+                    );
+                }
+                break;
+            case DIARY:
+                if (request.quantity() == null) {
+                    throw new InvalidOrderException(
+                            "quantity field required for product type DIARY"
                     );
                 }
                 break;

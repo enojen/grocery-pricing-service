@@ -1,5 +1,12 @@
 package com.online.grocery.pricing.pricing.strategy;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.Comparator;
+import java.util.List;
+
+import org.springframework.stereotype.Component;
+
 import com.online.grocery.pricing.config.PricingConfiguration;
 import com.online.grocery.pricing.domain.enums.ProductType;
 import com.online.grocery.pricing.domain.model.MoneyUtils;
@@ -7,27 +14,21 @@ import com.online.grocery.pricing.domain.model.OrderItem;
 import com.online.grocery.pricing.domain.model.ReceiptLine;
 import com.online.grocery.pricing.domain.model.VegetableItem;
 import com.online.grocery.pricing.pricing.context.VegetablePricingContext;
-import com.online.grocery.pricing.pricing.discount.VegetableDiscountRule;
-import org.springframework.stereotype.Component;
-
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.util.Comparator;
-import java.util.List;
+import com.online.grocery.pricing.pricing.discount.DiscountRule;
 
 @Component
 public final class VegetablePricingStrategy implements PricingStrategy {
 
     private final PricingConfiguration config;
-    private final List<VegetableDiscountRule> discountRules;
+    private final List<DiscountRule<VegetablePricingContext>> discountRules;
 
     public VegetablePricingStrategy(
             PricingConfiguration config,
-            List<VegetableDiscountRule> discountRules
+            List<DiscountRule<VegetablePricingContext>> discountRules
     ) {
         this.config = config;
         this.discountRules = discountRules.stream()
-                .sorted(Comparator.comparingInt(VegetableDiscountRule::order))
+                .sorted(Comparator.comparingInt(DiscountRule<VegetablePricingContext>::order))
                 .toList();
     }
 

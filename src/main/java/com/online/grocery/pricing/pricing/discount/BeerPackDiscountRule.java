@@ -1,10 +1,12 @@
 package com.online.grocery.pricing.pricing.discount;
 
-import com.online.grocery.pricing.config.PricingConfiguration;
-import com.online.grocery.pricing.pricing.context.BeerPricingContext;
+import java.math.BigDecimal;
+
 import org.springframework.stereotype.Component;
 
-import java.math.BigDecimal;
+import com.online.grocery.pricing.config.PricingConfiguration;
+import com.online.grocery.pricing.domain.enums.ProductType;
+import com.online.grocery.pricing.pricing.context.BeerPricingContext;
 
 /**
  * Pack-based discount rule for beer.
@@ -17,7 +19,7 @@ import java.math.BigDecimal;
  * </ul>
  */
 @Component
-public final class BeerPackDiscountRule implements BeerDiscountRule {
+public final class BeerPackDiscountRule implements DiscountRule<BeerPricingContext>{
 
     private final PricingConfiguration config;
 
@@ -59,5 +61,10 @@ public final class BeerPackDiscountRule implements BeerDiscountRule {
                 rules.getGermanPackDiscount(),
                 rules.getSpanishPackDiscount()
         );
+    }
+
+    @Override
+    public ProductType productType() {
+        return ProductType.BEER;
     }
 }

@@ -7,7 +7,8 @@ import com.online.grocery.pricing.domain.model.MoneyUtils;
 import com.online.grocery.pricing.domain.model.OrderItem;
 import com.online.grocery.pricing.domain.model.ReceiptLine;
 import com.online.grocery.pricing.pricing.context.BreadPricingContext;
-import com.online.grocery.pricing.pricing.discount.BreadDiscountRule;
+import com.online.grocery.pricing.pricing.discount.DiscountRule;
+
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
@@ -20,15 +21,15 @@ import java.util.stream.Collectors;
 public final class BreadPricingStrategy implements PricingStrategy {
 
     private final PricingConfiguration config;
-    private final List<BreadDiscountRule> discountRules;
+    private final List<DiscountRule<BreadPricingContext>> discountRules;
 
     public BreadPricingStrategy(
             PricingConfiguration config,
-            List<BreadDiscountRule> discountRules
+            List<DiscountRule<BreadPricingContext>> discountRules
     ) {
         this.config = config;
         this.discountRules = discountRules.stream()
-                .sorted(Comparator.comparingInt(BreadDiscountRule::order))
+                .sorted(Comparator.comparingInt(DiscountRule<BreadPricingContext>::order))
                 .toList();
     }
 

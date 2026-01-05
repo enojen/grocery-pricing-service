@@ -1,6 +1,7 @@
 package com.online.grocery.pricing.pricing.discount;
 
 import com.online.grocery.pricing.config.PricingConfiguration;
+import com.online.grocery.pricing.domain.enums.ProductType;
 import com.online.grocery.pricing.pricing.context.BreadPricingContext;
 import org.springframework.stereotype.Component;
 
@@ -10,7 +11,7 @@ import java.math.BigDecimal;
  * Age-based bundle discount rule for bread.
  */
 @Component
-public final class BreadAgeBundleRule implements BreadDiscountRule {
+public final class BreadAgeBundleRule implements DiscountRule<BreadPricingContext> {
 
     private final PricingConfiguration config;
 
@@ -64,5 +65,10 @@ public final class BreadAgeBundleRule implements BreadDiscountRule {
                 "Age-based bundle discounts: %d days old = buy 1 take 2, %d days old = pay 1 take 3",
                 buyOneTakeTwoAge, payOneTakeThreeAge
         );
+    }
+
+    @Override
+    public ProductType productType() {
+        return ProductType.BREAD;
     }
 }

@@ -14,5 +14,5 @@ public record VegetablePricingContext(
         int totalWeightGrams,
         BigDecimal pricePerGram,
         BigDecimal originalPrice
-) {
+) implements PricingContext {
 }

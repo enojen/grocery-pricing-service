@@ -2,6 +2,7 @@ package com.online.grocery.pricing.service;
 
 import com.online.grocery.pricing.api.dto.DiscountRuleResponse;
 import com.online.grocery.pricing.domain.enums.ProductType;
+import com.online.grocery.pricing.pricing.context.PricingContext;
 import com.online.grocery.pricing.pricing.discount.DiscountRule;
 import com.online.grocery.pricing.pricing.discount.OrderDiscountRule;
 import org.springframework.stereotype.Service;
@@ -18,11 +19,11 @@ import java.util.stream.Collectors;
 @Service
 public class DiscountRuleService {
 
-    private final List<DiscountRule> productRules;
+    private final List<DiscountRule<?>> productRules;
     private final List<OrderDiscountRule> orderRules;
 
     public DiscountRuleService(
-            List<DiscountRule> productRules,
+            List<DiscountRule<?>> productRules,
             List<OrderDiscountRule> orderRules) {
         this.productRules = productRules;
         this.orderRules = orderRules;

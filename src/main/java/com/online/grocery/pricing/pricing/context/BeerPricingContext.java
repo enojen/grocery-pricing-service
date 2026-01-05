@@ -22,5 +22,5 @@ public record BeerPricingContext(
         int singles,
         BigDecimal originBasePrice,
         BigDecimal originalPrice
-) {
+) implements PricingContext {
 }

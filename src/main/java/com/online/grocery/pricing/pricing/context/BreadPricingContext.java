@@ -16,5 +16,5 @@ public record BreadPricingContext(
         int totalQuantity,
         BigDecimal unitPrice,
         BigDecimal originalPrice
-) {
+) implements PricingContext {
 }
